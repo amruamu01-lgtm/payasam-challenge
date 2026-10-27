@@ -57,7 +57,7 @@
 </head>
 <body class="bg-[var(--background)] text-[var(--foreground)] min-h-screen antialiased font-sans p-3 md:p-6">
 
-  <!-- Printable Area (Hidden on screen, populated dynamically for PDF/Print) -->
+  <!-- Printable Area -->
   <div id="printArea" class="hidden"></div>
 
   <!-- APPLICATION WRAPPER -->
@@ -74,7 +74,10 @@
             <h1 class="text-xl md:text-2xl font-bold tracking-tight">Payasam Challenge 2026</h1>
             <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-600 border border-amber-500/30">അട പ്രഥമൻ (₹250 / L)</span>
           </div>
-          <p class="text-xs text-[var(--muted-foreground)]">സ്വാദൂറും അട പ്രഥമൻ ഫെസ്റ്റ് ഓർഡർ മാനേജ്‌മെന്റ് പോർട്ടൽ</p>
+          <div class="flex items-center gap-2 mt-0.5">
+            <p class="text-xs text-[var(--muted-foreground)]">ഫെസ്റ്റ് ഓർഡർ മാനേജ്‌മെന്റ് പോർട്ടൽ</p>
+            <span id="cloudStatusBadge" class="text-[10px] px-2 py-0.2 rounded-full font-bold bg-slate-500/10 text-slate-500 border border-slate-500/20">⚪ Local Mode</span>
+          </div>
         </div>
       </div>
 
@@ -90,11 +93,10 @@
     </header>
 
     <!-- ========================================================= -->
-    <!-- VIEW 0: HOME SCREEN (5 OPTIONS - INDIVIDUAL ORDER AS #2) -->
+    <!-- VIEW 0: HOME SCREEN (5 OPTIONS) -->
     <!-- ========================================================= -->
     <section id="view-home" class="space-y-6">
       
-      <!-- Festive Hero Banner -->
       <div class="bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/5 border border-amber-500/20 rounded-2xl p-6 text-center space-y-2">
         <span class="text-4xl">🍮</span>
         <h2 class="text-xl md:text-2xl font-extrabold text-[var(--foreground)]">Payasam Challenge - പ്രധാന മെനു</h2>
@@ -128,7 +130,7 @@
           </div>
         </div>
 
-        <!-- OPTION 2: INDIVIDUAL ORDER (NOW OPTION 2!) -->
+        <!-- OPTION 2: INDIVIDUAL ORDER -->
         <div onclick="navigate('direct-order')" class="group cursor-pointer bg-[var(--card)] hover:bg-amber-500/5 border border-[var(--border)] hover:border-amber-500/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
           <div class="space-y-3">
             <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-2xl font-bold border border-emerald-500/20 group-hover:scale-105 transition">
@@ -150,7 +152,7 @@
           </div>
         </div>
 
-        <!-- OPTION 3: RANKINGS (TEAM & INDIVIDUAL) -->
+        <!-- OPTION 3: RANKINGS -->
         <div onclick="navigate('rankings')" class="group cursor-pointer bg-[var(--card)] hover:bg-amber-500/5 border border-[var(--border)] hover:border-amber-500/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
           <div class="space-y-3">
             <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-2xl font-bold border border-amber-500/20 group-hover:scale-105 transition">
@@ -172,7 +174,7 @@
           </div>
         </div>
 
-        <!-- OPTION 4: ALL ORDERS (PAID / UNPAID STATUS) -->
+        <!-- OPTION 4: ALL ORDERS -->
         <div onclick="navigate('all-orders')" class="group cursor-pointer bg-[var(--card)] hover:bg-amber-500/5 border border-[var(--border)] hover:border-amber-500/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between sm:col-span-2 lg:col-span-2">
           <div class="space-y-3">
             <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center text-2xl font-bold border border-rose-500/20 group-hover:scale-105 transition">
@@ -206,7 +208,7 @@
                 <span class="text-xs px-2 py-0.5 rounded bg-purple-500/10 text-purple-600 font-medium">Full Control</span>
               </div>
               <p class="text-xs text-[var(--muted-foreground)] mt-1.5">
-                സമ്പൂർണ്ണ അഡ്മിൻ കൺട്രോൾ. UPI ID & QR സെറ്റ് ചെയ്യാം, WhatsApp മെസ്സേജ് ടെംപ്ലേറ്റ് മാറ്റാം, ക്യാഷ് സെറ്റിൽമെന്റും ലാഭവും കൈകാര്യം ചെയ്യാം.
+                Google Sheets ക്ലൗഡ് സിങ്ക്, UPI സെറ്റിംഗ്സ്, WhatsApp മെസ്സേജ് ടെംപ്ലേറ്റ്, ക്യാഷ് സെറ്റിൽമെന്റ് & ചിലവുകൾ.
               </p>
             </div>
           </div>
@@ -257,7 +259,7 @@
         </div>
       </div>
 
-      <!-- NEW TEAM REGISTRATION CARD (COLLAPSED / TOGGLED) -->
+      <!-- NEW TEAM REGISTRATION CARD -->
       <div id="newTeamCard" class="max-w-md mx-auto bg-emerald-500/5 border border-emerald-500/30 rounded-2xl p-5 shadow-sm space-y-3 text-xs hidden">
         <div class="flex justify-between items-center pb-2 border-b border-emerald-500/20">
           <h4 class="font-bold text-sm text-emerald-700 flex items-center gap-1.5">
@@ -348,7 +350,7 @@
           </button>
         </div>
 
-        <!-- NEW ORDER ENTRY FORM (CONSECUTIVE / SEQUENTIAL READY) -->
+        <!-- NEW ORDER ENTRY FORM -->
         <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
           <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
             <div>
@@ -476,7 +478,7 @@
     </section>
 
     <!-- ========================================================= -->
-    <!-- VIEW 2: INDIVIDUAL ORDER (OPTION 2 - DUAL MODE WITH TEAM CREDIT) -->
+    <!-- VIEW 2: INDIVIDUAL ORDER -->
     <!-- ========================================================= -->
     <section id="view-direct-order" class="space-y-6 hidden">
       
@@ -495,7 +497,7 @@
           <p class="text-[var(--muted-foreground)]">ഓർഡർ എടുത്ത ആളുടെ പേരും ടീമും നൽകിയാൽ ആ ടീമിന്റെയും ആളുടെയും റാങ്ക് തത്സമയം കയറും!</p>
         </div>
 
-        <!-- Mode Toggle: Volunteer Agent vs Direct Customer -->
+        <!-- Mode Toggle -->
         <div class="grid grid-cols-2 gap-2 p-1 bg-[var(--background)] rounded-xl border border-[var(--border)]">
           <button type="button" id="btnIndModeAgent" onclick="setIndividualMode('agent')" class="py-1.5 rounded-lg font-bold text-xs bg-amber-500 text-white transition shadow-sm">
             👤 വോളന്റിയർ / ഏജന്റ് ബുക്കിംഗ്
@@ -505,14 +507,14 @@
           </button>
         </div>
 
-        <!-- Consecutive Banner for Individual Order -->
+        <!-- Consecutive Banner -->
         <div id="dirConsecutiveNotice" class="hidden p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 text-xs">
           ✅ മുൻ ഓർഡർ സേവ് ചെയ്തു! അടുത്ത ഓർഡർ നൽകാം.
         </div>
 
         <form id="directOrderForm" onsubmit="handleDirectOrderSubmit(event)" class="space-y-3 pt-2">
           
-          <!-- AGENT & TEAM ATTRIBUTION SECTION (Gives team ranking points!) -->
+          <!-- Agent Attribution -->
           <div id="agentAttributionBox" class="p-3 rounded-xl bg-blue-500/5 border border-blue-500/20 space-y-2.5">
             <div class="font-bold text-blue-600 flex items-center gap-1 text-[11px]">
               <span>⭐</span> <span>റാങ്ക് ക്രെഡിറ്റ് ചെയ്യുന്നതിനുള്ള വിവരങ്ങൾ:</span>
@@ -604,7 +606,7 @@
     </section>
 
     <!-- ========================================================= -->
-    <!-- VIEW 3: RANKINGS (TEAM & INDIVIDUAL LEADERBOARD) -->
+    <!-- VIEW 3: RANKINGS (TEAM & INDIVIDUAL) -->
     <!-- ========================================================= -->
     <section id="view-rankings" class="space-y-6 hidden">
       
@@ -691,7 +693,7 @@
     </section>
 
     <!-- ========================================================= -->
-    <!-- VIEW 4: ALL ORDERS (PAID / UNPAID & DIRECT WHATSAPP) -->
+    <!-- VIEW 4: ALL ORDERS -->
     <!-- ========================================================= -->
     <section id="view-all-orders" class="space-y-6 hidden">
       
@@ -767,7 +769,7 @@
     </section>
 
     <!-- ========================================================= -->
-    <!-- VIEW 5: ADMIN DESK (UPI CONFIG & WHATSAPP TEMPLATE SETTINGS) -->
+    <!-- VIEW 5: ADMIN DESK (CLOUD SYNC, UPI, WA TEMPLATE) -->
     <!-- ========================================================= -->
     <section id="view-admin" class="space-y-6 hidden">
       
@@ -821,10 +823,41 @@
           </div>
         </div>
 
-        <!-- NEW ADMIN SETTINGS: 1. UPI CONFIG, 2. WHATSAPP TEMPLATE -->
+        <!-- ☁️ GOOGLE SHEETS CLOUD SYNC CONFIGURATION -->
+        <div class="bg-[var(--card)] border border-blue-500/30 bg-blue-500/5 rounded-2xl p-5 shadow-sm space-y-3 text-xs">
+          <div class="flex justify-between items-center pb-2 border-b border-blue-500/20">
+            <div>
+              <h4 class="font-bold text-sm text-blue-700 flex items-center gap-1.5">
+                <span>☁️</span> <span>Google Sheets ലൈവ് ക്ലൗഡ് സിങ്ക് (Live Multi-Phone Sync)</span>
+              </h4>
+              <p class="text-[var(--muted-foreground)]">ടീമുകൾ വെവ്വേറെ ഫോണുകളിൽ ഓർഡർ എടുക്കുമ്പോൾ അഡ്മിൻ ഫോണിൽ തത്സമയം സിങ്ക് ആവാൻ</p>
+            </div>
+            <span id="sheetSyncStatus" class="font-bold text-[11px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-600">Disconnected</span>
+          </div>
+
+          <form onsubmit="handleSaveCloudSync(event)" class="space-y-3">
+            <div>
+              <label class="block font-medium mb-1 text-[var(--muted-foreground)]">Google Apps Script Web App URL *</label>
+              <input type="url" id="sheetApiUrlInput" placeholder="eg. https://script.google.com/macros/s/AKfycbx.../exec" class="w-full px-3 py-2 rounded-lg bg-[var(--card)] border border-[var(--border)] font-mono text-xs focus:outline-none">
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-[10px] text-[var(--muted-foreground)]">💡 Google Sheets സെറ്റപ്പ് ചെയ്യാനുള്ള ഗൈഡ് താഴെ ചാറ്റിൽ ലഭ്യമാക്കിയിട്ടുണ്ട്.</span>
+              <div class="flex gap-2">
+                <button type="button" onclick="testSyncGoogleSheets()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">
+                  🔄 Fetch & Sync Now
+                </button>
+                <button type="submit" class="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold transition shadow">
+                  Save Cloud URL
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- UPI & WHATSAPP SETTINGS -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-          <!-- 1. UPI CONFIGURATION -->
+          <!-- UPI CONFIGURATION -->
           <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-3">
             <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
               <div>
@@ -852,7 +885,7 @@
             </form>
           </div>
 
-          <!-- 2. WHATSAPP MESSAGE TEMPLATE SETTINGS -->
+          <!-- WHATSAPP MESSAGE TEMPLATE SETTINGS -->
           <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-3">
             <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
               <div>
@@ -965,9 +998,7 @@
 
   </div>
 
-  <!-- ========================================================= -->
   <!-- MODAL: PDF EXPORT & PRINT STUDIO -->
-  <!-- ========================================================= -->
   <div id="pdfModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 max-w-lg w-full shadow-2xl space-y-4 text-xs">
       <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
@@ -1078,24 +1109,36 @@
 ഡെലിവറി സ്ഥലം: {area}
 പായസം ഫെസ്റ്റിലേക്ക് സ്വാഗതം! ❤️`;
 
+    // ⚙️ GLOBAL CLOUD & UPI DEFAULTS (ഈ ലിങ്ക് സെറ്റ് ചെയ്താൽ എല്ലാ ഫോണുകളിലും തനിയെ കണക്റ്റ് ആകും)
+    const DEFAULT_CONFIG_SHEET_URL = "https://script.google.com/macros/s/AKfycbyKT4_zsGfkvgR8hIH11hIu2OLu1ysiRTdi8zHx9V37Bnk0z_-3Y3a5909_NYv0qzs/exec"; 
+
     let teams = [];
     let orders = [];
     let expenses = [];
     let adminUpiId = "festpayasam@upi";
     let adminUpiName = "Fest Payasam Committee";
     let waTemplate = DEFAULT_WA_TEMPLATE;
+    let sheetApiUrl = DEFAULT_CONFIG_SHEET_URL;
     let loggedInTeam = null;
     let loggedInMember = null;
     let isAdminUnlocked = false;
     let individualMode = 'agent';
 
     function initApp() {
+      // 1. URL Query Parameters ചെക്ക് ചെയ്യുന്നു (ഉദാ: ?sheet=https://script.google.com/...)
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlSheetParam = urlParams.get('sheet') || urlParams.get('sheetUrl');
+      if (urlSheetParam) {
+        localStorage.setItem('payasam_v3_sheet_url', decodeURIComponent(urlSheetParam));
+      }
+
       const storedTeams = localStorage.getItem('payasam_v3_teams');
       const storedOrders = localStorage.getItem('payasam_v3_orders');
       const storedExpenses = localStorage.getItem('payasam_v3_expenses');
       const storedUpi = localStorage.getItem('payasam_v3_upi_id');
       const storedPayee = localStorage.getItem('payasam_v3_upi_name');
       const storedWa = localStorage.getItem('payasam_v3_wa_template');
+      const storedSheet = localStorage.getItem('payasam_v3_sheet_url');
 
       teams = storedTeams ? JSON.parse(storedTeams) : JSON.parse(JSON.stringify(DEFAULT_TEAMS));
       orders = storedOrders ? JSON.parse(storedOrders) : JSON.parse(JSON.stringify(SEED_ORDERS));
@@ -1103,11 +1146,24 @@
       if (storedUpi) adminUpiId = storedUpi;
       if (storedPayee) adminUpiName = storedPayee;
       if (storedWa) waTemplate = storedWa;
+      
+      if (storedSheet && storedSheet.trim().startsWith('http')) {
+        sheetApiUrl = storedSheet.trim();
+      } else if (DEFAULT_CONFIG_SHEET_URL) {
+        sheetApiUrl = DEFAULT_CONFIG_SHEET_URL;
+      }
 
       saveState();
       populateSelectOptions();
       refreshMetrics();
       updateUpiDisplay();
+      updateCloudBadge();
+
+      if (sheetApiUrl) {
+        testSyncGoogleSheets(true);
+        setInterval(() => testSyncGoogleSheets(true), 15000);
+      }
+
       navigate('home');
     }
 
@@ -1118,6 +1174,96 @@
       localStorage.setItem('payasam_v3_upi_id', adminUpiId);
       localStorage.setItem('payasam_v3_upi_name', adminUpiName);
       localStorage.setItem('payasam_v3_wa_template', waTemplate);
+      localStorage.setItem('payasam_v3_sheet_url', sheetApiUrl);
+    }
+
+    function updateCloudBadge() {
+      const badge = document.getElementById('cloudStatusBadge');
+      const statusText = document.getElementById('sheetSyncStatus');
+      if (sheetApiUrl) {
+        badge.innerText = '🟢 Google Sheet Connected';
+        badge.className = 'text-[10px] px-2 py-0.2 rounded-full font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/30';
+        if (statusText) {
+          statusText.innerText = 'Connected & Live Syncing';
+          statusText.className = 'font-bold text-[11px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600';
+        }
+      } else {
+        badge.innerText = '⚪ Local Mode';
+        badge.className = 'text-[10px] px-2 py-0.2 rounded-full font-bold bg-slate-500/10 text-slate-500 border border-slate-500/20';
+        if (statusText) {
+          statusText.innerText = 'Disconnected';
+          statusText.className = 'font-bold text-[11px] px-2 py-0.5 rounded bg-slate-500/10 text-slate-500';
+        }
+      }
+    }
+
+    function handleSaveCloudSync(e) {
+      e.preventDefault();
+      const url = document.getElementById('sheetApiUrlInput').value.trim();
+      sheetApiUrl = url;
+      saveState();
+      updateCloudBadge();
+      if (sheetApiUrl) {
+        testSyncGoogleSheets();
+        showToast('☁️ Google Sheets URL സേവ് ചെയ്തു! സിങ്കിംഗ് ആരംഭിച്ചു...');
+      } else {
+        showToast('ക്ലൗഡ് സിങ്ക് ഒഴിവാക്കി');
+      }
+    }
+
+    async function testSyncGoogleSheets(silent = false) {
+      if (!sheetApiUrl) return;
+      try {
+        const response = await fetch(sheetApiUrl);
+        if (response.ok) {
+          const cloudOrders = await response.json();
+          if (Array.isArray(cloudOrders) && cloudOrders.length > 0) {
+            const existingIds = new Set(orders.map(o => o.id));
+            cloudOrders.forEach(co => {
+              if (!existingIds.has(co.id)) {
+                orders.push({
+                  id: co.id,
+                  name: co.name,
+                  phone: `${co.phone}`,
+                  area: co.area,
+                  teamId: co.teamId,
+                  member: co.member,
+                  item: co.item || FLAVOR_NAME,
+                  litres: parseFloat(co.litres) || 1.0,
+                  amount: parseFloat(co.amount) || 250,
+                  payMode: co.payMode,
+                  payStatus: co.payStatus,
+                  utr: co.utr || '',
+                  time: co.time || ''
+                });
+              }
+            });
+            saveState();
+            refreshMetrics();
+            updateAreaDropdowns();
+            renderAllOrdersTable();
+            renderTeamRankings();
+            renderIndividualRankings();
+            if (!silent) showToast(`✅ Google Sheets-ൽ നിന്ന് സിങ്ക് ചെയ്തു (${cloudOrders.length} ആകെ ഓർഡറുകൾ)`);
+          }
+        }
+      } catch (err) {
+        if (!silent) alert('Google Sheets-ലേക്ക് കണക്ട് ചെയ്യാൻ സാധിച്ചില്ല. URL ശരിയാണോ എന്ന് പരിശോധിക്കുക.');
+      }
+    }
+
+    async function pushOrderToCloud(newOrder) {
+      if (!sheetApiUrl) return;
+      try {
+        await fetch(sheetApiUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'add_order', order: newOrder })
+        });
+      } catch (err) {
+        console.error('Cloud push error', err);
+      }
     }
 
     function navigate(viewName) {
@@ -1346,6 +1492,7 @@
 
       orders.unshift(newOrder);
       saveState();
+      pushOrderToCloud(newOrder);
 
       document.getElementById('tOrdCustName').value = '';
       document.getElementById('tOrdCustPhone').value = '';
@@ -1482,6 +1629,7 @@
 
       orders.unshift(newOrder);
       saveState();
+      pushOrderToCloud(newOrder);
 
       document.getElementById('dirCustName').value = '';
       document.getElementById('dirCustPhone').value = '';
@@ -1774,9 +1922,11 @@
     }
 
     function renderAdminDesk() {
+      document.getElementById('sheetApiUrlInput').value = sheetApiUrl;
       document.getElementById('admUpiIdInput').value = adminUpiId;
       document.getElementById('admUpiNameInput').value = adminUpiName;
       document.getElementById('admWaTemplateInput').value = waTemplate;
+      updateCloudBadge();
 
       const grossSales = orders.reduce((sum, o) => sum + o.amount, 0);
       const totalLitres = orders.reduce((sum, o) => sum + o.litres, 0);
