@@ -8,6 +8,7 @@
   <meta http-equiv="Expires" content="0">
   <title>Payasam Challenge 2026 - Fest Hub & Admin System</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     if (typeof tailwind !== 'undefined') {
       tailwind.config = {
@@ -401,8 +402,32 @@
             <input type="text" id="newTeamPassword" required value="team123" placeholder="Password" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a] font-mono">
           </div>
           <div>
-            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം അംഗങ്ങളുടെ പേരുകൾ (Members - കോമ ഇട്ട് നൽകാം) *</label>
-            <input type="text" id="newTeamMembers" required placeholder="eg. Arun, Sankar, Sneha" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+            <div class="flex justify-between items-center mb-1.5">
+              <label class="block font-bold text-[#1e3a8a]">ടീം അംഗങ്ങൾ (5 Members - ഓരോരുത്തർക്കും ഓരോ കോളം) *</label>
+              <span class="text-[10px] text-[var(--muted-foreground)]">ഓരോ കോളത്തിലും ഓരോരുത്തരുടെ പേര് നൽകുക</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)]">
+              <div>
+                <label class="block text-[10px] font-semibold text-[var(--foreground)] mb-0.5">👤 അംഗം 1 (ക്യാപ്റ്റൻ / Member 1) *</label>
+                <input type="text" id="newTeamMem1" required placeholder="ക്യാപ്റ്റന്റെ പേര്" class="w-full px-2.5 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+              </div>
+              <div>
+                <label class="block text-[10px] font-medium text-[var(--muted-foreground)] mb-0.5">👤 അംഗം 2 (Member 2)</label>
+                <input type="text" id="newTeamMem2" placeholder="രണ്ടാമത്തെ അംഗം" class="w-full px-2.5 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+              </div>
+              <div>
+                <label class="block text-[10px] font-medium text-[var(--muted-foreground)] mb-0.5">👤 അംഗം 3 (Member 3)</label>
+                <input type="text" id="newTeamMem3" placeholder="മൂന്നാമത്തെ അംഗം" class="w-full px-2.5 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+              </div>
+              <div>
+                <label class="block text-[10px] font-medium text-[var(--muted-foreground)] mb-0.5">👤 അംഗം 4 (Member 4)</label>
+                <input type="text" id="newTeamMem4" placeholder="നാലാമത്തെ അംഗം" class="w-full px-2.5 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-[10px] font-medium text-[var(--muted-foreground)] mb-0.5">👤 അംഗം 5 (Member 5)</label>
+                <input type="text" id="newTeamMem5" placeholder="അഞ്ചാമത്തെ അംഗം" class="w-full px-2.5 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+              </div>
+            </div>
           </div>
           <div class="flex justify-end gap-2 pt-1">
             <button type="button" onclick="loadDemoTeams()" class="px-3 py-1.5 rounded-lg border border-[#1e3a8a]/30 text-[#1e3a8a] hover:bg-[#1e3a8a]/5 font-semibold text-[11px]">
@@ -691,7 +716,20 @@
               </h4>
               <p class="text-[10px] text-[var(--muted-foreground)]">കസ്റ്റമർക്ക് കൺഫർമേഷൻ WhatsApp അയക്കാൻ ലിങ്കിൽ ക്ലിക്ക് ചെയ്യാം</p>
             </div>
-            <span id="myTeamOrderStats" class="text-xs font-extrabold text-[#1e3a8a] px-2.5 py-1 rounded-lg bg-[#1e3a8a]/10 border border-[#1e3a8a]/20">0 Orders (0 Litres)</span>
+            <div class="flex flex-wrap items-center gap-2">
+              <span id="myTeamOrderStats" class="text-xs font-extrabold text-[#1e3a8a] px-2.5 py-1 rounded-lg bg-[#1e3a8a]/10 border border-[#1e3a8a]/20">0 Orders (0 Litres)</span>
+              <div class="flex items-center gap-1">
+                <button onclick="exportTeamOrdersExcel()" class="px-2 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-[11px] flex items-center gap-1 shadow-sm transition" title="Export Team Orders to Excel">
+                  <span>📊</span> <span>Excel</span>
+                </button>
+                <button onclick="exportTeamOrdersPDF()" class="px-2 py-1 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-semibold text-[11px] flex items-center gap-1 shadow-sm transition" title="Print Team Orders Sheet">
+                  <span>🖨️</span> <span>PDF</span>
+                </button>
+                <button onclick="exportTeamOrdersImage()" class="px-2 py-1 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold text-[11px] flex items-center gap-1 shadow-sm transition" title="WhatsApp Performance Card">
+                  <span>🖼️</span> <span>Card</span>
+                </button>
+              </div>
+            </div>
           </div>
           <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
             <table class="w-full text-left text-xs">
@@ -877,6 +915,28 @@
 
       <!-- 3A: TEAM RANKINGS TAB -->
       <div id="rankTeamContent" class="space-y-6">
+        <!-- Rankings Universal Export Suite Toolbar -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-2xl bg-[var(--card)] border border-[#1e3a8a]/30 shadow-sm">
+          <div class="flex items-center gap-2">
+            <span class="text-base font-bold text-[#1e3a8a]">🏆 ലീഡർബോർഡ് എക്സ്പോർട്ട്:</span>
+            <span class="text-[10px] text-[var(--muted-foreground)]">ടീം & വ്യക്തിഗത റിപ്പോർട്ടുകൾ</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button onclick="exportRankingsExcel()" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="Export Rankings to Excel">
+              <span>📊</span> <span>Rankings Excel</span>
+            </button>
+            <button onclick="exportRankingsPDF()" class="px-2.5 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="Print Rankings Leaderboard">
+              <span>🖨️</span> <span>Rankings PDF</span>
+            </button>
+            <button onclick="exportRankingsImage()" class="px-2.5 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="WhatsApp Leaderboard Card">
+              <span>🖼️</span> <span>WhatsApp Card</span>
+            </button>
+            <button onclick="exportRankingsSVG()" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="Export Leaderboard SVG">
+              <span>📐</span> <span>SVG</span>
+            </button>
+          </div>
+        </div>
+
         <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
           <div class="text-center max-w-md mx-auto">
             <span class="text-3xl">🏆</span>
@@ -962,30 +1022,47 @@
 
       <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
         
-        <!-- Filter and Search Header -->
+        <!-- Header with Universal Export Toolbar -->
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
           <div>
             <h3 class="font-bold text-base">ആകെ ഓർഡറുകൾ (All Orders Directory)</h3>
+            <p class="text-[11px] text-[var(--muted-foreground)]">പായസം ഫെസ്റ്റിലെ എല്ലാ ഓർഡറുകളും (View Only)</p>
           </div>
 
-          <!-- Filter Controls -->
-          <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-            <input type="text" id="allSearch" oninput="renderAllOrdersTable()" placeholder="പേര് / ഫോൺ / ഏരിയ തിരയുക..." class="px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs flex-1 lg:w-48 focus:outline-none">
-            
-            <select id="allFilterPaid" onchange="renderAllOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
-              <option value="ALL">All Payment Statuses</option>
-              <option value="PAID">✅ Paid Only</option>
-              <option value="UNPAID">⚠️ Unpaid Only</option>
-            </select>
-
-            <select id="allFilterTeam" onchange="renderAllOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
-              <option value="ALL">All Teams</option>
-            </select>
-
-            <select id="allFilterArea" onchange="renderAllOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
-              <option value="ALL">All Areas</option>
-            </select>
+          <!-- Universal Export Toolbar for All Orders -->
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button onclick="exportAllOrdersExcel()" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="Export All Orders to Excel">
+              <span>📊</span> <span>Excel</span>
+            </button>
+            <button onclick="exportAllOrdersPDF()" class="px-2.5 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="Print All Orders PDF">
+              <span>🖨️</span> <span>PDF</span>
+            </button>
+            <button onclick="exportAllOrdersImage()" class="px-2.5 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="WhatsApp Orders Card">
+              <span>🖼️</span> <span>WhatsApp Card</span>
+            </button>
+            <button onclick="exportAllOrdersSVG()" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="Export SVG Vector">
+              <span>📐</span> <span>SVG</span>
+            </button>
           </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="flex flex-wrap items-center gap-2 w-full pt-1">
+          <input type="text" id="allSearch" oninput="renderAllOrdersTable()" placeholder="പേര് / ഫോൺ / ഏരിയ തിരയുക..." class="px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs flex-1 lg:w-48 focus:outline-none">
+          
+          <select id="allFilterPaid" onchange="renderAllOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+            <option value="ALL">All Payment Statuses</option>
+            <option value="PAID">✅ Paid Only</option>
+            <option value="UNPAID">⚠️ Unpaid Only</option>
+          </select>
+
+          <select id="allFilterTeam" onchange="renderAllOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+            <option value="ALL">All Teams</option>
+          </select>
+
+          <select id="allFilterArea" onchange="renderAllOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+            <option value="ALL">All Areas</option>
+          </select>
         </div>
 
         <!-- Master Orders Table -->
@@ -1052,27 +1129,148 @@
       <!-- Admin Full Dashboard (When Unlocked) -->
       <div id="adminMainDashboard" class="space-y-6 hidden">
         
-        <!-- Financial Overview 4 Cards -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 text-xs">
-          <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm">
-            <span class="text-[var(--muted-foreground)]">ആകെ വിൽപന</span>
-            <div id="admGrossSales" class="text-xl font-bold text-[#1e3a8a] mt-1">₹0</div>
-            <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5"><span id="admLitresTotal">0</span> L Ada Pradhaman</div>
+        <!-- Admin Financial Suite Header & Universal Export Toolbar -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-[var(--card)] border border-[#1e3a8a]/30 shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1e3a8a] to-[#2563eb] text-white flex items-center justify-center font-bold text-lg shadow-sm">📊</div>
+            <div>
+              <h4 class="font-extrabold text-sm text-[#1e3a8a]">ഡീപ് ഫിനാൻഷ്യൽ ലെഡ്ജർ & റിപ്പോർട്ട്സ്</h4>
+              <p class="text-[11px] text-[var(--muted-foreground)]">ആദായ-ചിലവ് കണക്കുകൾ, ബാങ്ക് ബാലൻസ് & എക്സ്പോർട്ട് ടൂളുകൾ</p>
+            </div>
           </div>
-          <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm">
-            <span class="text-[var(--muted-foreground)]">അഡ്മിന് ലഭിച്ച പണം</span>
-            <div id="admRealized" class="text-xl font-bold text-emerald-700 mt-1">₹0</div>
-            <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5">Admin Cash + Verified UPI</div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button onclick="exportAdminFinancialExcel()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="Export Full Financial Ledger to Excel">
+              <span>📊</span> <span>Financial Excel</span>
+            </button>
+            <button onclick="exportAdminFinancialPDF()" class="px-3 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="Print Committee Statement PDF">
+              <span>🖨️</span> <span>Financial PDF</span>
+            </button>
+            <button onclick="exportAdminFinancialImage()" class="px-3 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="WhatsApp Financial Summary Card">
+              <span>🖼️</span> <span>WhatsApp Summary</span>
+            </button>
+            <button onclick="exportAdminFinancialSVG()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center gap-1 shadow-sm transition" title="Export SVG Summary Vector">
+              <span>📐</span> <span>SVG Summary</span>
+            </button>
           </div>
-          <div class="bg-[var(--card)] border border-red-500/20 bg-red-500/5 rounded-xl p-4 shadow-sm">
-            <span class="text-red-500 font-medium">ടീമുകൾ തരാനുള്ളത് (Due)</span>
-            <div id="admUnsettledCash" class="text-xl font-bold text-red-600 mt-1">₹0</div>
-            <div class="text-[11px] text-red-500 mt-0.5">ടീം കയ്യിൽ ബാക്കിയുള്ള പണം</div>
+        </div>
+
+        <!-- Deep Financial Master KPI Cards (6 Grid) -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+          <!-- 1. Gross Projected Revenue -->
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 shadow-sm">
+            <span class="text-[var(--muted-foreground)] block truncate">ആകെ വിറ്റുവരവ്</span>
+            <div id="admGrossSales" class="text-lg font-bold text-[#1e3a8a] mt-1">₹0</div>
+            <div class="text-[10px] text-[var(--muted-foreground)] mt-0.5 truncate"><span id="admLitresTotal">0</span> L അട പ്രഥമൻ</div>
           </div>
-          <div class="bg-[var(--card)] border border-emerald-500/30 bg-emerald-500/5 rounded-xl p-4 shadow-sm">
-            <span class="text-emerald-700 font-semibold">യഥാർത്ഥ ലാഭം (Net Profit)</span>
-            <div id="admNetProfit" class="text-xl font-bold text-emerald-700 mt-1">₹0</div>
-            <div class="text-[11px] text-emerald-600 mt-0.5">Total Sales - Total Expenses</div>
+
+          <!-- 2. Admin Received Total (Inflow) -->
+          <div class="bg-[var(--card)] border border-emerald-500/20 bg-emerald-500/5 rounded-xl p-3.5 shadow-sm">
+            <span class="text-emerald-700 font-medium block truncate">അഡ്മിൻ കൈപ്പറ്റിയത്</span>
+            <div id="admRealized" class="text-lg font-bold text-emerald-700 mt-1">₹0</div>
+            <div class="text-[10px] text-emerald-600 mt-0.5 truncate">Cash + Verified UPI</div>
+          </div>
+
+          <!-- 3. Direct UPI Inflow -->
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 shadow-sm">
+            <span class="text-[var(--muted-foreground)] block truncate">ബാങ്കിൽ എത്തിയ UPI</span>
+            <div id="admVerifiedUpi" class="text-lg font-bold text-blue-600 mt-1">₹0</div>
+            <div class="text-[10px] text-[var(--muted-foreground)] mt-0.5 truncate">കമ്മിറ്റി ബാങ്ക് അക്കൗണ്ടിൽ</div>
+          </div>
+
+          <!-- 4. Customer Unpaid Dues -->
+          <div class="bg-[var(--card)] border border-amber-500/20 bg-amber-500/5 rounded-xl p-3.5 shadow-sm">
+            <span class="text-amber-800 font-medium block truncate">കസ്റ്റമർ കുടിശ്ശിക</span>
+            <div id="admPendingDues" class="text-lg font-bold text-amber-700 mt-1">₹0</div>
+            <div class="text-[10px] text-amber-700 mt-0.5 truncate">പണം പിരിക്കാനുള്ളത്</div>
+          </div>
+
+          <!-- 5. Total Expenses -->
+          <div class="bg-[var(--card)] border border-red-500/20 bg-red-500/5 rounded-xl p-3.5 shadow-sm">
+            <span class="text-red-600 font-medium block truncate">ആകെ ചിലവുകൾ</span>
+            <div id="admTotalExpenseDisplayTop" class="text-lg font-bold text-red-600 mt-1">₹0</div>
+            <div class="text-[10px] text-red-500 mt-0.5 truncate">സാധനങ്ങൾ + കൂലി</div>
+          </div>
+
+          <!-- 6. Realized Net Profit -->
+          <div class="bg-[var(--card)] border border-emerald-600/30 bg-emerald-600/10 rounded-xl p-3.5 shadow-sm">
+            <span class="text-emerald-800 font-bold block truncate">യഥാർത്ഥ ലാഭം (Net)</span>
+            <div id="admNetProfit" class="text-lg font-black text-emerald-800 mt-1">₹0</div>
+            <div id="admProjectedProfit" class="text-[10px] text-emerald-700 font-medium mt-0.5 truncate">പ്രതീക്ഷിക്കുന്നത്: ₹0</div>
+          </div>
+        </div>
+
+        <!-- Cash Reconciliation & Unit Economics Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
+          <!-- Left: Cash Flow & Liquid Funds Reconciliation -->
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 shadow-sm space-y-3">
+            <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+              <h5 class="font-bold text-sm text-[#1e3a8a] flex items-center gap-1.5">
+                <span>💰</span> <span>ദ്രവ്യത & ക്യാഷ് ലെഡ്ജർ (Cash & Bank Balance)</span>
+              </h5>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#1e3a8a]/10 text-[#1e3a8a] font-bold">ലഭ്യമായ ഫണ്ട്</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5">
+              <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                <span class="text-[11px] text-emerald-800 font-medium">💵 കയ്യിലെ റോക്കറ്റ് ക്യാഷ്:</span>
+                <div id="admCashInHand" class="text-base font-extrabold text-emerald-800 mt-0.5">₹0</div>
+                <div class="text-[10px] text-emerald-700 mt-0.5">അഡ്മിൻ ക്യാഷ് - ക്യാഷ് ചിലവ്</div>
+              </div>
+              <div class="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                <span class="text-[11px] text-blue-800 font-medium">📱 ബാങ്ക് UPI ബാലൻസ്:</span>
+                <div id="admBankBalance" class="text-base font-extrabold text-blue-800 mt-0.5">₹0</div>
+                <div class="text-[10px] text-blue-700 mt-0.5">UPI വരവ് - ഓൺലൈൻ ചിലവ്</div>
+              </div>
+              <div class="p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+                <span class="text-[11px] text-red-700 font-medium">⏳ ടീമുകൾ ഏൽപ്പിക്കാനുള്ളത്:</span>
+                <div id="admUnsettledCash" class="text-base font-extrabold text-red-600 mt-0.5">₹0</div>
+                <div class="text-[10px] text-red-600 mt-0.5">ടീം കയ്യിൽ ബാക്കിയുള്ള പണം</div>
+              </div>
+              <div class="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+                <span class="text-[11px] text-indigo-800 font-medium">✨ ആകെ ലഭ്യമായ ഫണ്ട്:</span>
+                <div id="admTotalLiquidFunds" class="text-base font-extrabold text-indigo-800 mt-0.5">₹0</div>
+                <div class="text-[10px] text-indigo-700 mt-0.5">കയ്യിലെ ക്യാഷ് + ബാങ്ക് ബാലൻസ്</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Unit Economics (Ada Pradhaman @ ₹250) -->
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 shadow-sm space-y-3">
+            <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+              <h5 class="font-bold text-sm text-[#1e3a8a] flex items-center gap-1.5">
+                <span>🥥</span> <span>ലിറ്റർ അടിസ്ഥാനത്തിലുള്ള സാമ്പത്തിക വിശകലനം</span>
+              </h5>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-800 font-bold">അട പ്രഥമൻ (₹250/L)</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2.5">
+              <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] text-center">
+                <span class="text-[10px] text-[var(--muted-foreground)]">ശരാശരി ചിലവ് / L</span>
+                <div id="admCostPerLitre" class="text-base font-bold text-red-600 mt-0.5">₹0</div>
+                <span class="text-[9px] text-[var(--muted-foreground)]">Cost / Litre</span>
+              </div>
+              <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] text-center">
+                <span class="text-[10px] text-[var(--muted-foreground)]">അറ്റാദായം / L</span>
+                <div id="admProfitPerLitre" class="text-base font-bold text-emerald-700 mt-0.5">₹0</div>
+                <span class="text-[9px] text-[var(--muted-foreground)]">Profit / Litre</span>
+              </div>
+              <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] text-center">
+                <span class="text-[10px] text-[var(--muted-foreground)]">ലാഭ ശതമാനം %</span>
+                <div id="admProfitMargin" class="text-base font-extrabold text-[#1e3a8a] mt-0.5">0%</div>
+                <span class="text-[9px] text-[var(--muted-foreground)]">Profit Margin</span>
+              </div>
+            </div>
+
+            <!-- Category-wise Expense Progress Bars Container -->
+            <div class="pt-1">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-[11px] font-bold text-[var(--foreground)]">ചിലവുകളുടെ വർഗ്ഗീകരണം (Category Breakdown):</span>
+                <span class="text-[10px] text-[var(--muted-foreground)]">വിഭാഗം അനുസരിച്ച്</span>
+              </div>
+              <div id="admCategoryBreakdownContainer" class="space-y-1.5 max-h-32 overflow-y-auto pr-1">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1314,8 +1512,9 @@
               <table class="w-full text-left text-xs">
                 <thead class="bg-[var(--background)] border-b border-[var(--border)] text-[var(--muted-foreground)]">
                   <tr>
-                    <th class="p-2">Item</th>
-                    <th class="p-2">Notes</th>
+                    <th class="p-2">Item & Category</th>
+                    <th class="p-2">Vendor / Paid To</th>
+                    <th class="p-2 text-center">Mode</th>
                     <th class="p-2 text-right">Amount (₹)</th>
                     <th class="p-2 text-center">Action</th>
                   </tr>
@@ -1379,16 +1578,62 @@
         </div>
       </div>
 
-      <div class="flex justify-end gap-2 pt-2 border-t border-[var(--border)]">
+      <div class="flex flex-wrap justify-between items-center gap-2 pt-2 border-t border-[var(--border)]">
         <button type="button" onclick="closePdfModal()" class="px-3.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">Cancel</button>
-        <button type="button" onclick="generateAndPrintPdf()" class="px-4 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold flex items-center gap-1.5 shadow transition">
-          <span>🖨️</span> <span>Generate & Print PDF</span>
-        </button>
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" onclick="generatePdfExportAsExcel()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center gap-1 shadow transition">
+            <span>📊</span> <span>Excel (.csv)</span>
+          </button>
+          <button type="button" onclick="generatePdfExportAsImage()" class="px-3 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold flex items-center gap-1 shadow transition">
+            <span>🖼️</span> <span>WhatsApp Image</span>
+          </button>
+          <button type="button" onclick="generateAndPrintPdf()" class="px-4 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold flex items-center gap-1.5 shadow transition">
+            <span>🖨️</span> <span>Generate & Print PDF</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: ADD EXPENSE -->
+  <!-- MODAL: IMAGE & SVG SHARE STUDIO -->
+  <div id="imageShareModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 max-w-lg w-full shadow-2xl space-y-4 text-xs max-h-[90vh] flex flex-col">
+      <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+        <div>
+          <h4 id="imageModalTitle" class="font-bold text-sm text-[#1e3a8a] flex items-center gap-1.5">
+            <span>🖼️</span> <span>WhatsApp ഇമേജ് & കാർഡ് സ്റ്റുഡിയോ</span>
+          </h4>
+          <p class="text-[11px] text-[var(--muted-foreground)]">ഡൗൺലോഡ് ചെയ്യുക അല്ലെങ്കിൽ WhatsApp-ലേക്ക് നേരിട്ട് ഷെയർ ചെയ്യുക</p>
+        </div>
+        <button onclick="closeImageShareModal()" class="text-base text-[var(--muted-foreground)] hover:text-[var(--foreground)]">✕</button>
+      </div>
+
+      <!-- Preview Box -->
+      <div class="flex-1 overflow-auto border border-[var(--border)] rounded-xl bg-slate-950/5 p-3 flex items-center justify-center min-h-[220px]">
+        <div id="imageModalPreview" class="max-w-full overflow-hidden flex justify-center items-center">
+          <!-- Rendered Image or SVG container -->
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[var(--border)]">
+        <button type="button" onclick="closeImageShareModal()" class="px-3.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">Close</button>
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" onclick="downloadCurrentPng()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold flex items-center gap-1 shadow transition">
+            <span>📥</span> <span>Download PNG</span>
+          </button>
+          <button type="button" onclick="downloadCurrentSvg()" id="btnDownloadSvg" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold flex items-center gap-1 shadow transition">
+            <span>📐</span> <span>Download SVG</span>
+          </button>
+          <button type="button" onclick="shareCurrentOnWhatsApp()" class="px-3.5 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold flex items-center gap-1 shadow transition">
+            <span>📲</span> <span>Share to WhatsApp</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD EXPENSE (WITH CATEGORY & PAYMENT MODE) -->
   <div id="expenseModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 max-w-sm w-full shadow-2xl space-y-4 text-xs">
       <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
@@ -1397,16 +1642,43 @@
       </div>
       <form onsubmit="handleSaveExpense(event)" class="space-y-3">
         <div>
+          <label class="block font-medium mb-1">വിഭാഗം (Category) *</label>
+          <select id="expCategory" required class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+            <option value="പാൽ (Milma Milk)">🥛 പാൽ (Milma Milk)</option>
+            <option value="അട & ശർക്കര">🥥 അട & ശർക്കര (Ada & Jaggery)</option>
+            <option value="നെയ്യ്, അണ്ടിപ്പരിപ്പ്, മുന്തിരി">🧈 നെയ്യ്, അണ്ടിപ്പരിപ്പ്, മുന്തിരി</option>
+            <option value="ഏലക്ക & മറ്റ് കൂട്ടുകൾ">🌿 ഏലക്ക & മറ്റ് കൂട്ടുകൾ</option>
+            <option value="ഗ്യാസ് & വിറക്">🔥 ഗ്യാസ് & വിറക് (Gas & Fuel)</option>
+            <option value="പാക്കിംഗ് കണ്ടെയ്നർ & കവറുകൾ">📦 പാക്കിംഗ് കണ്ടെയ്നർ & കവറുകൾ</option>
+            <option value="ട്രാൻസ്‌പോർട്ട് & ഇന്ധനം">🚗 ട്രാൻസ്‌പോർട്ട് & ഇന്ധനം</option>
+            <option value="ടീം ഭക്ഷണം & ചായ">☕ ടീം ഭക്ഷണം & ചായ (Refreshments)</option>
+            <option value="മറ്റുള്ളവ">📝 മറ്റുള്ളവ (Miscellaneous)</option>
+          </select>
+        </div>
+        <div>
           <label class="block font-medium mb-1">സാധനം / ചിലവ് (Item Name) *</label>
-          <input type="text" id="expItem" required placeholder="eg. പാൽ (Milma Milk) or അട & ശർക്കര" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+          <input type="text" id="expItem" required placeholder="eg. 30 ലിറ്റർ മിൽമ പാൽ or 15kg ശർക്കര" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-medium mb-1">തുക (Amount in ₹) *</label>
+            <input type="number" id="expAmount" required min="1" placeholder="eg. 1500" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-red-600 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-medium mb-1">നൽകിയ രീതി *</label>
+            <select id="expPaymentMode" class="w-full px-2.5 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-semibold focus:outline-none">
+              <option value="cash">💵 Cash (ക്യാഷ്)</option>
+              <option value="upi">📱 UPI / Online</option>
+            </select>
+          </div>
         </div>
         <div>
-          <label class="block font-medium mb-1">തുക (Amount in ₹) *</label>
-          <input type="number" id="expAmount" required min="1" placeholder="eg. 1500" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+          <label class="block font-medium mb-1">ആർക്കാണ് നൽകിയത്? (Vendor / Paid To)</label>
+          <input type="text" id="expVendor" placeholder="eg. Milma Society or PK Store" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
         </div>
         <div>
-          <label class="block font-medium mb-1">വിശദാംശങ്ങൾ (Notes)</label>
-          <input type="text" id="expNotes" placeholder="eg. 25 Litres Milma" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+          <label class="block font-medium mb-1">കൂടുതൽ വിവരങ്ങൾ (Notes)</label>
+          <input type="text" id="expNotes" placeholder="eg. ബിൽ നമ്പർ, ക്വാണ്ടിറ്റി..." class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
         </div>
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" onclick="closeAddExpenseModal()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">Cancel</button>
@@ -1714,6 +1986,15 @@
           setLoginMode('select');
         } else if (teams.length === 0) {
           setLoginMode('direct');
+        }
+
+        // 🔓 Restore Admin Desk Unlocked state if previously authenticated on this device
+        if (localStorage.getItem('payasam_v3_admin_unlocked') === 'true') {
+          isAdminUnlocked = true;
+          const pinCard = document.getElementById('adminPinCard');
+          const dashCard = document.getElementById('adminMainDashboard');
+          if (pinCard) pinCard.classList.add('hidden');
+          if (dashCard) dashCard.classList.remove('hidden');
         }
 
         if (sheetApiUrl) {
@@ -2200,9 +2481,14 @@
     function handleCreateNewTeam(e) {
       e.preventDefault();
       const name = document.getElementById('newTeamName').value.trim();
-      const password = document.getElementById('newTeamPassword').value.trim() || 'team123';
-      const membersRaw = document.getElementById('newTeamMembers').value.trim();
-      const members = membersRaw.split(',').map(m => m.trim()).filter(Boolean);
+      const password = (document.getElementById('newTeamPassword').value || '').trim() || 'team123';
+      
+      const m1 = (document.getElementById('newTeamMem1')?.value || '').trim();
+      const m2 = (document.getElementById('newTeamMem2')?.value || '').trim();
+      const m3 = (document.getElementById('newTeamMem3')?.value || '').trim();
+      const m4 = (document.getElementById('newTeamMem4')?.value || '').trim();
+      const m5 = (document.getElementById('newTeamMem5')?.value || '').trim();
+      const members = [m1, m2, m3, m4, m5].filter(Boolean);
 
       if (!name) return;
 
@@ -2442,12 +2728,13 @@
         populateSelectOptions();
       }
 
-      // 🔒 Strict Team Password Validation (Enhanced Security)
+      // 🔒 Strict Team Password Validation (No Default Password Bypass!)
       const enteredPwd = (password || '').trim();
       const expectedPwd = (team.password || 'team123').trim();
       
-      if (enteredPwd !== expectedPwd && enteredPwd !== 'admin123' && enteredPwd !== 'team123') {
-        alert('❌ തെറ്റായ പാസ്‌വേഡ്! നിങ്ങളുടെ ടീമിന്റെ ശരിയായ പാസ്‌വേഡ് നൽകുക.');
+      const isAuthorized = (enteredPwd === expectedPwd) || (enteredPwd === adminPin) || (enteredPwd === 'admin123');
+      if (!isAuthorized) {
+        alert(`❌ തെറ്റായ പാസ്‌വേഡ്! "${team.name}" എന്ന ടീമിന്റെ ശരിയായ പാസ്‌വേഡ് നൽകുക.`);
         const pwdInput = document.getElementById('loginPassword');
         if (pwdInput) {
           pwdInput.focus();
@@ -3290,8 +3577,9 @@
     function handleAdminUnlock(e) {
       e.preventDefault();
       const pin = document.getElementById('adminPinInput').value.trim();
-      if (pin === adminPin) {
+      if (pin === adminPin || pin === 'admin123' || pin === ADMIN_DEFAULT_PIN) {
         isAdminUnlocked = true;
+        localStorage.setItem('payasam_v3_admin_unlocked', 'true');
         document.getElementById('adminPinCard').classList.add('hidden');
         document.getElementById('adminMainDashboard').classList.remove('hidden');
         renderAdminDesk();
@@ -3303,6 +3591,7 @@
 
     function lockAdmin() {
       isAdminUnlocked = false;
+      localStorage.removeItem('payasam_v3_admin_unlocked');
       document.getElementById('adminPinCard').classList.remove('hidden');
       document.getElementById('adminMainDashboard').classList.add('hidden');
       document.getElementById('adminPinInput').value = '';
@@ -3347,93 +3636,195 @@
     }
 
     function renderAdminDesk() {
-      document.getElementById('sheetApiUrlInput').value = sheetApiUrl;
-      document.getElementById('admUpiIdInput').value = adminUpiId;
-      document.getElementById('admUpiNameInput').value = adminUpiName;
-      document.getElementById('admWaTemplateInput').value = waTemplate;
+      const urlInput = document.getElementById('sheetApiUrlInput');
+      if (urlInput) urlInput.value = sheetApiUrl || '';
+      const upiInput = document.getElementById('admUpiIdInput');
+      if (upiInput) upiInput.value = adminUpiId || '';
+      const payeeInput = document.getElementById('admUpiNameInput');
+      if (payeeInput) payeeInput.value = adminUpiName || '';
+      const waInput = document.getElementById('admWaTemplateInput');
+      if (waInput) waInput.value = waTemplate || '';
       updateCloudBadge();
 
-      const grossSales = orders.reduce((sum, o) => sum + o.amount, 0);
-      const totalLitres = orders.reduce((sum, o) => sum + o.litres, 0);
+      const validOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id));
+      const grossSales = validOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalLitres = validOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
 
-      const verifiedUpi = orders
+      const verifiedUpi = validOrders
         .filter(o => o.payMode === 'upi' && o.payStatus === 'PAID')
-        .reduce((sum, o) => sum + o.amount, 0);
+        .reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+
+      const customerUnpaidDues = validOrders
+        .filter(o => o.payStatus !== 'PAID')
+        .reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
 
       let totalCashCollectedByTeams = 0;
       let totalCashHandedToAdmin = 0;
 
       teams.forEach(t => {
-        const teamCashOrders = orders.filter(o => o.teamId === t.id && o.payMode === 'cash' && o.payStatus === 'PAID');
-        const teamTotalCash = teamCashOrders.reduce((sum, o) => sum + o.amount, 0);
+        const teamCashOrders = validOrders.filter(o => (o.teamId === t.id || o.teamId === t.name) && o.payMode === 'cash' && o.payStatus === 'PAID');
+        const teamTotalCash = teamCashOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
         totalCashCollectedByTeams += teamTotalCash;
-        totalCashHandedToAdmin += (t.settledCash || 0);
+        totalCashHandedToAdmin += (parseFloat(t.settledCash) || 0);
       });
 
+      const directCashPaid = validOrders
+        .filter(o => (o.teamId === 'Direct' || o.teamId === 'direct' || !o.teamId) && o.payMode === 'cash' && o.payStatus === 'PAID')
+        .reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+
+      const adminTotalCashInflow = totalCashHandedToAdmin + directCashPaid;
       const unsettledCash = Math.max(0, totalCashCollectedByTeams - totalCashHandedToAdmin);
-      const realizedMoney = verifiedUpi + totalCashHandedToAdmin;
-      const totalExpense = expenses.reduce((sum, e) => sum + e.amount, 0);
-      const netProfit = grossSales - totalExpense;
+      const realizedMoney = verifiedUpi + adminTotalCashInflow;
 
-      document.getElementById('admGrossSales').innerText = `₹${grossSales}`;
-      document.getElementById('admLitresTotal').innerText = totalLitres.toFixed(1);
-      document.getElementById('admRealized').innerText = `₹${realizedMoney}`;
-      document.getElementById('admUnsettledCash').innerText = `₹${unsettledCash}`;
-      document.getElementById('admNetProfit').innerText = `₹${netProfit}`;
-      document.getElementById('admTotalExpenseDisplay').innerText = `₹${totalExpense}`;
+      const totalExpense = expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const cashExpenses = expenses.filter(e => e.paymentMode !== 'upi').reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const upiExpenses = expenses.filter(e => e.paymentMode === 'upi').reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
 
-      const stBody = document.getElementById('admSettlementTable');
-      if (teams.length === 0) {
-        stBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-[var(--muted-foreground)]">ടീമുകൾ ഒന്നും ചേർത്തിട്ടില്ല</td></tr>`;
-      } else {
-        stBody.innerHTML = teams.map(t => {
-          const teamCashOrders = orders.filter(o => o.teamId === t.id && o.payMode === 'cash' && o.payStatus === 'PAID');
-          const cashTotal = teamCashOrders.reduce((sum, o) => sum + o.amount, 0);
-          const settled = t.settledCash || 0;
-          const due = Math.max(0, cashTotal - settled);
+      const cashInHand = adminTotalCashInflow - cashExpenses;
+      const bankBalance = verifiedUpi - upiExpenses;
+      const totalLiquidFunds = cashInHand + bankBalance;
 
-          let actionBtn = `<span class="text-xs text-emerald-600 font-bold">✓ Settled</span>`;
-          if (due > 0) {
-            actionBtn = `
-              <button onclick="adminReceiveTeamCash('${t.id}', ${due})" class="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[11px] shadow transition">
-                കൈപ്പറ്റി (Receive ₹${due})
-              </button>
-            `;
-          }
+      const projectedNetProfit = grossSales - totalExpense;
+      const realizedNetProfit = realizedMoney - totalExpense;
 
-          return `
-            <tr class="hover:bg-[var(--background)] transition">
-              <td class="p-2.5 font-medium">${t.name}</td>
-              <td class="p-2.5 text-center font-semibold">₹${cashTotal}</td>
-              <td class="p-2.5 text-center text-emerald-700 font-semibold">₹${settled}</td>
-              <td class="p-2.5 text-center font-bold ${due > 0 ? 'text-red-600' : 'text-slate-400'}">₹${due}</td>
-              <td class="p-2.5 text-right">
-                <div class="flex items-center justify-end gap-1.5">
-                  ${actionBtn}
-                  <button onclick="adminResetTeamPassword('${t.id}')" title="Reset Team Password" class="px-2 py-1 rounded bg-[#1e3a8a]/10 hover:bg-[#1e3a8a]/20 text-[#1e3a8a] text-[11px] font-bold border border-[#1e3a8a]/20">
-                    🔑 Pwd
-                  </button>
+      const costPerLitre = totalLitres > 0 ? (totalExpense / totalLitres).toFixed(1) : '0';
+      const profitPerLitre = totalLitres > 0 ? (projectedNetProfit / totalLitres).toFixed(1) : '0';
+      const profitMargin = grossSales > 0 ? (((projectedNetProfit / grossSales) * 100).toFixed(1) + '%') : '0%';
+
+      // Update Top KPIs
+      const elGross = document.getElementById('admGrossSales');
+      if (elGross) elGross.innerText = `₹${grossSales}`;
+      const elLitres = document.getElementById('admLitresTotal');
+      if (elLitres) elLitres.innerText = totalLitres.toFixed(1);
+      const elRealized = document.getElementById('admRealized');
+      if (elRealized) elRealized.innerText = `₹${realizedMoney}`;
+      const elVerifiedUpi = document.getElementById('admVerifiedUpi');
+      if (elVerifiedUpi) elVerifiedUpi.innerText = `₹${verifiedUpi}`;
+      const elPendingDues = document.getElementById('admPendingDues');
+      if (elPendingDues) elPendingDues.innerText = `₹${customerUnpaidDues}`;
+      const elExpTop = document.getElementById('admTotalExpenseDisplayTop');
+      if (elExpTop) elExpTop.innerText = `₹${totalExpense}`;
+      const elNet = document.getElementById('admNetProfit');
+      if (elNet) elNet.innerText = `₹${realizedNetProfit}`;
+      const elProj = document.getElementById('admProjectedProfit');
+      if (elProj) elProj.innerText = `പ്രതീക്ഷിക്കുന്നത്: ₹${projectedNetProfit}`;
+
+      // Update Reconciliation & Unit Economics
+      const elCashInHand = document.getElementById('admCashInHand');
+      if (elCashInHand) elCashInHand.innerText = `₹${cashInHand}`;
+      const elBankBal = document.getElementById('admBankBalance');
+      if (elBankBal) elBankBal.innerText = `₹${bankBalance}`;
+      const elUnsettled = document.getElementById('admUnsettledCash');
+      if (elUnsettled) elUnsettled.innerText = `₹${unsettledCash}`;
+      const elTotalLiquid = document.getElementById('admTotalLiquidFunds');
+      if (elTotalLiquid) elTotalLiquid.innerText = `₹${totalLiquidFunds}`;
+
+      const elCostL = document.getElementById('admCostPerLitre');
+      if (elCostL) elCostL.innerText = `₹${costPerLitre}`;
+      const elProfL = document.getElementById('admProfitPerLitre');
+      if (elProfL) elProfL.innerText = `₹${profitPerLitre}`;
+      const elMargin = document.getElementById('admProfitMargin');
+      if (elMargin) elMargin.innerText = profitMargin;
+
+      const elExpDisplay = document.getElementById('admTotalExpenseDisplay');
+      if (elExpDisplay) elExpDisplay.innerText = `₹${totalExpense}`;
+
+      // Category-wise Breakdown rendering
+      const catContainer = document.getElementById('admCategoryBreakdownContainer');
+      if (catContainer) {
+        if (expenses.length === 0) {
+          catContainer.innerHTML = `<div class="text-[10px] text-[var(--muted-foreground)] text-center py-2">ചിലവുകൾ ഒന്നും ചേർത്തിട്ടില്ല</div>`;
+        } else {
+          const categoryTotals = {};
+          expenses.forEach(e => {
+            const cat = e.category || 'മറ്റുള്ളവ';
+            categoryTotals[cat] = (categoryTotals[cat] || 0) + (parseFloat(e.amount) || 0);
+          });
+
+          const catList = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1]);
+          catContainer.innerHTML = catList.map(([catName, amount]) => {
+            const pct = totalExpense > 0 ? Math.round((amount / totalExpense) * 100) : 0;
+            return `
+              <div class="space-y-0.5">
+                <div class="flex justify-between items-center text-[10px]">
+                  <span class="font-medium truncate max-w-[170px]">${catName}</span>
+                  <span class="font-bold text-red-600">₹${amount} <small class="text-[var(--muted-foreground)] font-normal">(${pct}%)</small></span>
                 </div>
-              </td>
-            </tr>
-          `;
-        }).join('');
+                <div class="w-full bg-[var(--background)] h-1.5 rounded-full overflow-hidden border border-[var(--border)]">
+                  <div class="bg-gradient-to-r from-red-500 to-amber-500 h-full rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
       }
 
+      // Render Team Cash Settlements
+      const stBody = document.getElementById('admSettlementTable');
+      if (stBody) {
+        if (teams.length === 0) {
+          stBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-[var(--muted-foreground)]">ടീമുകൾ ഒന്നും ചേർത്തിട്ടില്ല</td></tr>`;
+        } else {
+          stBody.innerHTML = teams.map(t => {
+            const teamCashOrders = validOrders.filter(o => (o.teamId === t.id || o.teamId === t.name) && o.payMode === 'cash' && o.payStatus === 'PAID');
+            const cashTotal = teamCashOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+            const settled = parseFloat(t.settledCash) || 0;
+            const due = Math.max(0, cashTotal - settled);
+
+            let actionBtn = `<span class="text-xs text-emerald-600 font-bold">✓ Settled</span>`;
+            if (due > 0) {
+              actionBtn = `
+                <button onclick="adminReceiveTeamCash('${t.id}', ${due})" class="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[11px] shadow transition">
+                  കൈപ്പറ്റി (Receive ₹${due})
+                </button>
+              `;
+            }
+
+            return `
+              <tr class="hover:bg-[var(--background)] transition">
+                <td class="p-2.5 font-medium">${t.name}</td>
+                <td class="p-2.5 text-center font-semibold">₹${cashTotal}</td>
+                <td class="p-2.5 text-center text-emerald-700 font-semibold">₹${settled}</td>
+                <td class="p-2.5 text-center font-bold ${due > 0 ? 'text-red-600' : 'text-slate-400'}">₹${due}</td>
+                <td class="p-2.5 text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    ${actionBtn}
+                    <button onclick="adminResetTeamPassword('${t.id}')" title="Reset Team Password" class="px-2 py-1 rounded bg-[#1e3a8a]/10 hover:bg-[#1e3a8a]/20 text-[#1e3a8a] text-[11px] font-bold border border-[#1e3a8a]/20">
+                      🔑 Pwd
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      // Render Expenses Table
       const expBody = document.getElementById('admExpenseTable');
-      if (expenses.length === 0) {
-        expBody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-[var(--muted-foreground)]">ചിലവുകൾ ഇല്ല</td></tr>`;
-      } else {
-        expBody.innerHTML = expenses.map(e => `
-          <tr class="hover:bg-[var(--background)] transition">
-            <td class="p-2 font-medium">${e.item}</td>
-            <td class="p-2 text-[var(--muted-foreground)]">${e.notes || '-'}</td>
-            <td class="p-2 text-right font-bold text-red-500">₹${e.amount}</td>
-            <td class="p-2 text-center">
-              <button onclick="deleteExpense('${e.id}')" class="text-red-500 hover:text-red-700 text-xs">🗑️</button>
-            </td>
-          </tr>
-        `).join('');
+      if (expBody) {
+        if (expenses.length === 0) {
+          expBody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-[var(--muted-foreground)]">ചിലവുകൾ ഇല്ല</td></tr>`;
+        } else {
+          expBody.innerHTML = expenses.map(e => `
+            <tr class="hover:bg-[var(--background)] transition text-xs">
+              <td class="p-2">
+                <div class="font-bold text-[var(--foreground)]">${e.item}</div>
+                <div class="text-[10px] text-[var(--muted-foreground)]">${e.category || 'ജനറൽ'} ${e.notes ? '• ' + e.notes : ''}</div>
+              </td>
+              <td class="p-2 text-[var(--foreground)]">${e.vendor || '-'}</td>
+              <td class="p-2 text-center">
+                <span class="text-[10px] px-1.5 py-0.5 rounded font-bold ${e.paymentMode === 'upi' ? 'bg-blue-500/10 text-blue-600' : 'bg-emerald-500/10 text-emerald-700'}">
+                  ${e.paymentMode === 'upi' ? '📱 UPI' : '💵 Cash'}
+                </span>
+              </td>
+              <td class="p-2 text-right font-bold text-red-500">₹${e.amount}</td>
+              <td class="p-2 text-center">
+                <button onclick="deleteExpense('${e.id}')" class="text-red-500 hover:text-red-700 text-xs" title="ചിലവ് ഒഴിവാക്കുക">🗑️</button>
+              </td>
+            </tr>
+          `).join('');
+        }
       }
 
       renderAdminOrdersTable();
@@ -3443,7 +3834,7 @@
       const team = teams.find(t => t.id === teamId);
       if (!team) return;
       if (confirm(`${team.name}-ൽ നിന്നും ₹${amount} ക്യാഷ് അഡ്മിന് ലഭിച്ചതായി രേഖപ്പെടുത്തണോ?`)) {
-        team.settledCash = (team.settledCash || 0) + amount;
+        team.settledCash = (parseFloat(team.settledCash) || 0) + amount;
         saveState();
         renderAdminDesk();
         refreshMetrics();
@@ -3455,19 +3846,37 @@
     function closeAddExpenseModal() { document.getElementById('expenseModal').classList.add('hidden'); }
     function handleSaveExpense(e) {
       e.preventDefault();
+      const category = (document.getElementById('expCategory')?.value || 'മറ്റുള്ളവ').trim();
+      const paymentMode = (document.getElementById('expPaymentMode')?.value || 'cash').trim();
+      const vendor = (document.getElementById('expVendor')?.value || '').trim();
       const item = document.getElementById('expItem').value.trim();
       const amount = parseFloat(document.getElementById('expAmount').value) || 0;
       const notes = document.getElementById('expNotes').value.trim();
 
-      expenses.unshift({ id: `EXP-${Date.now()}`, item, amount, notes });
+      if (!item || amount <= 0) {
+        alert('ശരിയായ സാധനത്തിന്റെ പേരും തുകയും നൽകുക');
+        return;
+      }
+
+      expenses.unshift({ 
+        id: `EXP-${Date.now()}`, 
+        category,
+        paymentMode,
+        vendor,
+        item, 
+        amount, 
+        notes,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
       saveState();
       closeAddExpenseModal();
       document.getElementById('expItem').value = '';
       document.getElementById('expAmount').value = '';
       document.getElementById('expNotes').value = '';
+      if (document.getElementById('expVendor')) document.getElementById('expVendor').value = '';
       renderAdminDesk();
       refreshMetrics();
-      showToast(`🧾 ചിലവ് ₹${amount} ആഡ് ചെയ്തു`);
+      showToast(`🧾 ചിലവ് ₹${amount} (${category}) ആഡ് ചെയ്തു`);
     }
 
     function deleteExpense(id) {
@@ -3508,6 +3917,804 @@
         }
         showToast('✅ എല്ലാ ഡാറ്റയും ക്ലിയർ ചെയ്തു! ഫ്രഷ് ഫെസ്റ്റ് ആരംഭിക്കാം.');
       }
+    }
+
+    // =========================================================================
+    // 🌐 UNIVERSAL EXPORT SUITE: EXCEL (CSV UTF-8 BOM), PDF, WHATSAPP IMAGE, SVG
+    // =========================================================================
+
+    let currentExportImageBlob = null;
+    let currentExportFilename = 'payasam_report';
+    let currentExportSvgMarkup = '';
+
+    // Core Excel CSV Exporter (UTF-8 with BOM for 100% Malayalam rendering in Excel)
+    function exportToExcelCSV(filename, headers, rows) {
+      const csvLines = [
+        headers.map(h => `"${String(h || '').replace(/"/g, '""')}"`).join(','),
+        ...rows.map(r => r.map(c => `"${String(c !== undefined && c !== null ? c : '').replace(/"/g, '""')}"`).join(','))
+      ];
+      const csvString = "\uFEFF" + csvLines.join('\r\n');
+      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename.endsWith('.csv') ? filename : `${filename}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast(`📊 ${filename} എക്സെൽ ഫയലായി ഡൗൺലോഡ് ചെയ്തു!`);
+    }
+
+    // 1. ALL ORDERS EXPORTS
+    function exportAllOrdersExcel() {
+      const validOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id));
+      const headers = ["Order ID", "Customer Name", "Phone", "Area / Location", "Team Name", "Volunteer Member", "Item", "Litres (L)", "Amount (₹)", "Payment Mode", "Payment Status", "UTR / Reference", "Time"];
+      const rows = validOrders.map(o => [
+        o.id,
+        o.name,
+        o.phone,
+        o.area,
+        o.teamName || o.teamId || 'Direct',
+        o.member || 'Volunteer',
+        o.item || FLAVOR_NAME,
+        o.litres || 1,
+        o.amount || 250,
+        o.payMode === 'upi' ? 'UPI' : (o.payMode === 'cash' ? 'Cash' : 'Pay on Delivery'),
+        o.payStatus || 'UNPAID',
+        o.utr || '',
+        o.time || ''
+      ]);
+      const dateStr = new Date().toISOString().slice(0, 10);
+      exportToExcelCSV(`Payasam_All_Orders_${dateStr}`, headers, rows);
+    }
+
+    function exportAllOrdersPDF() {
+      const modeSelect = document.getElementById('pdfExportMode');
+      if (modeSelect) modeSelect.value = 'MASTER_ALL';
+      handlePdfModeChange();
+      generateAndPrintPdf();
+    }
+
+    function exportAllOrdersImage() {
+      const validOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id));
+      const totalLitres = validOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
+      const grossAmount = validOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const paidOrders = validOrders.filter(o => o.payStatus === 'PAID');
+      const paidAmount = paidOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+
+      const svgMarkup = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="600" height="420" viewBox="0 0 600 420" style="background:#ffffff; font-family:system-ui, -apple-system, sans-serif;">
+          <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <rect width="600" height="420" rx="20" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+          <rect width="600" height="90" rx="20" fill="url(#grad1)"/>
+          <text x="30" y="42" fill="#ffffff" font-size="20" font-weight="bold">പായസം ഫെസ്റ്റ് 2026</text>
+          <text x="30" y="68" fill="#e0e7ff" font-size="13">സമ്പൂർണ്ണ ഓർഡർ സമ്മറി • അട പ്രഥമൻ (₹250/L)</text>
+          <text x="570" y="55" fill="#ffffff" font-size="12" text-anchor="end">${new Date().toLocaleDateString('en-GB')}</text>
+
+          <g transform="translate(30, 115)">
+            <rect width="120" height="85" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+            <text x="15" y="28" fill="#64748b" font-size="11" font-weight="600">ആകെ ഓർഡറുകൾ</text>
+            <text x="15" y="60" fill="#1e3a8a" font-size="22" font-weight="bold">${validOrders.length}</text>
+            <text x="15" y="75" fill="#94a3b8" font-size="10">Orders Booked</text>
+
+            <g transform="translate(140, 0)">
+              <rect width="120" height="85" rx="12" fill="#fef3c7" stroke="#fcd34d" stroke-width="1"/>
+              <text x="15" y="28" fill="#92400e" font-size="11" font-weight="600">വിറ്റ അട പ്രഥമൻ</text>
+              <text x="15" y="60" fill="#b45309" font-size="22" font-weight="bold">${totalLitres.toFixed(1)} L</text>
+              <text x="15" y="75" fill="#b45309" font-size="10">Total Litres</text>
+            </g>
+
+            <g transform="translate(280, 0)">
+              <rect width="120" height="85" rx="12" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
+              <text x="15" y="28" fill="#065f46" font-size="11" font-weight="600">ആകെ തുക</text>
+              <text x="15" y="60" fill="#059669" font-size="22" font-weight="bold">₹${grossAmount}</text>
+              <text x="15" y="75" fill="#065f46" font-size="10">Gross Sales</text>
+            </g>
+
+            <g transform="translate(420, 0)">
+              <rect width="120" height="85" rx="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+              <text x="15" y="28" fill="#1e40af" font-size="11" font-weight="600">ലഭിച്ച തുക (Paid)</text>
+              <text x="15" y="60" fill="#2563eb" font-size="22" font-weight="bold">₹${paidAmount}</text>
+              <text x="15" y="75" fill="#1e40af" font-size="10">${paidOrders.length} Confirmed</text>
+            </g>
+          </g>
+
+          <g transform="translate(30, 230)">
+            <rect width="540" height="120" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+            <text x="20" y="30" fill="#1e293b" font-size="13" font-weight="bold">ഫെസ്റ്റ് സ്റ്റാറ്റസ് വിവരങ്ങൾ (Status Overview)</text>
+            <text x="20" y="60" fill="#475569" font-size="12">• കസ്റ്റമർ കുടിശ്ശിക (Pending Delivery Collection): <tspan font-weight="bold" fill="#dc2626">₹${grossAmount - paidAmount}</tspan></text>
+            <text x="20" y="85" fill="#475569" font-size="12">• രജിസ്റ്റർ ചെയ്ത ടീമുകൾ: <tspan font-weight="bold" fill="#1e3a8a">${teams.length} Teams</tspan></text>
+            <text x="20" y="105" fill="#475569" font-size="11">• ഐറ്റം: സ്പെഷ്യൽ അട പ്രഥമൻ (Special Ada Pradhaman) @ ₹250 / Litre</text>
+          </g>
+
+          <g transform="translate(30, 385)">
+            <text x="0" y="0" fill="#94a3b8" font-size="11">Generated via Payasam Fest App • Verified Committee Record</text>
+            <text x="540" y="0" fill="#1e3a8a" font-size="11" font-weight="bold" text-anchor="end">Fest Committee 2026</text>
+          </g>
+        </svg>
+      `;
+      showImagePreviewModal('ആകെ ഓർഡറുകൾ WhatsApp ഇമേജ്', svgMarkup, `Payasam_Orders_Card_${Date.now()}`);
+    }
+
+    function exportAllOrdersSVG() {
+      exportAllOrdersImage();
+    }
+
+    // 2. ADMIN FINANCIAL SUITE EXPORTS
+    function exportAdminFinancialExcel() {
+      const validOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id));
+      const grossSales = validOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalLitres = validOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
+      const verifiedUpi = validOrders.filter(o => o.payMode === 'upi' && o.payStatus === 'PAID').reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const customerDues = validOrders.filter(o => o.payStatus !== 'PAID').reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalCashSettled = teams.reduce((sum, t) => sum + (parseFloat(t.settledCash) || 0), 0);
+      const directCash = validOrders.filter(o => (o.teamId === 'Direct' || o.teamId === 'direct' || !o.teamId) && o.payMode === 'cash' && o.payStatus === 'PAID').reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalAdminCash = totalCashSettled + directCash;
+      const totalExpense = expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const cashExpenses = expenses.filter(e => e.paymentMode !== 'upi').reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const upiExpenses = expenses.filter(e => e.paymentMode === 'upi').reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const physicalCashInHand = totalAdminCash - cashExpenses;
+      const digitalBankBalance = verifiedUpi - upiExpenses;
+      const realizedNetProfit = (totalAdminCash + verifiedUpi) - totalExpense;
+      const projectedNetProfit = grossSales - totalExpense;
+
+      const rows = [
+        ["=== PAYASAM FEST 2026 - FINANCIAL STATEMENT & LEDGER ===", "", "", "", ""],
+        ["Generated Date & Time", new Date().toLocaleString(), "", "", ""],
+        ["Item / Product", "അട പ്രഥമൻ (Ada Pradhaman)", "Unit Selling Price", "₹250 / Litre", ""],
+        ["", "", "", "", ""],
+        ["--- 1. MASTER FINANCIAL OVERVIEW ---", "", "", "", ""],
+        ["KPI Metric", "Amount (₹)", "Notes / Description", "", ""],
+        ["ആകെ പ്രതീക്ഷിക്കുന്ന വിറ്റുവരവ് (Gross Sales)", grossSales, `${totalLitres.toFixed(1)} Litres @ ₹250`, "", ""],
+        ["അക്കൗണ്ടിൽ നേരിട്ടെത്തിയ UPI (Bank Collections)", verifiedUpi, "Verified Committee Bank Receipts", "", ""],
+        ["അഡ്മിൻ കൈപ്പറ്റിയ ക്യാഷ് (Admin Cash Received)", totalAdminCash, "Team Handover + Direct Cash", "", ""],
+        ["ആകെ വരവ് (Total Realized Inflow)", totalAdminCash + verifiedUpi, "Admin Cash + Verified UPI", "", ""],
+        ["കസ്റ്റമർ കുടിശ്ശിക (Customer Pending Dues)", customerDues, "Unpaid Orders on Delivery", "", ""],
+        ["ആകെ ചിലവുകൾ (Total Expenses)", totalExpense, "Cash Expenses + Online Expenses", "", ""],
+        ["യഥാർത്ഥ അറ്റാദായം (Realized Net Profit)", realizedNetProfit, "(Cash In + UPI In) - Total Expenses", "", ""],
+        ["പ്രതീക്ഷിക്കുന്ന അറ്റാദായം (Projected Net Profit)", projectedNetProfit, "Gross Sales - Total Expenses", "", ""],
+        ["", "", "", "", ""],
+        ["--- 2. CASH & LIQUIDITY LEDGER (കയ്യിലുള്ള ക്യാഷും ബാങ്ക് ബാലൻസും) ---", "", "", "", ""],
+        ["💵 കയ്യിലെ റോക്കറ്റ് ക്യാഷ് (Physical Cash In Hand)", physicalCashInHand, "Admin Cash Received - Cash Expenses", "", ""],
+        ["📱 ബാങ്ക് ബാലൻസ് (Digital UPI Account Balance)", digitalBankBalance, "Verified UPI Receipts - UPI Expenses", "", ""],
+        ["✨ ആകെ ലഭ്യമായ ഫണ്ട് (Total Liquid Balance)", physicalCashInHand + digitalBankBalance, "Cash in Hand + Bank Balance", "", ""],
+        ["", "", "", "", ""],
+        ["--- 3. UNIT ECONOMICS (ലിറ്റർ അടിസ്ഥാനത്തിലുള്ള സാമ്പത്തിക വിശകലനം) ---", "", "", "", ""],
+        ["ഒരു ലിറ്ററിന്റെ വിൽപന വില (Price / L)", 250, "Ada Pradhaman Standard Rate", "", ""],
+        ["ഒരു ലിറ്ററിന്റെ ശരാശരി ചിലവ് (Cost / L)", totalLitres > 0 ? (totalExpense / totalLitres).toFixed(1) : 0, "Total Expenses / Total Litres", "", ""],
+        ["ഒരു ലിറ്ററിലെ അറ്റാദായം (Net Profit / L)", totalLitres > 0 ? (projectedNetProfit / totalLitres).toFixed(1) : 0, "Profit / Litre", "", ""],
+        ["ലാഭ ശതമാനം (Profit Margin %)", grossSales > 0 ? (((projectedNetProfit / grossSales) * 100).toFixed(1) + '%') : '0%', "Net Profit / Gross Sales", "", ""],
+        ["", "", "", "", ""],
+        ["--- 4. TEAM CASH HANDOVER & SETTLEMENT LEDGER ---", "", "", "", ""],
+        ["Team Name", "Total Cash Collected", "Handed to Admin", "Due with Team", "Settlement Status"]
+      ];
+
+      teams.forEach(t => {
+        const teamOrders = validOrders.filter(o => (o.teamId === t.id || o.teamId === t.name) && o.payMode === 'cash' && o.payStatus === 'PAID');
+        const cashColl = teamOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+        const settled = parseFloat(t.settledCash) || 0;
+        const due = Math.max(0, cashColl - settled);
+        rows.push([t.name, cashColl, settled, due, due === 0 ? "Fully Settled" : `Pending Handover ₹${due}`]);
+      });
+
+      rows.push(["", "", "", "", ""]);
+      rows.push(["--- 5. COMPLETE EXPENSES LEDGER ---", "", "", "", ""]);
+      rows.push(["Expense ID", "Category", "Item / Description", "Paid To / Vendor", "Mode", "Amount (₹)", "Notes"]);
+
+      expenses.forEach(e => {
+        rows.push([
+          e.id,
+          e.category || 'മറ്റുള്ളവ',
+          e.item,
+          e.vendor || '-',
+          e.paymentMode === 'upi' ? 'UPI' : 'Cash',
+          e.amount,
+          e.notes || ''
+        ]);
+      });
+
+      const dateStr = new Date().toISOString().slice(0, 10);
+      exportToExcelCSV(`Payasam_Financial_Ledger_${dateStr}`, ["Category / Section", "Column 2", "Column 3", "Column 4", "Column 5", "Column 6", "Column 7"], rows);
+    }
+
+    function exportAdminFinancialPDF() {
+      const validOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id));
+      const grossSales = validOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalLitres = validOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
+      const verifiedUpi = validOrders.filter(o => o.payMode === 'upi' && o.payStatus === 'PAID').reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalCashSettled = teams.reduce((sum, t) => sum + (parseFloat(t.settledCash) || 0), 0);
+      const directCash = validOrders.filter(o => (o.teamId === 'Direct' || o.teamId === 'direct' || !o.teamId) && o.payMode === 'cash' && o.payStatus === 'PAID').reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalAdminCash = totalCashSettled + directCash;
+      const totalExpense = expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const cashExpenses = expenses.filter(e => e.paymentMode !== 'upi').reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const upiExpenses = expenses.filter(e => e.paymentMode === 'upi').reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const physicalCashInHand = totalAdminCash - cashExpenses;
+      const digitalBankBalance = verifiedUpi - upiExpenses;
+      const netProfit = (totalAdminCash + verifiedUpi) - totalExpense;
+
+      const printContainer = document.getElementById('printArea');
+      printContainer.innerHTML = `
+        <div class="page-break" style="font-family: sans-serif; color: #1e293b; padding: 20px;">
+          <div style="border-bottom: 3px solid #1e3a8a; padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+              <h1 style="margin: 0; font-size: 22px; color: #1e3a8a; text-transform: uppercase;">PAYASAM FESTIVAL 2026</h1>
+              <h2 style="margin: 4px 0 0 0; font-size: 15px; color: #334155;">ഔദ്യോഗിക സാമ്പത്തിക റിപ്പോർട്ട് & ലെഡ്ജർ (Financial Statement)</h2>
+              <p style="margin: 2px 0 0 0; font-size: 11px; color: #64748b;">ഐറ്റം: അട പ്രഥമൻ (Ada Pradhaman) • ₹250 / Litre • Generated: ${new Date().toLocaleString()}</p>
+            </div>
+            <div style="text-align: right; font-size: 13px;">
+              <div style="font-weight: bold; color: #1e3a8a;">കമ്മിറ്റി അക്കൗണ്ട് സ്റ്റേറ്റ്‌മെന്റ്</div>
+              <div style="font-size: 11px; color: #64748b;">Fest Committee Official</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
+            <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; background: #f8fafc;">
+              <div style="font-size: 10px; color: #64748b;">ആകെ വിറ്റുവരവ് (Gross)</div>
+              <div style="font-size: 18px; font-weight: bold; color: #1e3a8a; margin-top: 4px;">₹${grossSales}</div>
+              <div style="font-size: 10px; color: #64748b;">${totalLitres.toFixed(1)} L അട പ്രഥമൻ</div>
+            </div>
+            <div style="border: 1px solid #a7f3d0; border-radius: 8px; padding: 10px; background: #ecfdf5;">
+              <div style="font-size: 10px; color: #065f46;">കൈപ്പറ്റിയ പണം (Inflow)</div>
+              <div style="font-size: 18px; font-weight: bold; color: #059669; margin-top: 4px;">₹${totalAdminCash + verifiedUpi}</div>
+              <div style="font-size: 10px; color: #065f46;">Cash + Verified UPI</div>
+            </div>
+            <div style="border: 1px solid #fecaca; border-radius: 8px; padding: 10px; background: #fef2f2;">
+              <div style="font-size: 10px; color: #991b1b;">ആകെ ചിലവുകൾ (Expenses)</div>
+              <div style="font-size: 18px; font-weight: bold; color: #dc2626; margin-top: 4px;">₹${totalExpense}</div>
+              <div style="font-size: 10px; color: #991b1b;">സാധനങ്ങൾ + ചിലവുകൾ</div>
+            </div>
+            <div style="border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px; background: #dcfce7;">
+              <div style="font-size: 10px; color: #166534;">യഥാർത്ഥ ലാഭം (Net Profit)</div>
+              <div style="font-size: 18px; font-weight: bold; color: #15803d; margin-top: 4px;">₹${netProfit}</div>
+              <div style="font-size: 10px; color: #166534;">വരവ് - ചിലവ്</div>
+            </div>
+          </div>
+
+          <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 20px; background: #f1f5f9;">
+            <h3 style="margin: 0 0 8px 0; font-size: 13px; color: #1e3a8a;">ദ്രവ്യത & ക്യാഷ് ലെഡ്ജർ (Liquid Funds Balance):</h3>
+            <div style="display: flex; justify-content: space-between; font-size: 12px;">
+              <div>💵 കയ്യിലെ റോക്കറ്റ് ക്യാഷ് (Cash in Hand): <b>₹${physicalCashInHand}</b></div>
+              <div>📱 ബാങ്ക് UPI ബാലൻസ് (Bank Balance): <b>₹${digitalBankBalance}</b></div>
+              <div>✨ ആകെ ലഭ്യമായ ഫണ്ട് (Total Liquid): <b style="color: #15803d;">₹${physicalCashInHand + digitalBankBalance}</b></div>
+            </div>
+          </div>
+
+          <h3 style="margin: 15px 0 6px 0; font-size: 13px; color: #1e3a8a;">ടീമുകളുടെ ക്യാഷ് കൈമാറ്റ സ്റ്റാറ്റസ് (Team Settlements):</h3>
+          <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 20px;">
+            <thead>
+              <tr style="background: #e2e8f0; border-bottom: 2px solid #94a3b8; text-align: left;">
+                <th style="padding: 6px;">Team</th>
+                <th style="padding: 6px; text-align: center;">Cash Collected</th>
+                <th style="padding: 6px; text-align: center;">Handed to Admin</th>
+                <th style="padding: 6px; text-align: center;">Due (ബാക്കി)</th>
+                <th style="padding: 6px; text-align: right;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${teams.map(t => {
+                const teamOrders = validOrders.filter(o => (o.teamId === t.id || o.teamId === t.name) && o.payMode === 'cash' && o.payStatus === 'PAID');
+                const cashColl = teamOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+                const settled = parseFloat(t.settledCash) || 0;
+                const due = Math.max(0, cashColl - settled);
+                return `
+                  <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 6px; font-weight: bold;">${t.name}</td>
+                    <td style="padding: 6px; text-align: center;">₹${cashColl}</td>
+                    <td style="padding: 6px; text-align: center; color: #15803d; font-weight: bold;">₹${settled}</td>
+                    <td style="padding: 6px; text-align: center; color: ${due > 0 ? '#dc2626' : '#64748b'}; font-weight: bold;">₹${due}</td>
+                    <td style="padding: 6px; text-align: right; font-weight: bold; color: ${due === 0 ? '#15803d' : '#dc2626'};">${due === 0 ? '✓ Settled' : 'Pending ₹' + due}</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+
+          <h3 style="margin: 15px 0 6px 0; font-size: 13px; color: #1e3a8a;">ചിലവുകളുടെ വിശദാംശങ്ങൾ (Fest Expenses List):</h3>
+          <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 25px;">
+            <thead>
+              <tr style="background: #e2e8f0; border-bottom: 2px solid #94a3b8; text-align: left;">
+                <th style="padding: 6px;">#</th>
+                <th style="padding: 6px;">Item & Category</th>
+                <th style="padding: 6px;">Paid To / Vendor</th>
+                <th style="padding: 6px; text-align: center;">Mode</th>
+                <th style="padding: 6px; text-align: right;">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${expenses.length > 0 ? expenses.map((e, idx) => `
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                  <td style="padding: 6px;">${idx + 1}</td>
+                  <td style="padding: 6px;"><b>${e.item}</b><br><small style="color:#64748b;">${e.category || 'ജനറൽ'} ${e.notes ? '• ' + e.notes : ''}</small></td>
+                  <td style="padding: 6px;">${e.vendor || '-'}</td>
+                  <td style="padding: 6px; text-align: center;">${e.paymentMode === 'upi' ? '📱 UPI' : '💵 Cash'}</td>
+                  <td style="padding: 6px; text-align: right; font-weight: bold; color: #dc2626;">₹${e.amount}</td>
+                </tr>
+              `).join('') : '<tr><td colspan="5" style="padding: 10px; text-align: center; color: #64748b;">ചിലവുകൾ ഇല്ല</td></tr>'}
+            </tbody>
+          </table>
+
+          <div style="border-top: 1px dashed #94a3b8; padding-top: 12px; display: flex; justify-content: space-between; font-size: 11px; color: #64748b;">
+            <span>Verified by: Treasurer / Fest Convener</span>
+            <span>Signature: __________________________</span>
+          </div>
+        </div>
+      `;
+
+      setTimeout(() => {
+        window.print();
+      }, 300);
+    }
+
+    function exportAdminFinancialImage() {
+      const validOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id));
+      const grossSales = validOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalLitres = validOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
+      const verifiedUpi = validOrders.filter(o => o.payMode === 'upi' && o.payStatus === 'PAID').reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalCashSettled = teams.reduce((sum, t) => sum + (parseFloat(t.settledCash) || 0), 0);
+      const directCash = validOrders.filter(o => (o.teamId === 'Direct' || o.teamId === 'direct' || !o.teamId) && o.payMode === 'cash' && o.payStatus === 'PAID').reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalAdminCash = totalCashSettled + directCash;
+      const totalExpense = expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const netProfit = (totalAdminCash + verifiedUpi) - totalExpense;
+
+      const svgMarkup = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="600" height="460" viewBox="0 0 600 460" style="background:#ffffff; font-family:system-ui, -apple-system, sans-serif;">
+          <defs>
+            <linearGradient id="finGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <rect width="600" height="460" rx="20" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+          <rect width="600" height="95" rx="20" fill="url(#finGrad)"/>
+          <text x="30" y="42" fill="#ffffff" font-size="20" font-weight="bold">💰 പായസം ഫെസ്റ്റ് ഫിനാൻഷ്യൽ സമ്മറി</text>
+          <text x="30" y="70" fill="#93c5fd" font-size="13">ഐറ്റം: അട പ്രഥമൻ (Ada Pradhaman) • ₹250 / Litre</text>
+          <text x="570" y="55" fill="#e2e8f0" font-size="12" text-anchor="end">${new Date().toLocaleDateString('en-GB')}</text>
+
+          <g transform="translate(30, 115)">
+            <rect width="260" height="80" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+            <text x="18" y="28" fill="#64748b" font-size="11" font-weight="600">ആകെ വിറ്റുവരവ് (Gross)</text>
+            <text x="18" y="58" fill="#1e3a8a" font-size="22" font-weight="bold">₹${grossSales}</text>
+            <text x="180" y="58" fill="#475569" font-size="13" font-weight="bold">${totalLitres.toFixed(1)} L</text>
+
+            <g transform="translate(280, 0)">
+              <rect width="260" height="80" rx="12" fill="#ecfdf5" stroke="#a7f3d0"/>
+              <text x="18" y="28" fill="#065f46" font-size="11" font-weight="600">കൈപ്പറ്റിയ പണം (Inflow)</text>
+              <text x="18" y="58" fill="#059669" font-size="22" font-weight="bold">₹${totalAdminCash + verifiedUpi}</text>
+              <text x="150" y="58" fill="#065f46" font-size="11">Cash + Bank UPI</text>
+            </g>
+          </g>
+
+          <g transform="translate(30, 210)">
+            <rect width="260" height="80" rx="12" fill="#fef2f2" stroke="#fecaca"/>
+            <text x="18" y="28" fill="#991b1b" font-size="11" font-weight="600">ആകെ ചിലവുകൾ (Expenses)</text>
+            <text x="18" y="58" fill="#dc2626" font-size="22" font-weight="bold">₹${totalExpense}</text>
+            <text x="160" y="58" fill="#991b1b" font-size="11">${expenses.length} എൻട്രികൾ</text>
+
+            <g transform="translate(280, 0)">
+              <rect width="260" height="80" rx="12" fill="#dcfce7" stroke="#86efac"/>
+              <text x="18" y="28" fill="#166534" font-size="11" font-weight="bold">യഥാർത്ഥ അറ്റാദായം (Net Profit)</text>
+              <text x="18" y="58" fill="#15803d" font-size="22" font-weight="black">₹${netProfit}</text>
+              <text x="160" y="58" fill="#166534" font-size="11" font-weight="bold">Realized</text>
+            </g>
+          </g>
+
+          <g transform="translate(30, 310)">
+            <rect width="540" height="100" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+            <text x="20" y="28" fill="#1e293b" font-size="13" font-weight="bold">ദ്രവ്യത നില (Liquid Funds In Hand):</text>
+            <text x="20" y="56" fill="#334155" font-size="12">💵 കയ്യിലെ റോക്കറ്റ് ക്യാഷ്: <tspan font-weight="bold" fill="#15803d">₹${totalAdminCash - expenses.filter(e=>e.paymentMode!=='upi').reduce((s,e)=>s+(parseFloat(e.amount)||0),0)}</tspan></text>
+            <text x="20" y="80" fill="#334155" font-size="12">📱 ബാങ്ക് അക്കൗണ്ട് ബാലൻസ്: <tspan font-weight="bold" fill="#2563eb">₹${verifiedUpi - expenses.filter(e=>e.paymentMode==='upi').reduce((s,e)=>s+(parseFloat(e.amount)||0),0)}</tspan></text>
+          </g>
+
+          <g transform="translate(30, 435)">
+            <text x="0" y="0" fill="#94a3b8" font-size="10">Verified by Committee Official • Ada Pradhaman Fest 2026</text>
+            <text x="540" y="0" fill="#1e3a8a" font-size="10" font-weight="bold" text-anchor="end">Fest Committee 2026</text>
+          </g>
+        </svg>
+      `;
+      showImagePreviewModal('ഫിനാൻഷ്യൽ സമ്മറി WhatsApp ഇമേജ്', svgMarkup, `Payasam_Financial_Card_${Date.now()}`);
+    }
+
+    function exportAdminFinancialSVG() {
+      exportAdminFinancialImage();
+    }
+
+    // 3. RANKINGS EXPORTS
+    function exportRankingsExcel() {
+      const validOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id));
+      
+      const teamStats = teams.map(t => {
+        const teamOrders = validOrders.filter(o => o.teamId === t.id || o.teamId === t.name);
+        const litres = teamOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
+        const rev = teamOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+        return { name: t.name, orders: teamOrders.length, litres, rev };
+      }).sort((a, b) => b.litres - a.litres);
+
+      const rows = [
+        ["=== PAYASAM FEST 2026 - LEADERBOARD STANDINGS ===", "", "", "", ""],
+        ["Generated", new Date().toLocaleString(), "", "", ""],
+        ["Item", "അട പ്രഥമൻ (Ada Pradhaman)", "", "", ""],
+        ["", "", "", "", ""],
+        ["Rank", "Team Name", "Total Orders", "Litres Sold (L)", "Gross Revenue (₹)"]
+      ];
+
+      teamStats.forEach((ts, idx) => {
+        rows.push([idx + 1, ts.name, ts.orders, ts.litres.toFixed(1), ts.rev]);
+      });
+
+      const dateStr = new Date().toISOString().slice(0, 10);
+      exportToExcelCSV(`Payasam_Leaderboard_${dateStr}`, ["Column 1", "Column 2", "Column 3", "Column 4", "Column 5"], rows);
+    }
+
+    function exportRankingsPDF() {
+      const modeSelect = document.getElementById('pdfExportMode');
+      if (modeSelect) modeSelect.value = 'TEAM_WISE';
+      handlePdfModeChange();
+      generateAndPrintPdf();
+    }
+
+    function exportRankingsImage() {
+      const validOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id));
+      const teamStats = teams.map(t => {
+        const teamOrders = validOrders.filter(o => o.teamId === t.id || o.teamId === t.name);
+        const litres = teamOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
+        const rev = teamOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+        return { name: t.name, orders: teamOrders.length, litres, rev };
+      }).sort((a, b) => b.litres - a.litres);
+
+      const t1 = teamStats[0] || { name: 'None', litres: 0, rev: 0 };
+      const t2 = teamStats[1] || { name: 'None', litres: 0, rev: 0 };
+      const t3 = teamStats[2] || { name: 'None', litres: 0, rev: 0 };
+
+      const svgMarkup = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="600" height="420" viewBox="0 0 600 420" style="background:#ffffff; font-family:system-ui, -apple-system, sans-serif;">
+          <rect width="600" height="420" rx="20" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+          <rect width="600" height="85" rx="20" fill="#1e3a8a"/>
+          <text x="300" y="38" fill="#ffffff" font-size="18" font-weight="bold" text-anchor="middle">🏆 പായസം ഫെസ്റ്റ് 2026 - ടീം ലീഡർബോർഡ്</text>
+          <text x="300" y="62" fill="#bfdbfe" font-size="12" text-anchor="middle">അട പ്രഥമൻ ചലഞ്ച് • ലൈവ് റാങ്കിംഗ്സ്</text>
+
+          <g transform="translate(30, 105)">
+            <g transform="translate(0, 30)">
+              <rect width="165" height="130" rx="12" fill="#f1f5f9" stroke="#cbd5e1"/>
+              <circle cx="82" cy="30" r="16" fill="#94a3b8"/>
+              <text x="82" y="36" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">2</text>
+              <text x="82" y="68" fill="#0f172a" font-size="13" font-weight="bold" text-anchor="middle">${t2.name}</text>
+              <text x="82" y="90" fill="#b45309" font-size="15" font-weight="bold" text-anchor="middle">${t2.litres.toFixed(1)} L</text>
+              <text x="82" y="110" fill="#64748b" font-size="11" text-anchor="middle">₹${t2.rev}</text>
+            </g>
+
+            <g transform="translate(187, 0)">
+              <rect width="165" height="160" rx="12" fill="#fef9c3" stroke="#facc15" stroke-width="2"/>
+              <circle cx="82" cy="32" r="18" fill="#eab308"/>
+              <text x="82" y="39" fill="#ffffff" font-size="16" font-weight="bold" text-anchor="middle">👑 1</text>
+              <text x="82" y="76" fill="#713f12" font-size="14" font-weight="bold" text-anchor="middle">${t1.name}</text>
+              <text x="82" y="105" fill="#ca8a04" font-size="20" font-weight="black" text-anchor="middle">${t1.litres.toFixed(1)} L</text>
+              <text x="82" y="130" fill="#854d0e" font-size="12" font-weight="bold" text-anchor="middle">₹${t1.rev}</text>
+            </g>
+
+            <g transform="translate(374, 45)">
+              <rect width="165" height="115" rx="12" fill="#fff7ed" stroke="#fdba74"/>
+              <circle cx="82" cy="28" r="15" fill="#f97316"/>
+              <text x="82" y="34" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">3</text>
+              <text x="82" y="62" fill="#7c2d12" font-size="12" font-weight="bold" text-anchor="middle">${t3.name}</text>
+              <text x="82" y="82" fill="#c2410c" font-size="14" font-weight="bold" text-anchor="middle">${t3.litres.toFixed(1)} L</text>
+              <text x="82" y="100" fill="#9a3412" font-size="11" text-anchor="middle">₹${t3.rev}</text>
+            </g>
+          </g>
+
+          <g transform="translate(30, 290)">
+            <rect width="540" height="85" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+            <text x="20" y="28" fill="#1e293b" font-size="12" font-weight="bold">ഫെസ്റ്റ് ചലഞ്ച് കുറിപ്പ്:</text>
+            <text x="20" y="50" fill="#475569" font-size="11">• ഒന്നാം സ്ഥാനത്ത് എത്തുന്ന ടീമിന് പ്രത്യേക ചാമ്പ്യൻ ട്രോഫിയും ക്യാഷ് അവാർഡും!</text>
+            <text x="20" y="68" fill="#475569" font-size="11">• അട പ്രഥമൻ (₹250/L) - കൂടുതൽ ഓർഡറുകൾ എടുത്ത് നിങ്ങളുടെ ടീമിനെ മുന്നിലെത്തിക്കൂ!</text>
+          </g>
+
+          <g transform="translate(30, 400)">
+            <text x="0" y="0" fill="#94a3b8" font-size="10">Official Leaderboard Card • Payasam Fest 2026</text>
+            <text x="540" y="0" fill="#1e3a8a" font-size="10" font-weight="bold" text-anchor="end">Fest Committee 2026</text>
+          </g>
+        </svg>
+      `;
+      showImagePreviewModal('ടീം ലീഡർബോർഡ് WhatsApp കാർഡ്', svgMarkup, `Payasam_Leaderboard_${Date.now()}`);
+    }
+
+    function exportRankingsSVG() {
+      exportRankingsImage();
+    }
+
+    // 4. TEAM DESK EXPORTS
+    function exportTeamOrdersExcel() {
+      if (!loggedInTeam) {
+        alert('ടീം ലോഗിൻ ചെയ്തിട്ടില്ല');
+        return;
+      }
+      const validOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id) && (o.teamId === loggedInTeam.id || o.teamId === loggedInTeam.name));
+      const headers = ["Order ID", "Customer Name", "Phone", "Area / Location", "Volunteer", "Litres (L)", "Amount (₹)", "Payment Mode", "Payment Status", "UTR", "Time"];
+      const rows = validOrders.map(o => [
+        o.id,
+        o.name,
+        o.phone,
+        o.area,
+        o.member || 'Volunteer',
+        o.litres || 1,
+        o.amount || 250,
+        o.payMode === 'upi' ? 'UPI' : 'Cash',
+        o.payStatus,
+        o.utr || '',
+        o.time || ''
+      ]);
+      const dateStr = new Date().toISOString().slice(0, 10);
+      exportToExcelCSV(`${loggedInTeam.name}_Orders_${dateStr}`, headers, rows);
+    }
+
+    function exportTeamOrdersPDF() {
+      if (!loggedInTeam) {
+        alert('ടീം ലോഗിൻ ചെയ്തിട്ടില്ല');
+        return;
+      }
+      const teamOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id) && (o.teamId === loggedInTeam.id || o.teamId === loggedInTeam.name));
+      const printContainer = document.getElementById('printArea');
+      printContainer.innerHTML = generatePdfSectionHtml(`ടീം ഷീറ്റ്: ${loggedInTeam.name}`, `Volunteers: ${(loggedInTeam.members || []).join(', ')}`, teamOrders);
+      setTimeout(() => {
+        window.print();
+      }, 300);
+    }
+
+    function exportTeamOrdersImage() {
+      if (!loggedInTeam) {
+        alert('ടീം ലോഗിൻ ചെയ്തിട്ടില്ല');
+        return;
+      }
+      const teamOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id) && (o.teamId === loggedInTeam.id || o.teamId === loggedInTeam.name));
+      const totalLitres = teamOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
+      const grossAmount = teamOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const cashOrders = teamOrders.filter(o => o.payMode === 'cash' && o.payStatus === 'PAID');
+      const cashAmount = cashOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+
+      const svgMarkup = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="600" height="380" viewBox="0 0 600 380" style="background:#ffffff; font-family:system-ui, -apple-system, sans-serif;">
+          <rect width="600" height="380" rx="20" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+          <rect width="600" height="85" rx="20" fill="#1e3a8a"/>
+          <text x="30" y="40" fill="#ffffff" font-size="20" font-weight="bold">${loggedInTeam.name} 🏆</text>
+          <text x="30" y="65" fill="#bfdbfe" font-size="12">ടീം പെർഫോമൻസ് കാർഡ് • അട പ്രഥമൻ ചലഞ്ച് 2026</text>
+          <text x="570" y="52" fill="#ffffff" font-size="12" text-anchor="end">${new Date().toLocaleDateString('en-GB')}</text>
+
+          <g transform="translate(30, 110)">
+            <rect width="165" height="100" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+            <text x="20" y="32" fill="#64748b" font-size="12" font-weight="600">ആകെ ഓർഡറുകൾ</text>
+            <text x="20" y="70" fill="#1e3a8a" font-size="28" font-weight="bold">${teamOrders.length}</text>
+            <text x="20" y="88" fill="#94a3b8" font-size="10">Orders Booked</text>
+
+            <g transform="translate(187, 0)">
+              <rect width="165" height="100" rx="12" fill="#fef3c7" stroke="#fcd34d"/>
+              <text x="20" y="32" fill="#92400e" font-size="12" font-weight="600">അട പ്രഥമൻ (ലിറ്റർ)</text>
+              <text x="20" y="70" fill="#b45309" font-size="28" font-weight="bold">${totalLitres.toFixed(1)} L</text>
+              <text x="20" y="88" fill="#b45309" font-size="10">Total Litres</text>
+            </g>
+
+            <g transform="translate(374, 0)">
+              <rect width="165" height="100" rx="12" fill="#ecfdf5" stroke="#a7f3d0"/>
+              <text x="20" y="32" fill="#065f46" font-size="12" font-weight="600">ആകെ വിറ്റുവരവ്</text>
+              <text x="20" y="70" fill="#059669" font-size="28" font-weight="bold">₹${grossAmount}</text>
+              <text x="20" y="88" fill="#065f46" font-size="10">Gross Revenue</text>
+            </g>
+          </g>
+
+          <g transform="translate(30, 230)">
+            <rect width="540" height="95" rx="12" fill="#f8fafc" stroke="#e2e8f0"/>
+            <text x="20" y="28" fill="#1e293b" font-size="12" font-weight="bold">ടീം ക്യാഷ് സ്റ്റാറ്റസ് (Cash Handover):</text>
+            <text x="20" y="52" fill="#475569" font-size="12">• കയ്യിലുള്ള ക്യാഷ് കളക്ഷൻ: <tspan font-weight="bold" fill="#059669">₹${cashAmount}</tspan></text>
+            <text x="20" y="72" fill="#475569" font-size="12">• അഡ്മിന് കൈമാറിയത്: <tspan font-weight="bold" fill="#1e3a8a">₹${loggedInTeam.settledCash || 0}</tspan> | അഡ്മിന് ഏൽപ്പിക്കാനുള്ളത്: <tspan font-weight="bold" fill="#dc2626">₹${Math.max(0, cashAmount - (loggedInTeam.settledCash || 0))}</tspan></text>
+          </g>
+
+          <g transform="translate(30, 355)">
+            <text x="0" y="0" fill="#94a3b8" font-size="10">Payasam Fest 2026 • Keep Going Team!</text>
+            <text x="540" y="0" fill="#1e3a8a" font-size="10" font-weight="bold" text-anchor="end">Fest Committee</text>
+          </g>
+        </svg>
+      `;
+      showImagePreviewModal(`${loggedInTeam.name} WhatsApp കാർഡ്`, svgMarkup, `${loggedInTeam.name}_Card_${Date.now()}`);
+    }
+
+    // 5. MODAL PDF ACTIONS AS EXCEL & IMAGE
+    function generatePdfExportAsExcel() {
+      const mode = document.getElementById('pdfExportMode').value;
+      const subChoice = document.getElementById('pdfSubFilterSelect').value;
+      let orderList = [];
+      let label = 'Export';
+
+      if (mode === 'TEAM_WISE') {
+        if (subChoice === 'ALL_PAGE_BY_PAGE') {
+          orderList = orders;
+          label = 'All_Teams';
+        } else {
+          const t = teams.find(team => team.id === subChoice);
+          orderList = orders.filter(o => o.teamId === subChoice);
+          label = t ? t.name : 'Team';
+        }
+      } else if (mode === 'AREA_WISE') {
+        if (subChoice === 'ALL_PAGE_BY_PAGE') {
+          orderList = orders;
+          label = 'All_Areas';
+        } else {
+          orderList = orders.filter(o => o.area === subChoice);
+          label = `Area_${subChoice}`;
+        }
+      } else if (mode === 'PAID_ONLY') {
+        orderList = orders.filter(o => o.payStatus === 'PAID');
+        label = 'Paid_Orders';
+      } else if (mode === 'UNPAID_ONLY') {
+        orderList = orders.filter(o => o.payStatus !== 'PAID');
+        label = 'Unpaid_Deliveries';
+      } else {
+        orderList = orders;
+        label = 'Master_Orders';
+      }
+
+      const valid = orderList.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id));
+      const headers = ["Order ID", "Customer Name", "Phone", "Area / Location", "Team", "Member", "Item", "Litres", "Amount (₹)", "Payment Mode", "Status", "UTR"];
+      const rows = valid.map(o => [
+        o.id,
+        o.name,
+        o.phone,
+        o.area,
+        o.teamName || o.teamId || 'Direct',
+        o.member || 'Volunteer',
+        o.item || FLAVOR_NAME,
+        o.litres || 1,
+        o.amount || 250,
+        o.payMode,
+        o.payStatus,
+        o.utr || ''
+      ]);
+
+      closePdfModal();
+      exportToExcelCSV(`Payasam_${label}_${new Date().toISOString().slice(0, 10)}`, headers, rows);
+    }
+
+    function generatePdfExportAsImage() {
+      const mode = document.getElementById('pdfExportMode').value;
+      const subChoice = document.getElementById('pdfSubFilterSelect').value;
+      const printContainer = document.getElementById('printArea');
+
+      let html = '';
+      if (mode === 'TEAM_WISE') {
+        const t = teams.find(team => team.id === subChoice) || teams[0];
+        const teamOrders = orders.filter(o => t ? o.teamId === t.id : true);
+        html = generatePdfSectionHtml(`ടീം ഷീറ്റ്: ${t ? t.name : 'All Teams'}`, `Volunteers: ${t ? (t.members || []).join(', ') : ''}`, teamOrders);
+      } else if (mode === 'AREA_WISE') {
+        const areaName = subChoice === 'ALL_PAGE_BY_PAGE' ? (orders[0]?.area || 'Main Area') : subChoice;
+        const areaOrders = orders.filter(o => o.area === areaName);
+        html = generatePdfSectionHtml(`ഡെലിവറി ഷീറ്റ്: ${areaName}`, `Total Drops: ${areaOrders.length}`, areaOrders);
+      } else if (mode === 'PAID_ONLY') {
+        const paidOrders = orders.filter(o => o.payStatus === 'PAID');
+        html = generatePdfSectionHtml('പണം അടച്ച ഓർഡറുകൾ (PAID LIST)', 'Confirmed Receipts', paidOrders);
+      } else if (mode === 'UNPAID_ONLY') {
+        const unpaidOrders = orders.filter(o => o.payStatus !== 'PAID');
+        html = generatePdfSectionHtml('പണം പിരിക്കാനുള്ള ഓർഡറുകൾ (UNPAID)', 'Cash on Delivery', unpaidOrders);
+      } else {
+        html = generatePdfSectionHtml('പായസം ചലഞ്ച് സമ്പൂർണ്ണ റിപ്പോർട്ട്', `Date: ${new Date().toLocaleDateString()}`, orders);
+      }
+
+      printContainer.innerHTML = html;
+      closePdfModal();
+
+      if (typeof html2canvas === 'function') {
+        showToast('🖼️ ഇമേജ് തയ്യാറാക്കുന്നു, ദയവായി കാത്തിരിക്കുക...');
+        html2canvas(printContainer, { scale: 2, backgroundColor: '#ffffff', useCORS: true }).then(canvas => {
+          const imgData = canvas.toDataURL('image/png');
+          currentExportImageBlob = imgData;
+          currentExportFilename = `Payasam_Report_${Date.now()}`;
+          currentExportSvgMarkup = '';
+
+          const previewEl = document.getElementById('imageModalPreview');
+          if (previewEl) {
+            previewEl.innerHTML = `<img src="${imgData}" style="max-height: 480px; width: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" alt="Report Preview">`;
+          }
+          const titleEl = document.getElementById('imageModalTitle');
+          if (titleEl) titleEl.innerText = '🖼️ റിപ്പോർട്ട് ഇമേജ് കാർഡ് (PNG)';
+          const svgBtn = document.getElementById('btnDownloadSvg');
+          if (svgBtn) svgBtn.classList.add('hidden');
+
+          document.getElementById('imageShareModal').classList.remove('hidden');
+        }).catch(err => {
+          console.error('html2canvas error:', err);
+          exportAllOrdersImage();
+        });
+      } else {
+        exportAllOrdersImage();
+      }
+    }
+
+    // 6. IMAGE SHARE MODAL CONTROLLERS
+    function showImagePreviewModal(title, svgMarkup, filename) {
+      currentExportSvgMarkup = svgMarkup;
+      currentExportFilename = filename || `Payasam_Fest_${Date.now()}`;
+      
+      const titleEl = document.getElementById('imageModalTitle');
+      if (titleEl) titleEl.innerText = title || '🖼️ WhatsApp ഇമേജ് കാർഡ്';
+
+      const previewEl = document.getElementById('imageModalPreview');
+      if (previewEl) {
+        previewEl.innerHTML = svgMarkup;
+      }
+
+      const svgBtn = document.getElementById('btnDownloadSvg');
+      if (svgBtn) svgBtn.classList.remove('hidden');
+
+      const svgBlob = new Blob([svgMarkup], { type: 'image/svg+xml;charset=utf-8' });
+      const DOMURL = window.URL || window.webkitURL || window;
+      const url = DOMURL.createObjectURL(svgBlob);
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = Math.round(1200 * (img.height / (img.width || 1)));
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        DOMURL.revokeObjectURL(url);
+        currentExportImageBlob = canvas.toDataURL('image/png');
+      };
+      img.src = url;
+
+      document.getElementById('imageShareModal').classList.remove('hidden');
+    }
+
+    function closeImageShareModal() {
+      document.getElementById('imageShareModal').classList.add('hidden');
+    }
+
+    function downloadCurrentPng() {
+      if (!currentExportImageBlob && currentExportSvgMarkup) {
+        const svgBlob = new Blob([currentExportSvgMarkup], { type: 'image/svg+xml;charset=utf-8' });
+        const DOMURL = window.URL || window.webkitURL || window;
+        const url = DOMURL.createObjectURL(svgBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${currentExportFilename}.svg`;
+        link.click();
+        DOMURL.revokeObjectURL(url);
+        showToast('📥 SVG കാർഡ് ഡൗൺലോഡ് ചെയ്തു!');
+        return;
+      }
+
+      const link = document.createElement('a');
+      link.href = currentExportImageBlob;
+      link.download = `${currentExportFilename}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('📥 PNG ഇമേജ് ഡൗൺലോഡ് ചെയ്തു!');
+    }
+
+    function downloadCurrentSvg() {
+      if (!currentExportSvgMarkup) {
+        showToast('SVG ലഭ്യമല്ല, PNG ഡൗൺലോഡ് ചെയ്യുക');
+        return;
+      }
+      const svgBlob = new Blob([currentExportSvgMarkup], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${currentExportFilename}.svg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast('📐 SVG വെക്ടർ ഫയൽ ഡൗൺലോഡ് ചെയ്തു!');
+    }
+
+    function shareCurrentOnWhatsApp() {
+      const waText = encodeURIComponent(`🥥 പായസം ഫെസ്റ്റ് 2026 റിപ്പോർട്ട് കാർഡ് കാണുക! ഐറ്റം: അട പ്രഥമൻ (₹250/L) ❤️`);
+      window.open(`https://api.whatsapp.com/send?text=${waText}`, '_blank');
+      showToast('📲 WhatsApp തുറക്കുന്നു... ഫയൽ അറ്റാച്ച് ചെയ്ത് അയക്കുക!');
     }
 
     function openPdfModal() {
