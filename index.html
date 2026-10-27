@@ -347,16 +347,28 @@
     <!-- ========================================================= -->
     <section id="view-team-login" class="space-y-6 hidden">
       
-      <!-- Back Navigation Header -->
+      <!-- Adaptive Navigation Header -->
       <div class="flex items-center justify-between pb-2 border-b border-[var(--border)]">
-        <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
+        <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1 font-medium">
           <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
         </button>
-        <div class="flex items-center gap-2">
+        
+        <!-- Logged-out nav strip -->
+        <div id="teamNavLoggedOut" class="flex items-center gap-2">
           <button onclick="toggleNewTeamForm(true)" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white shadow-sm transition">
             ➕ New Team ഉണ്ടാക്കുക
           </button>
           <span class="text-xs font-semibold text-[#1e3a8a]">👥 Team Portal</span>
+        </div>
+
+        <!-- Logged-in nav strip -->
+        <div id="teamNavLoggedIn" class="hidden flex items-center gap-2">
+          <span id="teamNavActiveBadge" class="text-xs font-bold px-2 py-0.5 rounded-md bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/20">
+            Team Active
+          </span>
+          <button onclick="logoutTeam()" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 border border-red-500/20 transition">
+            🚪 Logout
+          </button>
         </div>
       </div>
 
@@ -454,133 +466,178 @@
       <!-- Logged-in Dashboard & CONSECUTIVE ORDER DESK -->
       <div id="teamDashboardCard" class="space-y-6 hidden">
         
-        <!-- Team Banner / Active Session Info -->
-        <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <!-- Active Session Info Card -->
+        <div class="bg-[var(--card)] border border-[#1e3a8a]/30 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-sm">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-[#1e3a8a]/15 text-[#1e3a8a] flex items-center justify-center font-bold text-lg">
-              ✓
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#1e3a8a] to-[#2563eb] text-white flex items-center justify-center font-bold text-xl shadow-sm">
+              👥
             </div>
             <div>
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
                 <span class="text-xs text-[var(--muted-foreground)]">ലോഗിൻ ചെയ്തിരിക്കുന്നു:</span>
-                <span id="activeTeamName" class="font-bold text-sm text-[var(--foreground)]">Team Name</span>
-                <span class="text-xs px-2 py-0.5 rounded-full bg-[#1e3a8a]/15 text-[#1e3a8a] font-bold" id="activeMemberName">Member Name</span>
+                <span id="activeTeamName" class="font-extrabold text-sm text-[var(--foreground)]">Team Name</span>
+                <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#1e3a8a]/15 text-[#1e3a8a] font-bold border border-[#1e3a8a]/30" id="activeMemberName">Member Name</span>
               </div>
-              <p class="text-[11px] text-[var(--muted-foreground)]">പായസം: <b class="text-[#1e3a8a]">അട പ്രഥമൻ (Ada Pradhaman)</b> | 1 ലിറ്റർ = ₹250</p>
+              <p class="text-[11px] text-[var(--muted-foreground)] mt-0.5">പായസം: <b class="text-[#1e3a8a]">അട പ്രഥമൻ (Ada Pradhaman)</b> | 1 ലിറ്റർ = ₹250</p>
             </div>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 self-end sm:self-auto">
             <button onclick="openTeamPasswordModal()" class="px-3 py-1.5 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] hover:bg-[#1e3a8a]/20 text-xs font-semibold border border-[#1e3a8a]/20 flex items-center gap-1 transition">
               <span>🔑</span> <span>പാസ്‌വേഡ് മാറ്റുക</span>
             </button>
             <button onclick="logoutTeam()" class="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 text-xs font-medium border border-red-500/20 transition">
-              ലോഗൗട്ട് (Logout)
+              🚪 ലോഗൗട്ട് (Logout)
             </button>
           </div>
         </div>
 
-        <!-- NEW ORDER ENTRY FORM -->
-        <div class="bg-[var(--card)] border border-[#1e3a8a]/20 rounded-2xl p-5 shadow-sm space-y-4">
-          <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+        <!-- THE COMPLETE ORDER ENTRY FORM (പൂർണ്ണരൂപം) -->
+        <div class="max-w-2xl mx-auto bg-[var(--card)] border border-[#1e3a8a]/30 rounded-2xl p-6 shadow-md space-y-4 text-xs">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-3 border-b border-[var(--border)] gap-2">
             <div>
-              <h3 class="text-sm font-bold text-[#1e3a8a] flex items-center gap-1.5">
-                <span>🛒</span> <span>പുതിയ ഓർഡർ എടുക്കുക (Take Order)</span>
+              <h3 class="text-base font-bold text-[#1e3a8a] flex items-center gap-1.5">
+                <span>🛒</span> <span>പുതിയ ഓർഡർ എടുക്കുക (Take Customer Order)</span>
               </h3>
-              <p class="text-[11px] text-[var(--muted-foreground)]">ഒരു ഓർഡർ സേവ് ചെയ്താൽ ഉടൻ തന്നെ അടുത്ത ഓർഡർ എന്റർ ചെയ്യാം!</p>
+              <p class="text-[11px] text-[var(--muted-foreground)]">ഒരു ഓർഡർ സേവ് ചെയ്താൽ ഉടൻ അടുത്ത ഓർഡർ എന്റർ ചെയ്യാം (Consecutive Entry)</p>
             </div>
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/30">അട പ്രഥമൻ ₹250/L</span>
+            <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-[#1e3a8a]/15 text-[#1e3a8a] border border-[#1e3a8a]/40 shadow-sm">
+              🍯 അട പ്രഥമൻ ₹250/L
+            </span>
           </div>
 
           <!-- Consecutive Next Order Notification Banner -->
-          <div id="consecutiveOrderNotice" class="hidden p-3 rounded-xl bg-[#1e3a8a]/10 border border-[#1e3a8a]/30 text-[#1e3a8a] text-xs flex justify-between items-center">
-            <span id="consecutiveOrderMsg">✅ ഓർഡർ സേവ് ചെയ്തു! അടുത്ത ഓർഡർ നൽകാം.</span>
-            <span class="text-[10px] text-[#1e3a8a] font-bold">Ready for Next ➔</span>
+          <div id="consecutiveOrderNotice" class="hidden p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs flex flex-col sm:flex-row justify-between items-center gap-2 shadow-sm">
+            <div class="flex items-center gap-2">
+              <span class="text-base">✅</span>
+              <span id="consecutiveOrderMsg" class="font-bold">ഓർഡർ സേവ് ചെയ്തു! അടുത്ത ഓർഡർ നൽകാം.</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <a id="consecutiveWaBtn" href="#" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-[11px] flex items-center gap-1 transition shadow">
+                <span>📲</span> <span>WhatsApp അയക്കുക</span>
+              </a>
+              <span class="text-[11px] text-[#1e3a8a] font-bold">Ready for Next ➔</span>
+            </div>
           </div>
 
-          <form id="teamOrderForm" onsubmit="handleTeamOrderSubmit(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <form id="teamOrderForm" onsubmit="handleTeamOrderSubmit(event)" class="space-y-4 pt-1">
+            <!-- Customer Name -->
             <div>
-              <label class="block font-medium text-[var(--muted-foreground)] mb-1">കസ്റ്റമറുടെ പേര് (Customer Name) *</label>
-              <input type="text" id="tOrdCustName" required placeholder="eg. Anjali R" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+              <label class="block font-semibold text-[var(--foreground)] mb-1">കസ്റ്റമറുടെ പേര് (Customer Name) *</label>
+              <input type="text" id="tOrdCustName" required placeholder="eg. Rahul S / Priya / Manoj" class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] text-xs font-medium">
             </div>
 
+            <!-- WhatsApp Phone -->
             <div>
-              <label class="block font-medium text-[var(--muted-foreground)] mb-1">WhatsApp ഫോൺ നമ്പർ *</label>
-              <input type="tel" id="tOrdCustPhone" required placeholder="eg. 9847123456" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+              <label class="block font-semibold text-[var(--foreground)] mb-1">WhatsApp ഫോൺ നമ്പർ (10 അക്കം) *</label>
+              <input type="tel" id="tOrdCustPhone" required placeholder="eg. 9847123456" class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] text-xs font-medium">
             </div>
 
+            <!-- Delivery Location / Area -->
             <div>
-              <label class="block font-medium text-[var(--muted-foreground)] mb-1">ഏരിയ / ലൊക്കേഷൻ (Area / Room / Dept) *</label>
-              <input type="text" id="tOrdCustArea" required placeholder="eg. Mechanical Dept Lab 2, Hostel..." class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+              <label class="block font-semibold text-[var(--foreground)] mb-1">ഡെലിവറി ഏരിയ / സ്ഥലം (Area / Dept / Room) *</label>
+              <input type="text" id="tOrdCustArea" required placeholder="eg. Mechanical Dept Lab 2, Main Block, Hostel Room 12..." class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-[#1e3a8a] text-xs font-medium">
             </div>
 
-            <!-- Litre Selection -->
-            <div>
-              <label class="block font-medium text-[var(--muted-foreground)] mb-1">ലിറ്റർ (Litres of Ada Pradhaman) *</label>
-              <div class="grid grid-cols-2 gap-2">
-                <select id="tOrdPresetLitres" onchange="handleLitrePresetChange()" class="px-2 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-medium">
-                  <option value="1">1 Litre (₹250)</option>
-                  <option value="0.5">0.5 Litre (₹125)</option>
-                  <option value="1.5">1.5 Litres (₹375)</option>
-                  <option value="2">2 Litres (₹500)</option>
-                  <option value="3">3 Litres (₹750)</option>
-                  <option value="5">5 Litres (₹1250)</option>
-                  <option value="custom">മറ്റുള്ളവ (Custom)</option>
-                </select>
-                <input type="number" id="tOrdLitres" step="0.1" min="0.2" value="1" oninput="recalcTeamPrice()" class="px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#1e3a8a]">
+            <!-- Litres Selection with Quick Quantity Buttons -->
+            <div class="space-y-1.5">
+              <label class="block font-semibold text-[var(--foreground)]">ലിറ്റർ അളവ് (Litres of Ada Pradhaman) *</label>
+              
+              <!-- Quick Preset Pills -->
+              <div class="flex flex-wrap gap-2 pt-1">
+                <button type="button" onclick="setTeamLitrePreset(0.5)" id="btnLitrePreset_05" class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:border-[#1e3a8a] font-bold text-xs transition">
+                  0.5 L (₹125)
+                </button>
+                <button type="button" onclick="setTeamLitrePreset(1)" id="btnLitrePreset_1" class="px-3 py-1.5 rounded-lg border font-bold text-xs transition bg-[#1e3a8a] text-white border-[#1e3a8a] shadow-sm">
+                  1 L (₹250)
+                </button>
+                <button type="button" onclick="setTeamLitrePreset(1.5)" id="btnLitrePreset_15" class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:border-[#1e3a8a] font-bold text-xs transition">
+                  1.5 L (₹375)
+                </button>
+                <button type="button" onclick="setTeamLitrePreset(2)" id="btnLitrePreset_2" class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:border-[#1e3a8a] font-bold text-xs transition">
+                  2 L (₹500)
+                </button>
+                <button type="button" onclick="setTeamLitrePreset(3)" id="btnLitrePreset_3" class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:border-[#1e3a8a] font-bold text-xs transition">
+                  3 L (₹750)
+                </button>
+                <button type="button" onclick="setTeamLitrePreset(5)" id="btnLitrePreset_5" class="px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:border-[#1e3a8a] font-bold text-xs transition">
+                  5 L (₹1250)
+                </button>
               </div>
-            </div>
 
-            <div>
-              <label class="block font-medium text-[var(--muted-foreground)] mb-1">പായസം തരം (Flavor)</label>
-              <input type="text" readonly value="അട പ്രഥമൻ (Ada Pradhaman Only)" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#1e3a8a]">
-            </div>
-
-            <div>
-              <label class="block font-medium text-[var(--muted-foreground)] mb-1">ആകെ അടയ്ക്കേണ്ട തുക</label>
-              <div class="flex items-center gap-2 h-9 px-3 rounded-lg bg-[#1e3a8a]/10 border border-[#1e3a8a]/30 font-bold text-[#1e3a8a] text-sm">
-                <span id="tOrdPriceDisplay">₹250</span>
-                <span class="text-[10px] text-[var(--muted-foreground)] font-normal">(Rate: ₹250/L)</span>
-              </div>
-            </div>
-
-            <div class="md:col-span-2">
-              <label class="block font-medium text-[var(--muted-foreground)] mb-1">പേയ്മെന്റ് രീതി (Payment Mode) *</label>
-              <div class="flex flex-wrap items-center gap-4 pt-1">
-                <label class="inline-flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="tPayMode" value="cash" checked onchange="toggleTeamUtr(false)" class="accent-[#1e3a8a]">
-                  <span>💵 Cash (കയ്യിൽ വാങ്ങി)</span>
-                </label>
-                <label class="inline-flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="tPayMode" value="upi" onchange="toggleTeamUtr(true)" class="accent-[#1e3a8a]">
-                  <span>📱 UPI / GPay</span>
-                </label>
-                <label class="inline-flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="tPayMode" value="unpaid" onchange="toggleTeamUtr(false)" class="accent-[#1e3a8a]">
-                  <span>⏳ Pay on Delivery</span>
-                </label>
-              </div>
-              <div id="tUtrBox" class="mt-2 hidden space-y-2">
-                <div class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
-                  <span class="text-[11px] text-[var(--muted-foreground)]">Admin UPI ID: <b id="teamUpiDisplay" class="text-[#1e3a8a] font-mono">festpayasam@upi</b></span>
-                  <button type="button" onclick="copyAdminUpi()" class="px-2 py-0.5 rounded text-[10px] bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/20 font-bold">Copy UPI</button>
+              <!-- Custom Litres Input -->
+              <div class="flex items-center gap-3 pt-1">
+                <div class="w-32">
+                  <input type="number" id="tOrdLitres" step="0.5" min="0.2" value="1" oninput="handleCustomTeamLitres()" class="w-full px-3 py-2 rounded-xl bg-[var(--background)] border border-[var(--border)] font-bold text-sm text-[#1e3a8a] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
                 </div>
-                <input type="text" id="tUtrInput" placeholder="Enter UPI Reference / UTR Number" class="w-full px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+                <span class="text-[11px] text-[var(--muted-foreground)]">ലിറ്റർ (Custom അളവാണെങ്കിൽ ഇവിടെ മാറ്റാം)</span>
               </div>
             </div>
 
-            <div class="flex items-end">
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold transition shadow flex items-center justify-center gap-1.5">
-                <span>➕</span> <span>ഓർഡർ സേവ് ചെയ്ത് അടുത്തത് എടുക്കുക</span>
-              </button>
+            <!-- Price Display Banner -->
+            <div class="p-3.5 rounded-xl bg-[#1e3a8a]/10 border border-[#1e3a8a]/30 flex items-center justify-between shadow-sm">
+              <div>
+                <span class="font-bold text-xs text-[var(--foreground)]">ആകെ തുക (Total Amount):</span>
+                <div class="text-[10px] text-[var(--muted-foreground)] font-mono">നിരക്ക്: ₹250 / ലിറ്റർ | അട പ്രഥമൻ</div>
+              </div>
+              <span id="tOrdPriceDisplay" class="text-2xl font-black text-[#1e3a8a]">₹250</span>
             </div>
+
+            <!-- Payment Options -->
+            <div class="space-y-2">
+              <label class="block font-semibold text-[var(--foreground)]">പേയ്മെന്റ് രീതി (Payment Mode) *</label>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] cursor-pointer hover:border-[#1e3a8a] transition">
+                  <input type="radio" name="tPayMode" value="cash" checked onchange="toggleTeamUtr(false)" class="accent-[#1e3a8a]">
+                  <span class="font-medium text-xs">💵 Cash (കയ്യിൽ വാങ്ങി)</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] cursor-pointer hover:border-[#1e3a8a] transition">
+                  <input type="radio" name="tPayMode" value="upi" onchange="toggleTeamUtr(true)" class="accent-[#1e3a8a]">
+                  <span class="font-bold text-xs text-[#1e3a8a]">📱 UPI / GPay (Online)</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] cursor-pointer hover:border-[#1e3a8a] transition">
+                  <input type="radio" name="tPayMode" value="unpaid" onchange="toggleTeamUtr(false)" class="accent-[#1e3a8a]">
+                  <span class="font-medium text-xs">⏳ Pay on Delivery</span>
+                </label>
+              </div>
+
+              <!-- Full Dynamic UPI QR Code Box -->
+              <div id="tOrdUpiBox" class="mt-3 p-4 rounded-xl bg-[var(--background)] border border-[var(--border)] space-y-3 hidden">
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                  <img id="tOrdUpiQrImg" src="" alt="UPI QR" class="w-32 h-32 border border-[var(--border)] rounded-xl bg-white p-1.5 shadow-sm">
+                  <div class="space-y-1.5 text-center sm:text-left flex-1">
+                    <div class="font-bold text-xs text-[#1e3a8a]">Scan & Pay via any UPI App</div>
+                    <div class="text-[11px] text-[var(--muted-foreground)]">Admin UPI ID: <b id="tOrdUpiIdText" class="font-mono text-[#1e3a8a]">festpayasam@upi</b></div>
+                    <div class="pt-1 flex flex-wrap gap-2 justify-center sm:justify-start">
+                      <button type="button" onclick="copyAdminUpi()" class="px-2.5 py-1 rounded-lg bg-[#1e3a8a]/10 hover:bg-[#1e3a8a]/20 text-[#1e3a8a] font-bold text-[11px] border border-[#1e3a8a]/20">
+                        📋 Copy UPI
+                      </button>
+                      <a id="tOrdUpiIntentLink" href="#" class="px-3 py-1 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-medium text-[11px] shadow-sm">
+                        Open GPay/UPI App
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <input type="text" id="tOrdUtrInput" placeholder="Enter UPI Reference / UTR Number (ഓപ്ഷണൽ)" class="w-full px-3 py-2 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs font-mono">
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full py-3.5 rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold text-sm transition shadow-md hover:shadow-lg flex items-center justify-center gap-2 mt-2">
+              <span>➕</span> <span>ഓർഡർ സേവ് ചെയ്ത് അടുത്തത് എടുക്കുക</span>
+            </button>
           </form>
         </div>
 
         <!-- My Team's Orders List -->
         <div class="bg-[var(--card)] border border-[#1e3a8a]/20 rounded-2xl p-5 shadow-sm space-y-3">
-          <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
-            <h4 class="font-bold text-xs text-[#1e3a8a]">ഞങ്ങളുടെ ടീമിന്റെ ഓർഡറുകൾ (My Team Orders)</h4>
-            <span id="myTeamOrderStats" class="text-xs font-bold text-[#1e3a8a]">0 Litres</span>
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-2 border-b border-[var(--border)] gap-2">
+            <div>
+              <h4 class="font-bold text-xs text-[#1e3a8a] flex items-center gap-1.5">
+                <span>📋</span> <span>ഞങ്ങളുടെ ടീം എടുത്ത ഓർഡറുകൾ (My Team Orders)</span>
+              </h4>
+              <p class="text-[10px] text-[var(--muted-foreground)]">കസ്റ്റമർക്ക് കൺഫർമേഷൻ WhatsApp അയക്കാൻ ലിങ്കിൽ ക്ലിക്ക് ചെയ്യാം</p>
+            </div>
+            <span id="myTeamOrderStats" class="text-xs font-extrabold text-[#1e3a8a] px-2.5 py-1 rounded-lg bg-[#1e3a8a]/10 border border-[#1e3a8a]/20">0 Orders (0 Litres)</span>
           </div>
           <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
             <table class="w-full text-left text-xs">
@@ -593,6 +650,7 @@
                   <th class="p-2.5">Amount</th>
                   <th class="p-2.5">Status</th>
                   <th class="p-2.5">Area</th>
+                  <th class="p-2.5 text-center">WhatsApp</th>
                 </tr>
               </thead>
               <tbody id="myTeamOrdersTable" class="divide-y divide-[var(--border)]">
@@ -1622,10 +1680,26 @@
         refreshMetrics();
       } else if (viewName === 'team-login') {
         if (loggedInTeam) {
+          const navOut = document.getElementById('teamNavLoggedOut');
+          const navIn = document.getElementById('teamNavLoggedIn');
+          const navBadge = document.getElementById('teamNavActiveBadge');
+          if (navOut) navOut.classList.add('hidden');
+          if (navIn) navIn.classList.remove('hidden');
+          if (navBadge) navBadge.innerText = `${loggedInTeam.name} (${loggedInMember || 'Member'})`;
+
           document.getElementById('teamLoginCard').classList.add('hidden');
           document.getElementById('teamDashboardCard').classList.remove('hidden');
+          setTeamLitrePreset(parseFloat(document.getElementById('tOrdLitres')?.value) || 1);
           renderMyTeamOrders();
+          setTimeout(() => {
+            document.getElementById('tOrdCustName')?.focus();
+          }, 200);
         } else {
+          const navOut = document.getElementById('teamNavLoggedOut');
+          const navIn = document.getElementById('teamNavLoggedIn');
+          if (navOut) navOut.classList.remove('hidden');
+          if (navIn) navIn.classList.add('hidden');
+
           document.getElementById('teamLoginCard').classList.remove('hidden');
           document.getElementById('teamDashboardCard').classList.add('hidden');
           if (teams.length === 0) {
@@ -1746,11 +1820,26 @@
       loggedInMember = newTeam.members[0];
       document.getElementById('activeTeamName').innerText = newTeam.name;
       document.getElementById('activeMemberName').innerText = loggedInMember;
+
+      const navOut = document.getElementById('teamNavLoggedOut');
+      const navIn = document.getElementById('teamNavLoggedIn');
+      const navBadge = document.getElementById('teamNavActiveBadge');
+      if (navOut) navOut.classList.add('hidden');
+      if (navIn) navIn.classList.remove('hidden');
+      if (navBadge) navBadge.innerText = `${newTeam.name} (${loggedInMember})`;
+
       document.getElementById('teamLoginCard').classList.add('hidden');
       document.getElementById('teamDashboardCard').classList.remove('hidden');
+
+      setTeamLitrePreset(1);
       renderMyTeamOrders();
 
-      showToast(`🎉 പുതിയ ടീം "${name}" രജിസ്റ്റർ ചെയ്ത് ലോഗിൻ ആയി!`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        document.getElementById('tOrdCustName')?.focus();
+      }, 250);
+
+      showToast(`🎉 പുതിയ ടീം "${name}" രജിസ്റ്റർ ചെയ്ത് ഓർഡർ ഡെസ്ക് തുറന്നു!`);
     }
 
     function loadDemoTeams() {
@@ -1799,40 +1888,108 @@
       document.getElementById('activeTeamName').innerText = team.name;
       document.getElementById('activeMemberName').innerText = member;
 
+      const navOut = document.getElementById('teamNavLoggedOut');
+      const navIn = document.getElementById('teamNavLoggedIn');
+      const navBadge = document.getElementById('teamNavActiveBadge');
+      if (navOut) navOut.classList.add('hidden');
+      if (navIn) navIn.classList.remove('hidden');
+      if (navBadge) navBadge.innerText = `${team.name} (${member})`;
+
       document.getElementById('teamLoginCard').classList.add('hidden');
       document.getElementById('teamDashboardCard').classList.remove('hidden');
 
-      showToast(`🎉 സ്വാഗതം ${member} (${team.name})`);
+      setTeamLitrePreset(1);
       renderMyTeamOrders();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        document.getElementById('tOrdCustName')?.focus();
+      }, 250);
+
+      showToast(`🎉 സ്വാഗതം ${member} (${team.name}) - ഓർഡർ ഡെസ്ക് തയ്യാർ!`);
     }
 
     function logoutTeam() {
       loggedInTeam = null;
       loggedInMember = null;
+      const navOut = document.getElementById('teamNavLoggedOut');
+      const navIn = document.getElementById('teamNavLoggedIn');
+      if (navOut) navOut.classList.remove('hidden');
+      if (navIn) navIn.classList.add('hidden');
+
       document.getElementById('teamLoginCard').classList.remove('hidden');
       document.getElementById('teamDashboardCard').classList.add('hidden');
       document.getElementById('loginPassword').value = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       showToast('ടീം ലോഗൗട്ട് ചെയ്തു');
     }
 
-    function handleLitrePresetChange() {
-      const preset = document.getElementById('tOrdPresetLitres').value;
-      const customInput = document.getElementById('tOrdLitres');
-      if (preset !== 'custom') customInput.value = preset;
+    function setTeamLitrePreset(litres) {
+      const input = document.getElementById('tOrdLitres');
+      if (input) input.value = litres;
+
+      const presets = [0.5, 1, 1.5, 2, 3, 5];
+      presets.forEach(p => {
+        const id = 'btnLitrePreset_' + (p === 0.5 ? '05' : p === 1.5 ? '15' : p);
+        const btn = document.getElementById(id);
+        if (btn) {
+          if (p === litres) {
+            btn.className = 'px-3 py-1.5 rounded-lg border font-bold text-xs transition bg-[#1e3a8a] text-white border-[#1e3a8a] shadow-sm';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:border-[#1e3a8a] font-bold text-xs transition';
+          }
+        }
+      });
+      recalcTeamPrice();
+    }
+
+    function handleCustomTeamLitres() {
+      const litres = parseFloat(document.getElementById('tOrdLitres')?.value) || 0;
+      const presets = [0.5, 1, 1.5, 2, 3, 5];
+      presets.forEach(p => {
+        const id = 'btnLitrePreset_' + (p === 0.5 ? '05' : p === 1.5 ? '15' : p);
+        const btn = document.getElementById(id);
+        if (btn) {
+          if (p === litres) {
+            btn.className = 'px-3 py-1.5 rounded-lg border font-bold text-xs transition bg-[#1e3a8a] text-white border-[#1e3a8a] shadow-sm';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:border-[#1e3a8a] font-bold text-xs transition';
+          }
+        }
+      });
       recalcTeamPrice();
     }
 
     function recalcTeamPrice() {
-      const litres = parseFloat(document.getElementById('tOrdLitres').value) || 0;
+      const litres = parseFloat(document.getElementById('tOrdLitres')?.value) || 0;
       const total = Math.round(litres * PRICE_PER_LITRE);
-      document.getElementById('tOrdPriceDisplay').innerText = `₹${total}`;
+      const display = document.getElementById('tOrdPriceDisplay');
+      if (display) display.innerText = `₹${total}`;
+      updateTeamUpiQr(total);
       return total;
     }
 
+    function updateTeamUpiQr(amount) {
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(adminUpiId)}&pn=${encodeURIComponent(adminUpiName)}&am=${amount}&cu=INR&tn=PayasamChallenge`;
+      const idText = document.getElementById('tOrdUpiIdText');
+      if (idText) idText.innerText = adminUpiId;
+      const intentLink = document.getElementById('tOrdUpiIntentLink');
+      if (intentLink) intentLink.href = upiUrl;
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
+      const qrImg = document.getElementById('tOrdUpiQrImg');
+      if (qrImg) qrImg.src = qrApiUrl;
+    }
+
     function toggleTeamUtr(show) {
-      const el = document.getElementById('tUtrBox');
-      if (show) el.classList.remove('hidden');
-      else el.classList.add('hidden');
+      const el = document.getElementById('tOrdUpiBox');
+      if (el) {
+        if (show) {
+          el.classList.remove('hidden');
+          recalcTeamPrice();
+        } else {
+          el.classList.add('hidden');
+        }
+      }
     }
 
     function handleTeamOrderSubmit(e) {
@@ -1848,7 +2005,7 @@
       const litres = parseFloat(document.getElementById('tOrdLitres').value) || 1.0;
       const amount = Math.round(litres * PRICE_PER_LITRE);
       const payMode = document.querySelector('input[name="tPayMode"]:checked').value;
-      const utr = document.getElementById('tUtrInput').value.trim();
+      const utr = document.getElementById('tOrdUtrInput')?.value.trim() || '';
 
       const newOrder = {
         id: `ORD-${Math.floor(100 + Math.random() * 900)}`,
@@ -1870,58 +2027,90 @@
       saveState();
       pushOrderToCloud(newOrder);
 
+      // Clear Form Fields for Next Consecutive Order
       document.getElementById('tOrdCustName').value = '';
       document.getElementById('tOrdCustPhone').value = '';
       document.getElementById('tOrdCustArea').value = '';
-      document.getElementById('tUtrInput').value = '';
-      document.getElementById('tOrdLitres').value = '1';
-      document.getElementById('tOrdPresetLitres').value = '1';
-      recalcTeamPrice();
+      const utrInput = document.getElementById('tOrdUtrInput');
+      if (utrInput) utrInput.value = '';
+
+      // Reset Litres to 1L
+      setTeamLitrePreset(1);
+
+      // Reset payment mode to Cash
+      const cashRadio = document.querySelector('input[name="tPayMode"][value="cash"]');
+      if (cashRadio) cashRadio.checked = true;
       toggleTeamUtr(false);
       updateAreaDropdowns();
 
+      // Show Consecutive Order Banner with direct WhatsApp Confirmation link
       const banner = document.getElementById('consecutiveOrderNotice');
-      document.getElementById('consecutiveOrderMsg').innerText = `✅ ഓർഡർ #${newOrder.id} (${newOrder.name}) സേവ് ചെയ്തു! അടുത്ത ഓർഡർ എന്റർ ചെയ്യാം.`;
-      banner.classList.remove('hidden');
-      document.getElementById('tOrdCustName').focus();
+      if (banner) {
+        const msgEl = document.getElementById('consecutiveOrderMsg');
+        if (msgEl) msgEl.innerText = `ഓർഡർ #${newOrder.id} (${newOrder.name}) സേവ് ചെയ്തു! അടുത്ത ഓർഡർ നൽകാം.`;
+        
+        const cleanPhone = phone.replace(/[^0-9]/g, '');
+        const waMsg = getGeneratedWaMessage(newOrder);
+        const waBtn = document.getElementById('consecutiveWaBtn');
+        if (waBtn) {
+          waBtn.href = `https://wa.me/91${cleanPhone}?text=${waMsg}`;
+        }
+        banner.classList.remove('hidden');
+      }
+
+      // Automatically focus on Customer Name input for consecutive entry
+      setTimeout(() => {
+        document.getElementById('tOrdCustName')?.focus();
+      }, 150);
 
       renderMyTeamOrders();
       refreshMetrics();
-      showToast(`🎉 ഓർഡർ #${newOrder.id} രജിസ്റ്റർ ചെയ്തു!`);
+      showToast(`🎉 ഓർഡർ #${newOrder.id} (${newOrder.name}) വിജയകരമായി രേഖപ്പെടുത്തി!`);
     }
 
     function renderMyTeamOrders() {
       if (!loggedInTeam) return;
       const tbody = document.getElementById('myTeamOrdersTable');
       const teamOrders = orders.filter(o => o.teamId === loggedInTeam.id);
-      const totalLitres = teamOrders.reduce((sum, o) => sum + o.litres, 0);
+      const totalLitres = teamOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
 
       document.getElementById('myTeamOrderStats').innerText = `${teamOrders.length} Orders (${totalLitres.toFixed(1)} Litres)`;
 
       if (teamOrders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-[var(--muted-foreground)]">ഇതുവരെ ഓർഡറുകൾ എടുത്തിട്ടില്ല</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-[var(--muted-foreground)]">ഇതുവരെ ഓർഡറുകൾ എടുത്തിട്ടില്ല. മുകളിലെ ഫോമിലൂടെ ഓർഡർ നൽകാം!</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = teamOrders.map(o => `
-        <tr class="hover:bg-[var(--background)] transition">
-          <td class="p-2.5 font-mono font-bold">${o.id}</td>
-          <td class="p-2.5">
-            <div class="font-medium">${o.name}</div>
-            <div class="text-[10px] text-[var(--muted-foreground)]">${o.phone}</div>
-          </td>
-          <td class="p-2.5 font-medium text-[#1e3a8a]">${o.member || 'Member'}</td>
-          <td class="p-2.5 font-bold font-mono">${o.litres} L</td>
-          <td class="p-2.5 font-bold text-[#1e3a8a]">₹${o.amount}</td>
-          <td class="p-2.5">
-            ${o.payStatus === 'PAID'
-              ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">PAID</span>'
-              : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-600 border border-red-500/20">UNPAID</span>'
-            }
-          </td>
-          <td class="p-2.5 text-[var(--muted-foreground)]">${o.area}</td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = teamOrders.map(o => {
+        const cleanPhone = (o.phone || '').replace(/[^0-9]/g, '');
+        const waMsg = getGeneratedWaMessage(o);
+        const waLink = `https://wa.me/91${cleanPhone}?text=${waMsg}`;
+
+        return `
+          <tr class="hover:bg-[var(--background)] transition">
+            <td class="p-2.5 font-mono font-bold">${o.id}</td>
+            <td class="p-2.5">
+              <div class="font-medium">${o.name}</div>
+              <div class="text-[10px] text-[var(--muted-foreground)] font-mono">${o.phone}</div>
+            </td>
+            <td class="p-2.5 font-medium text-[#1e3a8a]">${o.member || 'Member'}</td>
+            <td class="p-2.5 font-bold font-mono">${o.litres} L</td>
+            <td class="p-2.5 font-bold text-[#1e3a8a]">₹${o.amount}</td>
+            <td class="p-2.5">
+              ${o.payStatus === 'PAID'
+                ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">PAID</span>'
+                : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-600 border border-red-500/20">UNPAID</span>'
+              }
+            </td>
+            <td class="p-2.5 text-[var(--muted-foreground)]">${o.area}</td>
+            <td class="p-2.5 text-center">
+              <a href="${waLink}" target="_blank" title="Send WhatsApp confirmation" class="px-2.5 py-1 rounded-lg bg-emerald-700/10 hover:bg-emerald-700/20 text-emerald-700 font-bold text-[10px] border border-emerald-700/30 inline-flex items-center gap-1 transition">
+                <span>📲</span> <span>WA</span>
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
     function setIndividualMode(mode) {
@@ -2439,8 +2628,11 @@
     function updateUpiDisplay() {
       const tUpi = document.getElementById('teamUpiDisplay');
       if (tUpi) tUpi.innerText = adminUpiId;
+      const tOrdUpi = document.getElementById('tOrdUpiIdText');
+      if (tOrdUpi) tOrdUpi.innerText = adminUpiId;
       const dUpi = document.getElementById('dirUpiIdText');
       if (dUpi) dUpi.innerText = adminUpiId;
+      recalcTeamPrice();
     }
 
     function copyAdminUpi() {
