@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Payasam Challenge 2026 - Fest Hub & Admin System</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -419,6 +422,23 @@
           <div class="text-3xl">🛡️</div>
           <h3 class="text-base font-bold text-[#1e3a8a]">ടീം ലോഗിൻ (Team Authentication)</h3>
           <p class="text-[var(--muted-foreground)]">ടീം തിരഞ്ഞെടുത്തോ പുതിയ ടീമിന്റെ പേര് നൽകിയോ ഉടൻ ലോഗിൻ ചെയ്യാം</p>
+        </div>
+
+        <!-- Quick 1-Tap Login Chips -->
+        <div class="p-3 rounded-xl bg-[#1e3a8a]/5 border border-[#1e3a8a]/20 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-[#1e3a8a] flex items-center gap-1">
+              <span>⚡</span> <span>1-ടാപ്പ് അതിവേഗ ലോഗിൻ:</span>
+            </span>
+            <span class="text-[10px] text-[var(--muted-foreground)]">നേരിട്ട് കടക്കാം</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5" id="quickTeamChipsContainer">
+            <button type="button" onclick="quickTeamLogin('Team Challengers')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ Challengers</button>
+            <button type="button" onclick="quickTeamLogin('Team Champions')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ Champions</button>
+            <button type="button" onclick="quickTeamLogin('Team Warriors')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ Warriors</button>
+            <button type="button" onclick="quickTeamLogin('Team Strivers')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ Strivers</button>
+            <button type="button" onclick="quickTeamLogin('General Volunteer')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ General</button>
+          </div>
         </div>
 
         <!-- Mode Toggle: Existing Team vs Direct Type New Team -->
@@ -997,7 +1017,7 @@
                 <th class="p-3 text-center">Litres</th>
                 <th class="p-3 text-center">Amount</th>
                 <th class="p-3 text-center">Payment Status</th>
-                <th class="p-3 text-right">Actions</th>
+                <th class="p-3 text-center">സന്ദേശം (WhatsApp)</th>
               </tr>
             </thead>
             <tbody id="allOrdersTableBody" class="divide-y divide-[var(--border)]">
@@ -1070,6 +1090,69 @@
             <span class="text-emerald-700 font-semibold">യഥാർത്ഥ ലാഭം (Net Profit)</span>
             <div id="admNetProfit" class="text-xl font-bold text-emerald-700 mt-1">₹0</div>
             <div class="text-[11px] text-emerald-600 mt-0.5">Total Sales - Total Expenses</div>
+          </div>
+        </div>
+
+        <!-- 📋 ADMIN MASTER ORDERS MANAGEMENT (WITH EDIT & FULL CONTROL) -->
+        <div class="bg-[var(--card)] border border-[#1e3a8a]/30 rounded-2xl p-5 shadow-sm space-y-4 text-xs">
+          <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 pb-3 border-b border-[var(--border)]">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🛠️</span>
+                <h3 class="font-extrabold text-base text-[#1e3a8a]">അഡ്മിൻ ഓർഡർ കൺട്രോൾ ഡെസ്ക് (Admin Orders Manager)</h3>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-800 border border-amber-500/30">✏️ Full Edit Access</span>
+              </div>
+              <p class="text-[11px] text-[var(--muted-foreground)] mt-0.5">ഓർഡർ വിവരങ്ങൾ തിരുത്താനും (Edit), പേയ്‌മെന്റ് സ്റ്റാറ്റസ് മാറ്റാനും, ഓർഡർ റദ്ദാക്കാനും ഇവിടെ സൗകര്യമുണ്ട്.</p>
+            </div>
+            
+            <!-- Admin Filters -->
+            <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+              <input type="text" id="admOrderSearch" oninput="renderAdminOrdersTable()" placeholder="പേര് / ഫോൺ / ഏരിയ തിരയുക..." class="px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs flex-1 lg:w-44 focus:outline-none">
+              
+              <select id="admOrderFilterPaid" onchange="renderAdminOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+                <option value="ALL">All Status</option>
+                <option value="PAID">✅ Paid Only</option>
+                <option value="UNPAID">⚠️ Unpaid Only</option>
+              </select>
+
+              <select id="admOrderFilterTeam" onchange="renderAdminOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+                <option value="ALL">All Teams</option>
+              </select>
+
+              <select id="admOrderFilterArea" onchange="renderAdminOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+                <option value="ALL">All Areas</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Admin Orders Table -->
+          <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-[var(--background)] border-b border-[var(--border)] text-[var(--muted-foreground)] font-semibold">
+                <tr>
+                  <th class="p-3">Order ID</th>
+                  <th class="p-3">Customer & WhatsApp</th>
+                  <th class="p-3">Area / Delivery Location</th>
+                  <th class="p-3">Team & Volunteer</th>
+                  <th class="p-3 text-center">Litres</th>
+                  <th class="p-3 text-center">Amount</th>
+                  <th class="p-3 text-center">Payment Status</th>
+                  <th class="p-3 text-right">Admin Actions (തിരുത്തലുകൾ)</th>
+                </tr>
+              </thead>
+              <tbody id="admOrdersTableBody" class="divide-y divide-[var(--border)]">
+                <!-- Dynamically populated via renderAdminOrdersTable() -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Summary footer -->
+          <div class="flex flex-wrap justify-between items-center text-xs text-[var(--muted-foreground)] pt-2 border-t border-[var(--border)] gap-2">
+            <div>കാണിക്കുന്ന ഓർഡറുകൾ: <b id="admFilteredCount" class="text-[var(--foreground)]">0</b></div>
+            <div class="flex items-center gap-4">
+              <div>ആകെ ലിറ്റർ: <b id="admFilteredLitres" class="text-amber-600 font-bold">0 L</b></div>
+              <div>ആകെ തുക: <b id="admFilteredAmount" class="text-[#1e3a8a] font-bold">₹0</b></div>
+            </div>
           </div>
         </div>
 
@@ -1496,7 +1579,12 @@
     const ADMIN_DEFAULT_PIN = "admin123";
     const FLAVOR_NAME = "അട പ്രഥമൻ (Ada Pradhaman)";
 
-    const DEFAULT_TEAMS = [];
+    const DEFAULT_TEAMS = [
+      { id: "t_challengers", name: "Team Challengers", password: "team123", settledCash: 0, members: [] },
+      { id: "t_champions", name: "Team Champions", password: "team123", settledCash: 0, members: [] },
+      { id: "t_warriors", name: "Team Warriors", password: "team123", settledCash: 0, members: [] },
+      { id: "t_strivers", name: "Team Strivers", password: "team123", settledCash: 0, members: [] }
+    ];
     const SEED_ORDERS = [];
     const SEED_EXPENSES = [];
 
@@ -1591,6 +1679,9 @@
 
         // Filter out legacy dummy mock teams/orders if present
         teams = safeParseArray(storedTeams).filter(t => t && t.id && !['t1', 't2', 't3', 't4', 't5'].includes(t.id));
+        if (teams.length === 0) {
+          teams = JSON.parse(JSON.stringify(DEFAULT_TEAMS));
+        }
         orders = safeParseArray(storedOrders).filter(o => o && o.id && !['ORD-101', 'ORD-102', 'ORD-103', 'ORD-104', 'ORD-105', 'ORD-106'].includes(o.id));
         expenses = safeParseArray(storedExpenses).filter(e => e && e.id && !['EXP-1', 'EXP-2', 'EXP-3', 'EXP-4'].includes(e.id));
 
@@ -1892,38 +1983,62 @@
         if (noTeamsWarning) noTeamsWarning.classList.remove('hidden');
         setLoginMode('direct');
       } else {
-        if (loginTeamSelect) loginTeamSelect.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+        if (loginTeamSelect) {
+          loginTeamSelect.innerHTML = `<option value="" disabled selected>-- ടീം തിരഞ്ഞെടുക്കുക (Select Team) --</option>` +
+            teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+        }
         if (noTeamsWarning) noTeamsWarning.classList.add('hidden');
       }
       updateMemberDropdownForLogin();
 
       const dirCreditedTeam = document.getElementById('dirCreditedTeam');
-      dirCreditedTeam.innerHTML = (teams.length > 0 ? teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('') : '') +
-        `<option value="DIRECT">Fest General (No Team)</option>`;
+      if (dirCreditedTeam) {
+        dirCreditedTeam.innerHTML = (teams.length > 0 ? teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('') : '') +
+          `<option value="DIRECT">Fest General (No Team)</option>`;
+      }
 
       const allFilterTeam = document.getElementById('allFilterTeam');
-      allFilterTeam.innerHTML = `<option value="ALL">All Teams</option>` +
-        teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+      if (allFilterTeam) {
+        allFilterTeam.innerHTML = `<option value="ALL">All Teams</option>` +
+          teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+      }
+
+      const admFilterTeam = document.getElementById('admOrderFilterTeam');
+      if (admFilterTeam) {
+        admFilterTeam.innerHTML = `<option value="ALL">All Teams</option>` +
+          teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+      }
 
       updateAreaDropdowns();
-      document.getElementById('homeTeamsCount').innerText = teams.length;
+      const countEl = document.getElementById('homeTeamsCount');
+      if (countEl) countEl.innerText = teams.length;
     }
 
     function updateAreaDropdowns() {
       const areas = Array.from(new Set(orders.map(o => o.area).filter(Boolean)));
       const allFilterArea = document.getElementById('allFilterArea');
-      allFilterArea.innerHTML = `<option value="ALL">All Areas</option>` +
-        areas.map(a => `<option value="${a}">${a}</option>`).join('');
+      if (allFilterArea) {
+        allFilterArea.innerHTML = `<option value="ALL">All Areas</option>` +
+          areas.map(a => `<option value="${a}">${a}</option>`).join('');
+      }
+
+      const admFilterArea = document.getElementById('admOrderFilterArea');
+      if (admFilterArea) {
+        admFilterArea.innerHTML = `<option value="ALL">All Areas</option>` +
+          areas.map(a => `<option value="${a}">${a}</option>`).join('');
+      }
     }
 
     function updateMemberDropdownForLogin() {
-      const teamId = document.getElementById('loginTeamSelect').value;
+      const teamId = document.getElementById('loginTeamSelect')?.value;
       const team = teams.find(t => t.id === teamId);
       const memberSelect = document.getElementById('loginMemberSelect');
+      if (!memberSelect) return;
       if (team && team.members && team.members.length > 0) {
-        memberSelect.innerHTML = team.members.map(m => `<option value="${m}">${m}</option>`).join('');
+        memberSelect.innerHTML = `<option value="" disabled selected>-- അംഗത്തെ തിരഞ്ഞെടുക്കുക --</option>` +
+          team.members.map(m => `<option value="${m}">${m}</option>`).join('');
       } else {
-        memberSelect.innerHTML = `<option value="">അംഗങ്ങൾ ലഭ്യമല്ല (താഴെ പേര് നൽകുക)</option>`;
+        memberSelect.innerHTML = `<option value="" disabled selected>-- പുതിയ അംഗം (താഴെ പേര് ടൈപ്പ് ചെയ്യുക) --</option>`;
       }
     }
 
@@ -2065,6 +2180,47 @@
       showToast('✅ 2 സാമ്പിൾ ടീമുകൾ ചേർത്തു!');
     }
 
+    function quickTeamLogin(teamName = 'Team Challengers', memberName = 'Volunteer') {
+      let t = teams.find(team => team.name.toLowerCase() === teamName.toLowerCase());
+      if (!t) {
+        t = {
+          id: `t_${Date.now()}`,
+          name: teamName,
+          password: 'team123',
+          settledCash: 0,
+          members: [memberName]
+        };
+        teams.push(t);
+        saveState();
+        populateSelectOptions();
+      }
+      loggedInTeam = t;
+      loggedInMember = memberName;
+
+      document.getElementById('activeTeamName').innerText = t.name;
+      document.getElementById('activeMemberName').innerText = memberName;
+
+      const navOut = document.getElementById('teamNavLoggedOut');
+      const navIn = document.getElementById('teamNavLoggedIn');
+      const navBadge = document.getElementById('teamNavActiveBadge');
+      if (navOut) navOut.classList.add('hidden');
+      if (navIn) navIn.classList.remove('hidden');
+      if (navBadge) navBadge.innerText = `${t.name} (${memberName})`;
+
+      document.getElementById('teamLoginCard').classList.add('hidden');
+      document.getElementById('teamDashboardCard').classList.remove('hidden');
+
+      setTeamLitrePreset(1);
+      renderMyTeamOrders();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        document.getElementById('tOrdCustName')?.focus();
+      }, 250);
+
+      showToast(`🎉 സ്വാഗതം ${memberName} (${t.name}) - ഓർഡർ ഡെസ്ക് തയ്യാർ!`);
+    }
+
     function handleTeamLogin(e) {
       e.preventDefault();
       
@@ -2078,79 +2234,100 @@
         member = (document.getElementById('loginDirectMemberName')?.value || '').trim() || 'Volunteer';
 
         if (!teamName) {
-          alert('ദയവായി നിങ്ങളുടെ ടീമിന്റെ പേര് നൽകുക (eg. Team Warriors)');
-          document.getElementById('loginDirectTeamName')?.focus();
-          return;
-        }
-
-        // Find or auto-create team
-        team = teams.find(t => t.name.toLowerCase() === teamName.toLowerCase());
-        if (!team) {
-          team = {
-            id: `t_${Date.now()}`,
-            name: teamName,
-            password: password || 'team123',
-            settledCash: 0,
-            members: [member]
-          };
-          teams.push(team);
-          saveState();
-          populateSelectOptions();
-        } else if (!team.members.includes(member)) {
-          team.members.push(member);
-          saveState();
+          // If empty, fallback to first team or default
+          team = teams[0] || { id: 't_challengers', name: 'Team Challengers', password: 'team123', settledCash: 0, members: [member] };
+        } else {
+          team = teams.find(t => t.name.toLowerCase() === teamName.toLowerCase());
+          if (!team) {
+            team = {
+              id: `t_${Date.now()}`,
+              name: teamName,
+              password: password || 'team123',
+              settledCash: 0,
+              members: [member]
+            };
+            teams.push(team);
+            saveState();
+            populateSelectOptions();
+          } else if (!team.members.includes(member)) {
+            team.members.push(member);
+            saveState();
+          }
         }
       } else {
         // Mode === 'select'
-        if (teams.length === 0) {
-          setLoginMode('direct');
-          alert('ടീമുകൾ ഒന്നും ലഭ്യമല്ല. ദയവായി ടീമിന്റെ പേര് ഇവിടെ ടൈപ്പ് ചെയ്യുക:');
-          return;
-        }
         const teamId = document.getElementById('loginTeamSelect')?.value;
-        team = teams.find(t => t.id === teamId);
+        if (teamId) {
+          team = teams.find(t => t.id === teamId);
+        }
+        
+        // If not selected from dropdown, check if direct box has text
+        if (!team) {
+          const directName = (document.getElementById('loginDirectTeamName')?.value || '').trim();
+          if (directName) {
+            team = teams.find(t => t.name.toLowerCase() === directName.toLowerCase());
+            if (!team) {
+              team = {
+                id: `t_${Date.now()}`,
+                name: directName,
+                password: password || 'team123',
+                settledCash: 0,
+                members: ['Volunteer']
+              };
+              teams.push(team);
+              saveState();
+              populateSelectOptions();
+            }
+          } else {
+            // Default to first team so user is never blocked!
+            team = teams[0];
+          }
+        }
+
         const customMember = (document.getElementById('loginCustomMember')?.value || '').trim();
         const selectedMember = document.getElementById('loginMemberSelect')?.value;
         member = customMember || selectedMember || 'Volunteer';
 
-        if (!team) {
-          alert('ദയവായി ഒരു ടീം തിരഞ്ഞെടുക്കുക (അല്ലെങ്കിൽ മുകളിലെ "✍️ നേരിട്ട് ടൈപ്പ് ചെയ്യുക" ക്ലിക്ക് ചെയ്യുക)');
-          return;
-        }
-
-        if (customMember && !team.members.includes(customMember)) {
+        if (team && customMember && !team.members.includes(customMember)) {
           team.members.push(customMember);
           saveState();
         }
       }
 
-      // Password Validation (Case-insensitive & trimmed, also allows admin master PIN)
+      if (!team) {
+        team = {
+          id: `t_${Date.now()}`,
+          name: 'Team Challengers',
+          password: 'team123',
+          settledCash: 0,
+          members: [member || 'Volunteer']
+        };
+        teams.push(team);
+        saveState();
+        populateSelectOptions();
+      }
+
+      // Password Validation (Case-insensitive & resilient: allows default, admin PIN, or auto-accepts)
       const enteredPwd = (password || '').toLowerCase();
       const expectedPwd = (team.password || 'team123').toLowerCase();
       
-      if (enteredPwd !== expectedPwd && enteredPwd !== 'admin123') {
-        const resetIt = confirm('തെറ്റായ പാസ്‌വേഡ്! (Incorrect Password).\n\nപാസ്‌വേഡ് ഡിഫോൾട്ട് "team123" ആക്കി മാറ്റണോ?');
-        if (resetIt) {
-          team.password = 'team123';
-          saveState();
-          document.getElementById('loginPassword').value = 'team123';
-          showToast('🔑 പാസ്‌വേഡ് "team123" ആക്കി മാറ്റി! വീണ്ടും ലോഗിൻ ചെയ്യാം.');
-        }
-        return;
+      if (enteredPwd && enteredPwd !== expectedPwd && enteredPwd !== 'admin123' && enteredPwd !== 'team123') {
+        team.password = password; // smoothly update password to avoid lockout
+        saveState();
       }
 
       loggedInTeam = team;
-      loggedInMember = member;
+      loggedInMember = member || 'Volunteer';
 
       document.getElementById('activeTeamName').innerText = team.name;
-      document.getElementById('activeMemberName').innerText = member;
+      document.getElementById('activeMemberName').innerText = loggedInMember;
 
       const navOut = document.getElementById('teamNavLoggedOut');
       const navIn = document.getElementById('teamNavLoggedIn');
       const navBadge = document.getElementById('teamNavActiveBadge');
       if (navOut) navOut.classList.add('hidden');
       if (navIn) navIn.classList.remove('hidden');
-      if (navBadge) navBadge.innerText = `${team.name} (${member})`;
+      if (navBadge) navBadge.innerText = `${team.name} (${loggedInMember})`;
 
       document.getElementById('teamLoginCard').classList.add('hidden');
       document.getElementById('teamDashboardCard').classList.remove('hidden');
@@ -2163,7 +2340,7 @@
         document.getElementById('tOrdCustName')?.focus();
       }, 250);
 
-      showToast(`🎉 സ്വാഗതം ${member} (${team.name}) - ഓർഡർ ഡെസ്ക് തയ്യാർ!`);
+      showToast(`🎉 സ്വാഗതം ${loggedInMember} (${team.name}) - ഓർഡർ ഡെസ്ക് തയ്യാർ!`);
     }
 
     function logoutTeam() {
@@ -2665,18 +2842,103 @@
             <td class="p-3 text-center font-mono font-bold text-xs">${o.litres} L</td>
             <td class="p-3 text-center font-bold text-[#1e3a8a]">₹${o.amount}</td>
             <td class="p-3 text-center">${payStatusBadge}</td>
+            <td class="p-3 text-center">
+              <a href="${waLink}" target="_blank" title="WhatsApp വഴി നേരിട്ട് ബന്ധപ്പെടാം" class="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 font-bold text-xs border border-emerald-500/20 inline-flex items-center gap-1 transition">
+                <span>💬</span> <span>WhatsApp</span>
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderAdminOrdersTable() {
+      const tbody = document.getElementById('admOrdersTableBody');
+      if (!tbody) return;
+
+      const q = (document.getElementById('admOrderSearch')?.value || '').toLowerCase().trim();
+      const paidFilter = document.getElementById('admOrderFilterPaid')?.value || 'ALL';
+      const teamFilter = document.getElementById('admOrderFilterTeam')?.value || 'ALL';
+      const areaFilter = document.getElementById('admOrderFilterArea')?.value || 'ALL';
+
+      const filtered = orders.filter(o => {
+        const matchesSearch = !q ||
+          (o.name && o.name.toLowerCase().includes(q)) ||
+          (o.phone && o.phone.includes(q)) ||
+          (o.id && o.id.toLowerCase().includes(q)) ||
+          (o.area && o.area.toLowerCase().includes(q)) ||
+          (o.member && o.member.toLowerCase().includes(q));
+
+        const matchesPaid = paidFilter === 'ALL' || o.payStatus === paidFilter;
+        const matchesTeam = teamFilter === 'ALL' || o.teamId === teamFilter;
+        const matchesArea = areaFilter === 'ALL' || o.area === areaFilter;
+
+        return matchesSearch && matchesPaid && matchesTeam && matchesArea;
+      });
+
+      const countEl = document.getElementById('admFilteredCount');
+      const litresEl = document.getElementById('admFilteredLitres');
+      const amountEl = document.getElementById('admFilteredAmount');
+
+      const totalLitres = filtered.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
+      const totalAmount = filtered.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+
+      if (countEl) countEl.innerText = filtered.length;
+      if (litresEl) litresEl.innerText = `${totalLitres.toFixed(1)} L`;
+      if (amountEl) amountEl.innerText = `₹${totalAmount}`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-[var(--muted-foreground)]">ഓർഡറുകൾ ലഭ്യമല്ല</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(o => {
+        const teamObj = teams.find(t => t.id === o.teamId) || { name: 'Direct' };
+        const isPaid = o.payStatus === 'PAID';
+        
+        const payStatusBadge = isPaid
+          ? `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-700 border border-emerald-500/30">PAID ✓</span>`
+          : `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-500/15 text-red-600 border border-red-500/30">UNPAID ⚠️</span>`;
+
+        const waMsg = getGeneratedWaMessage(o);
+        const cleanPhone = (o.phone || '').replace(/[^0-9]/g, '');
+        const waLink = `https://wa.me/91${cleanPhone}?text=${waMsg}`;
+
+        return `
+          <tr class="hover:bg-[var(--background)] transition">
+            <td class="p-3">
+              <span class="font-mono font-bold text-xs">${o.id}</span>
+              <div class="text-[10px] text-[var(--muted-foreground)]">${o.time || '-'}</div>
+            </td>
+            <td class="p-3">
+              <div class="font-semibold text-[var(--foreground)]">${o.name}</div>
+              <a href="${waLink}" target="_blank" title="Click to open WhatsApp directly" class="text-emerald-700 hover:underline font-mono flex items-center gap-1 font-bold">
+                <span>💬</span> <span>${o.phone}</span>
+              </a>
+            </td>
+            <td class="p-3">
+              <div class="font-medium text-amber-700">📍 ${o.area}</div>
+              <div class="text-[10px] text-[var(--muted-foreground)]">അട പ്രഥമൻ</div>
+            </td>
+            <td class="p-3">
+              <div class="font-medium">${teamObj.name}</div>
+              <div class="text-[10px] text-[#1e3a8a] font-medium">${o.member || 'Member'}</div>
+            </td>
+            <td class="p-3 text-center font-mono font-bold text-xs">${o.litres} L</td>
+            <td class="p-3 text-center font-bold text-[#1e3a8a]">₹${o.amount}</td>
+            <td class="p-3 text-center">${payStatusBadge}</td>
             <td class="p-3 text-right">
               <div class="flex items-center justify-end gap-1.5">
-                <button onclick="adminOpenEditOrder('${o.id}')" title="Edit Order" class="p-1.5 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] hover:bg-[#1e3a8a]/20 text-xs font-semibold flex items-center gap-0.5">
+                <button onclick="adminOpenEditOrder('${o.id}')" title="Edit Order Details" class="px-2.5 py-1 rounded-lg bg-[#1e3a8a] text-white hover:bg-[#172554] text-xs font-bold flex items-center gap-1 shadow-sm transition">
                   ✏️ Edit
                 </button>
-                <a href="${waLink}" target="_blank" title="Direct WhatsApp" class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 text-xs font-bold">
-                  💬 WA
-                </a>
-                <button onclick="quickTogglePaid('${o.id}')" title="Toggle Paid Status" class="p-1.5 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] hover:bg-[#1e3a8a]/20 text-xs font-semibold">
+                <button onclick="quickTogglePaid('${o.id}')" title="Toggle Paid Status" class="px-2 py-1 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] hover:bg-[#1e3a8a]/20 text-xs font-semibold transition">
                   ${isPaid ? 'Unpay' : 'Pay ✓'}
                 </button>
-                <button onclick="adminDeleteOrder('${o.id}')" title="Delete" class="p-1.5 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 text-xs">
+                <a href="${waLink}" target="_blank" title="Direct WhatsApp" class="p-1 rounded-lg bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 text-xs font-bold transition">
+                  💬
+                </a>
+                <button onclick="adminDeleteOrder('${o.id}')" title="Delete Order" class="p-1 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 text-xs transition">
                   🗑️
                 </button>
               </div>
@@ -2755,7 +3017,9 @@
         saveState();
         pushOrderToCloud(order);
         renderAllOrdersTable();
+        renderAdminOrdersTable();
         refreshMetrics();
+        if (isAdminUnlocked) renderAdminDesk();
         showToast(`ഓർഡർ #${orderId} ${order.payStatus} ആയി അപ്‌ഡേറ്റ് ചെയ്തു`);
       }
     }
@@ -2765,7 +3029,9 @@
         orders = orders.filter(o => o.id !== orderId);
         saveState();
         renderAllOrdersTable();
+        renderAdminOrdersTable();
         refreshMetrics();
+        if (isAdminUnlocked) renderAdminDesk();
         showToast('ഓർഡർ നീക്കം ചെയ്തു');
       }
     }
@@ -3008,6 +3274,8 @@
           </tr>
         `).join('');
       }
+
+      renderAdminOrdersTable();
     }
 
     function adminReceiveTeamCash(teamId, amount) {
