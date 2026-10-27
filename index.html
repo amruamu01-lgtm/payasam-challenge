@@ -11,15 +11,15 @@
         extend: {
           colors: {
             brand: {
-              DEFAULT: '#006039',
-              dark: '#004a2c',
-              light: '#007847',
-              50: '#eef7f2',
-              100: '#d7ece2',
-              200: '#b0d9c5',
-              500: '#006039',
-              600: '#004d2e',
-              700: '#003a23'
+              DEFAULT: '#1e3a8a',
+              dark: '#172554',
+              light: '#2563eb',
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#1e3a8a',
+              600: '#1e40af',
+              700: '#172554'
             }
           }
         }
@@ -29,24 +29,24 @@
   <style>
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(0, 96, 57, 0.25); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(30, 58, 138, 0.25); border-radius: 4px; }
 
     :root {
-      --primary: #006039;
-      --primary-hover: #004a2c;
-      --background: #f2f8f5;
-      --foreground: #092015;
+      --primary: #1e3a8a;
+      --primary-hover: #172554;
+      --background: #f8fafc;
+      --foreground: #0f172a;
       --card: #ffffff;
-      --border: #d4e7de;
-      --muted-foreground: #476a5b;
+      --border: #e2e8f0;
+      --muted-foreground: #64748b;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --background: #06150e;
+        --background: #0b0f17;
         --foreground: #ffffff;
-        --card: #0c2017;
-        --border: #183829;
-        --muted-foreground: #9ebdb0;
+        --card: #111827;
+        --border: #1e293b;
+        --muted-foreground: #94a3b8;
       }
     }
     
@@ -87,29 +87,29 @@
   <div class="max-w-6xl mx-auto space-y-6">
 
     <!-- Top App Header -->
-    <header class="bg-[#ffffff] border border-[#006039]/20 rounded-2xl p-4 md:p-5 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <header class="bg-[#ffffff] border border-[#1e3a8a]/20 rounded-2xl p-4 md:p-5 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
-        <div class="w-12 h-12 rounded-xl bg-[#006039] text-white flex items-center justify-center text-2xl shadow-sm border border-[#006039]">
+        <div class="w-12 h-12 rounded-xl bg-[#1e3a8a] text-white flex items-center justify-center text-2xl shadow-sm border border-[#1e3a8a]">
           🍯
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-xl md:text-2xl font-bold tracking-tight text-[#006039]">Payasam Challenge 2026</h1>
-            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#006039]/10 text-[#006039] border border-[#006039]/30">അട പ്രഥമൻ (₹250 / L)</span>
+            <h1 class="text-xl md:text-2xl font-bold tracking-tight text-[#1e3a8a]">Payasam Challenge 2026</h1>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/30">അട പ്രഥമൻ (₹250 / L)</span>
           </div>
           <div class="flex items-center gap-2 mt-0.5">
             <p class="text-xs text-[var(--muted-foreground)]">ഫെസ്റ്റ് ഓർഡർ മാനേജ്‌മെന്റ് പോർട്ടൽ</p>
-            <span id="cloudStatusBadge" class="text-[10px] px-2 py-0.2 rounded-full font-bold bg-[#006039]/10 text-[#006039] border border-[#006039]/30">⚪ Local Mode</span>
+            <span id="cloudStatusBadge" class="text-[10px] px-2 py-0.2 rounded-full font-bold bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/30">⚪ Local Mode</span>
           </div>
         </div>
       </div>
 
       <!-- Quick Nav Buttons -->
       <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-        <button onclick="navigate('home')" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#ffffff] border border-[#006039]/20 text-[#006039] hover:bg-[#006039]/5 transition flex items-center gap-1.5 shadow-sm">
+        <button onclick="navigate('home')" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#ffffff] border border-[#1e3a8a]/20 text-[#1e3a8a] hover:bg-[#1e3a8a]/5 transition flex items-center gap-1.5 shadow-sm">
           <span>🏠</span> <span>Home</span>
         </button>
-        <button onclick="openPdfModal()" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#006039] hover:bg-[#004a2c] text-white transition flex items-center gap-1.5 shadow-sm">
+        <button onclick="openPdfModal()" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white transition flex items-center gap-1.5 shadow-sm">
           <span>📄</span> <span>PDF Export</span>
         </button>
       </div>
@@ -120,11 +120,11 @@
     <!-- ========================================================= -->
     <section id="view-home" class="space-y-6">
       
-      <div class="bg-gradient-to-r from-[#006039]/15 via-[#006039]/10 to-[#006039]/5 border border-[#006039]/25 rounded-2xl p-6 text-center space-y-2">
+      <div class="bg-gradient-to-r from-[#1e3a8a]/15 via-[#1e3a8a]/10 to-[#1e3a8a]/5 border border-[#1e3a8a]/25 rounded-2xl p-6 text-center space-y-2">
         <span class="text-4xl">🍮</span>
-        <h2 class="text-xl md:text-2xl font-extrabold text-[#006039]">Payasam Challenge - പ്രധാന മെനു</h2>
+        <h2 class="text-xl md:text-2xl font-extrabold text-[#1e3a8a]">Payasam Challenge - പ്രധാന മെനു</h2>
         <p class="text-xs md:text-sm text-[var(--muted-foreground)] max-w-xl mx-auto">
-          പായസം: <b class="text-[#006039]">അട പ്രഥമൻ മാത്രം</b> (റൈറ്റ്: 1 ലിറ്റർ = ₹250). താഴെയുള്ള 5 ഓപ്ഷനുകളിൽ നിന്ന് തിരഞ്ഞെടുക്കുക:
+          പായസം: <b class="text-[#1e3a8a]">അട പ്രഥമൻ മാത്രം</b> (റൈറ്റ്: 1 ലിറ്റർ = ₹250). താഴെയുള്ള 5 ഓപ്ഷനുകളിൽ നിന്ന് തിരഞ്ഞെടുക്കുക:
         </p>
       </div>
 
@@ -132,124 +132,124 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
         
         <!-- OPTION 1: TEAM LOGIN -->
-        <div onclick="navigate('team-login')" class="group cursor-pointer bg-[#ffffff] hover:bg-[#006039]/5 border border-[#006039]/20 hover:border-[#006039] rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+        <div onclick="navigate('team-login')" class="group cursor-pointer bg-[#ffffff] hover:bg-[#1e3a8a]/5 border border-[#1e3a8a]/20 hover:border-[#1e3a8a] rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-xl bg-[#006039]/10 text-[#006039] flex items-center justify-center text-2xl font-bold border border-[#006039]/20 group-hover:scale-105 transition">
+            <div class="w-12 h-12 rounded-xl bg-[#1e3a8a]/10 text-[#1e3a8a] flex items-center justify-center text-2xl font-bold border border-[#1e3a8a]/20 group-hover:scale-105 transition">
               👥
             </div>
             <div>
               <div class="flex items-center justify-between">
-                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-[#006039] transition">1. Team Login</h3>
-                <span class="text-xs px-2 py-0.5 rounded bg-[#006039]/10 text-[#006039] font-medium">Volunteers</span>
+                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-[#1e3a8a] transition">1. Team Login</h3>
+                <span class="text-xs px-2 py-0.5 rounded bg-[#1e3a8a]/10 text-[#1e3a8a] font-medium">Volunteers</span>
               </div>
               <p class="text-xs text-[var(--muted-foreground)] mt-1.5">
                 ടീം അംഗങ്ങൾക്ക് ലോഗിൻ ചെയ്യാം. പുതിയ ടീം രജിസ്റ്റർ ചെയ്യാനുള്ള ഓപ്ഷനും (New Team), അടുത്തടുത്ത ഓർഡറുകൾ വേഗത്തിൽ എടുക്കാനുള്ള സൗകര്യവും.
               </p>
             </div>
           </div>
-          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-[#006039]">
+          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-[#1e3a8a]">
             <span>ലോഗിൻ / New Team ➔</span>
             <span class="text-[11px] text-[var(--muted-foreground)] font-normal"><span id="homeTeamsCount">0</span> Teams</span>
           </div>
         </div>
 
         <!-- OPTION 2: INDIVIDUAL ORDER -->
-        <div onclick="navigate('direct-order')" class="group cursor-pointer bg-[#ffffff] hover:bg-[#006039]/5 border border-[#006039]/20 hover:border-[#006039] rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+        <div onclick="navigate('direct-order')" class="group cursor-pointer bg-[#ffffff] hover:bg-[#1e3a8a]/5 border border-[#1e3a8a]/20 hover:border-[#1e3a8a] rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-xl bg-[#006039]/10 text-[#006039] flex items-center justify-center text-2xl font-bold border border-[#006039]/20 group-hover:scale-105 transition">
+            <div class="w-12 h-12 rounded-xl bg-[#1e3a8a]/10 text-[#1e3a8a] flex items-center justify-center text-2xl font-bold border border-[#1e3a8a]/20 group-hover:scale-105 transition">
               🛍️
             </div>
             <div>
               <div class="flex items-center justify-between">
-                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-[#006039] transition">2. Individual Order</h3>
-                <span class="text-xs px-2 py-0.5 rounded bg-[#006039]/10 text-[#006039] font-medium">Dual Mode</span>
+                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-[#1e3a8a] transition">2. Individual Order</h3>
+                <span class="text-xs px-2 py-0.5 rounded bg-[#1e3a8a]/10 text-[#1e3a8a] font-medium">Dual Mode</span>
               </div>
               <p class="text-xs text-[var(--muted-foreground)] mt-1.5">
                 ഓർഡർ എടുത്ത ആളുടെ പേരും ടീമും വെച്ച് ബുക്ക് ചെയ്യാം (ആ ടീമിന് റാങ്ക് കയറും!), അല്ലെങ്കിൽ കസ്റ്റമർക്ക് നേരിട്ടും ബുക്ക് ചെയ്യാം.
               </p>
             </div>
           </div>
-          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-[#006039]">
+          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-[#1e3a8a]">
             <span>ഓർഡർ നൽകുക ➔</span>
             <span class="text-[11px] text-[var(--muted-foreground)] font-normal">₹250/Litre</span>
           </div>
         </div>
 
         <!-- OPTION 3: RANKINGS -->
-        <div onclick="navigate('rankings')" class="group cursor-pointer bg-[#ffffff] hover:bg-[#006039]/5 border border-[#006039]/20 hover:border-[#006039] rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+        <div onclick="navigate('rankings')" class="group cursor-pointer bg-[#ffffff] hover:bg-[#1e3a8a]/5 border border-[#1e3a8a]/20 hover:border-[#1e3a8a] rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-xl bg-[#006039]/10 text-[#006039] flex items-center justify-center text-2xl font-bold border border-[#006039]/20 group-hover:scale-105 transition">
+            <div class="w-12 h-12 rounded-xl bg-[#1e3a8a]/10 text-[#1e3a8a] flex items-center justify-center text-2xl font-bold border border-[#1e3a8a]/20 group-hover:scale-105 transition">
               🏆
             </div>
             <div>
               <div class="flex items-center justify-between">
-                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-[#006039] transition">3. Rankings</h3>
-                <span class="text-xs px-2 py-0.5 rounded bg-[#006039]/10 text-[#006039] font-medium">Leaderboard</span>
+                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-[#1e3a8a] transition">3. Rankings</h3>
+                <span class="text-xs px-2 py-0.5 rounded bg-[#1e3a8a]/10 text-[#1e3a8a] font-medium">Leaderboard</span>
               </div>
               <p class="text-xs text-[var(--muted-foreground)] mt-1.5">
                 ടീം റാങ്കിംഗും, ഒപ്പം കൂടുതൽ ലിറ്റർ വിറ്റ വ്യക്തിഗത വോളന്റിയർമാരുടെ തത്സമയ റാങ്കിംഗും (Individual Standings).
               </p>
             </div>
           </div>
-          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-[#006039]">
+          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-[#1e3a8a]">
             <span>ലീഡർബോർഡ് കാണുക ➔</span>
             <span class="text-[11px] text-[var(--muted-foreground)]">Live Standings</span>
           </div>
         </div>
 
         <!-- OPTION 4: ALL ORDERS -->
-        <div onclick="navigate('all-orders')" class="group cursor-pointer bg-[#ffffff] hover:bg-[#006039]/5 border border-[#006039]/20 hover:border-[#006039] rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between sm:col-span-2 lg:col-span-2">
+        <div onclick="navigate('all-orders')" class="group cursor-pointer bg-[#ffffff] hover:bg-[#1e3a8a]/5 border border-[#1e3a8a]/20 hover:border-[#1e3a8a] rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between sm:col-span-2 lg:col-span-2">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-xl bg-[#006039]/10 text-[#006039] flex items-center justify-center text-2xl font-bold border border-[#006039]/20 group-hover:scale-105 transition">
+            <div class="w-12 h-12 rounded-xl bg-[#1e3a8a]/10 text-[#1e3a8a] flex items-center justify-center text-2xl font-bold border border-[#1e3a8a]/20 group-hover:scale-105 transition">
               📋
             </div>
             <div>
               <div class="flex items-center justify-between">
-                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-[#006039] transition">4. ആകെ ഓർഡറുകൾ (All Orders)</h3>
-                <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#006039]/15 text-[#006039] font-bold border border-[#006039]/30">Paid & Unpaid Status</span>
+                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-[#1e3a8a] transition">4. ആകെ ഓർഡറുകൾ (All Orders)</h3>
+                <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#1e3a8a]/15 text-[#1e3a8a] font-bold border border-[#1e3a8a]/30">Paid & Unpaid Status</span>
               </div>
             </div>
           </div>
-          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-[#006039]">
+          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-[#1e3a8a]">
             <span>ലിസ്റ്റ് തുറക്കുക ➔</span>
             <span class="text-[11px] text-[var(--muted-foreground)] font-normal"><span id="homePaidCount">0</span> Paid | <span id="homeUnpaidCount">0</span> Unpaid</span>
           </div>
         </div>
 
         <!-- OPTION 5: ADMIN DESK -->
-        <div onclick="navigate('admin')" class="group cursor-pointer bg-[#ffffff] hover:bg-[#006039]/5 border border-[#006039]/20 hover:border-[#006039] rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+        <div onclick="navigate('admin')" class="group cursor-pointer bg-[#ffffff] hover:bg-[#1e3a8a]/5 border border-[#1e3a8a]/20 hover:border-[#1e3a8a] rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
           <div class="space-y-3">
-            <div class="w-12 h-12 rounded-xl bg-[#006039]/10 text-[#006039] flex items-center justify-center text-2xl font-bold border border-[#006039]/20 group-hover:scale-105 transition">
+            <div class="w-12 h-12 rounded-xl bg-[#1e3a8a]/10 text-[#1e3a8a] flex items-center justify-center text-2xl font-bold border border-[#1e3a8a]/20 group-hover:scale-105 transition">
               🔐
             </div>
             <div>
               <div class="flex items-center justify-between">
-                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-[#006039] transition">5. Admin Desk</h3>
-                <span class="text-xs px-2 py-0.5 rounded bg-[#006039]/10 text-[#006039] font-medium">Full Control</span>
+                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-[#1e3a8a] transition">5. Admin Desk</h3>
+                <span class="text-xs px-2 py-0.5 rounded bg-[#1e3a8a]/10 text-[#1e3a8a] font-medium">Full Control</span>
               </div>
             </div>
           </div>
-          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-[#006039]">
+          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-[#1e3a8a]">
             <span>അഡ്മിൻ പാനൽ ➔</span>
-            <span class="text-[11px] text-[#006039] font-mono font-bold" id="homeProfitPreview">₹0 Profit</span>
+            <span class="text-[11px] text-[#1e3a8a] font-mono font-bold" id="homeProfitPreview">₹0 Profit</span>
           </div>
         </div>
 
       </div>
 
       <!-- Quick Metrics Strip -->
-      <div class="bg-[#ffffff] border border-[#006039]/20 rounded-2xl p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs shadow-sm">
+      <div class="bg-[#ffffff] border border-[#1e3a8a]/20 rounded-2xl p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs shadow-sm">
         <div>
           <span class="text-[var(--muted-foreground)]">ആകെ അട പ്രഥമൻ</span>
-          <div id="metricTotalLitres" class="text-lg font-bold text-[#006039]">0 L</div>
+          <div id="metricTotalLitres" class="text-lg font-bold text-amber-600">0 L</div>
         </div>
         <div>
           <span class="text-[var(--muted-foreground)]">ആകെ വിൽപന തുക</span>
-          <div id="metricTotalRevenue" class="text-lg font-bold text-[#006039]">₹0</div>
+          <div id="metricTotalRevenue" class="text-lg font-bold text-[#1e3a8a]">₹0</div>
         </div>
         <div>
           <span class="text-[var(--muted-foreground)]">അടച്ച തുക (Paid)</span>
-          <div id="metricPaidAmount" class="text-lg font-bold text-[#006039]">₹0</div>
+          <div id="metricPaidAmount" class="text-lg font-bold text-emerald-700">₹0</div>
         </div>
         <div>
           <span class="text-[var(--muted-foreground)]">പിരിഞ്ഞു കിട്ടാനുള്ളത് (Due)</span>
@@ -269,17 +269,17 @@
           <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
         </button>
         <div class="flex items-center gap-2">
-          <button onclick="toggleNewTeamForm(true)" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white shadow-sm transition">
+          <button onclick="toggleNewTeamForm(true)" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white shadow-sm transition">
             ➕ New Team ഉണ്ടാക്കുക
           </button>
-          <span class="text-xs font-semibold text-[#006039]">👥 Team Portal</span>
+          <span class="text-xs font-semibold text-[#1e3a8a]">👥 Team Portal</span>
         </div>
       </div>
 
       <!-- NEW TEAM REGISTRATION CARD -->
-      <div id="newTeamCard" class="max-w-md mx-auto bg-[#ffffff] border border-[#006039]/30 rounded-2xl p-5 shadow-sm space-y-3 text-xs hidden">
-        <div class="flex justify-between items-center pb-2 border-b border-[#006039]/20">
-          <h4 class="font-bold text-sm text-[#006039] flex items-center gap-1.5">
+      <div id="newTeamCard" class="max-w-md mx-auto bg-[#ffffff] border border-[#1e3a8a]/30 rounded-2xl p-5 shadow-sm space-y-3 text-xs hidden">
+        <div class="flex justify-between items-center pb-2 border-b border-[#1e3a8a]/20">
+          <h4 class="font-bold text-sm text-[#1e3a8a] flex items-center gap-1.5">
             <span>✨</span> <span>പുതിയ ടീം രജിസ്റ്റർ ചെയ്യുക (Register New Team)</span>
           </h4>
           <button onclick="toggleNewTeamForm(false)" class="text-slate-400 hover:text-slate-600">✕</button>
@@ -288,19 +288,19 @@
         <form onsubmit="handleCreateNewTeam(event)" class="space-y-3">
           <div>
             <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീമിന്റെ പേര് (Team Name) *</label>
-            <input type="text" id="newTeamName" required placeholder="eg. Team Red Dragons" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039]">
+            <input type="text" id="newTeamName" required placeholder="eg. Team Red Dragons" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
           </div>
           <div>
             <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം പാസ്‌വേഡ് (Team Password) *</label>
-            <input type="text" id="newTeamPassword" required value="team123" placeholder="Password" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039] font-mono">
+            <input type="text" id="newTeamPassword" required value="team123" placeholder="Password" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a] font-mono">
           </div>
           <div>
             <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം അംഗങ്ങളുടെ പേരുകൾ (Members - കോമ ഇട്ട് നൽകാം) *</label>
-            <input type="text" id="newTeamMembers" required placeholder="eg. Arun, Sankar, Sneha" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039]">
+            <input type="text" id="newTeamMembers" required placeholder="eg. Arun, Sankar, Sneha" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
           </div>
           <div class="flex justify-end gap-2 pt-1">
             <button type="button" onclick="toggleNewTeamForm(false)" class="px-3 py-1.5 rounded-lg border border-[var(--border)]">Cancel</button>
-            <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white font-bold shadow transition">
+            <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold shadow transition">
               സേവ് ചെയ്യുക (Save Team)
             </button>
           </div>
@@ -308,20 +308,20 @@
       </div>
 
       <!-- Login Screen (When Logged Out) -->
-      <div id="teamLoginCard" class="max-w-md mx-auto bg-[#ffffff] border border-[#006039]/20 rounded-2xl p-6 shadow-sm space-y-4 text-xs">
+      <div id="teamLoginCard" class="max-w-md mx-auto bg-[#ffffff] border border-[#1e3a8a]/20 rounded-2xl p-6 shadow-sm space-y-4 text-xs">
         <div class="text-center space-y-1">
           <div class="text-3xl">🛡️</div>
-          <h3 class="text-base font-bold text-[#006039]">ടീം ലോഗിൻ (Team Authentication)</h3>
+          <h3 class="text-base font-bold text-[#1e3a8a]">ടീം ലോഗിൻ (Team Authentication)</h3>
           <p class="text-[var(--muted-foreground)]">നിങ്ങളുടെ ടീമും അംഗത്തിന്റെ പേരും തിരഞ്ഞെടുത്ത് ലോഗിൻ ചെയ്യുക</p>
         </div>
 
         <!-- Banner shown when no teams exist -->
-        <div id="noTeamsWarning" class="hidden p-3.5 rounded-xl bg-[#006039]/10 border border-[#006039]/30 text-[#006039] text-xs flex flex-col gap-2">
-          <div class="font-bold flex items-center gap-1.5 text-[#006039]">
+        <div id="noTeamsWarning" class="hidden p-3.5 rounded-xl bg-[#1e3a8a]/10 border border-[#1e3a8a]/30 text-[#1e3a8a] text-xs flex flex-col gap-2">
+          <div class="font-bold flex items-center gap-1.5 text-[#1e3a8a]">
             <span>⚠️</span> <span>ഇതുവരെ ടീമുകൾ ഒന്നും ചേർത്തിട്ടില്ല!</span>
           </div>
           <p class="text-[11px] text-[var(--muted-foreground)]">ഓർഡറുകൾ എടുക്കാൻ ആദ്യം നിങ്ങളുടെ ടീം രജിസ്റ്റർ ചെയ്യുക:</p>
-          <button type="button" onclick="toggleNewTeamForm(true)" class="px-3.5 py-1.5 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white font-bold w-fit shadow transition">
+          <button type="button" onclick="toggleNewTeamForm(true)" class="px-3.5 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold w-fit shadow transition">
             ➕ പുതിയ ടീം ഉണ്ടാക്കുക (Create New Team)
           </button>
         </div>
@@ -346,14 +346,14 @@
           <div>
             <div class="flex justify-between items-center mb-1">
               <label class="block font-medium text-[var(--muted-foreground)]">ടീം പാസ്‌വേഡ് (Team Password) *</label>
-              <button type="button" onclick="openTeamPasswordModal()" class="text-[11px] text-[#006039] hover:underline flex items-center gap-0.5 font-semibold">
+              <button type="button" onclick="openTeamPasswordModal()" class="text-[11px] text-[#1e3a8a] hover:underline flex items-center gap-0.5 font-semibold">
                 <span>🔑</span> <span>പാസ്‌വേഡ് മാറ്റുക</span>
               </button>
             </div>
-            <input type="password" id="loginPassword" required placeholder="ടീം പാസ്‌വേഡ് നൽകുക" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039]">
+            <input type="password" id="loginPassword" required placeholder="ടീം പാസ്‌വേഡ് നൽകുക" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
           </div>
 
-          <button type="submit" class="w-full py-2.5 rounded-xl bg-[#006039] hover:bg-[#004a2c] text-white font-semibold transition shadow mt-3">
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white font-semibold transition shadow mt-3">
             ലോഗിൻ ചെയ്യുക (Login to Dashboard) ➔
           </button>
         </form>
@@ -365,20 +365,20 @@
         <!-- Team Banner / Active Session Info -->
         <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-[#006039]/15 text-[#006039] flex items-center justify-center font-bold text-lg">
+            <div class="w-10 h-10 rounded-xl bg-[#1e3a8a]/15 text-[#1e3a8a] flex items-center justify-center font-bold text-lg">
               ✓
             </div>
             <div>
               <div class="flex items-center gap-2">
                 <span class="text-xs text-[var(--muted-foreground)]">ലോഗിൻ ചെയ്തിരിക്കുന്നു:</span>
                 <span id="activeTeamName" class="font-bold text-sm text-[var(--foreground)]">Team Name</span>
-                <span class="text-xs px-2 py-0.5 rounded-full bg-[#006039]/15 text-[#006039] font-bold" id="activeMemberName">Member Name</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-[#1e3a8a]/15 text-[#1e3a8a] font-bold" id="activeMemberName">Member Name</span>
               </div>
-              <p class="text-[11px] text-[var(--muted-foreground)]">പായസം: <b class="text-[#006039]">അട പ്രഥമൻ (Ada Pradhaman)</b> | 1 ലിറ്റർ = ₹250</p>
+              <p class="text-[11px] text-[var(--muted-foreground)]">പായസം: <b class="text-[#1e3a8a]">അട പ്രഥമൻ (Ada Pradhaman)</b> | 1 ലിറ്റർ = ₹250</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
-            <button onclick="openTeamPasswordModal()" class="px-3 py-1.5 rounded-lg bg-[#006039]/10 text-[#006039] hover:bg-[#006039]/20 text-xs font-semibold border border-[#006039]/20 flex items-center gap-1 transition">
+            <button onclick="openTeamPasswordModal()" class="px-3 py-1.5 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] hover:bg-[#1e3a8a]/20 text-xs font-semibold border border-[#1e3a8a]/20 flex items-center gap-1 transition">
               <span>🔑</span> <span>പാസ്‌വേഡ് മാറ്റുക</span>
             </button>
             <button onclick="logoutTeam()" class="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 text-xs font-medium border border-red-500/20 transition">
@@ -388,37 +388,37 @@
         </div>
 
         <!-- NEW ORDER ENTRY FORM -->
-        <div class="bg-[#ffffff] border border-[#006039]/20 rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="bg-[#ffffff] border border-[#1e3a8a]/20 rounded-2xl p-5 shadow-sm space-y-4">
           <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
             <div>
-              <h3 class="text-sm font-bold text-[#006039] flex items-center gap-1.5">
+              <h3 class="text-sm font-bold text-[#1e3a8a] flex items-center gap-1.5">
                 <span>🛒</span> <span>പുതിയ ഓർഡർ എടുക്കുക (Take Order)</span>
               </h3>
               <p class="text-[11px] text-[var(--muted-foreground)]">ഒരു ഓർഡർ സേവ് ചെയ്താൽ ഉടൻ തന്നെ അടുത്ത ഓർഡർ എന്റർ ചെയ്യാം!</p>
             </div>
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#006039]/10 text-[#006039] border border-[#006039]/30">അട പ്രഥമൻ ₹250/L</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/30">അട പ്രഥമൻ ₹250/L</span>
           </div>
 
           <!-- Consecutive Next Order Notification Banner -->
-          <div id="consecutiveOrderNotice" class="hidden p-3 rounded-xl bg-[#006039]/10 border border-[#006039]/30 text-[#006039] text-xs flex justify-between items-center">
+          <div id="consecutiveOrderNotice" class="hidden p-3 rounded-xl bg-[#1e3a8a]/10 border border-[#1e3a8a]/30 text-[#1e3a8a] text-xs flex justify-between items-center">
             <span id="consecutiveOrderMsg">✅ ഓർഡർ സേവ് ചെയ്തു! അടുത്ത ഓർഡർ നൽകാം.</span>
-            <span class="text-[10px] text-[#006039] font-bold">Ready for Next ➔</span>
+            <span class="text-[10px] text-[#1e3a8a] font-bold">Ready for Next ➔</span>
           </div>
 
           <form id="teamOrderForm" onsubmit="handleTeamOrderSubmit(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             <div>
               <label class="block font-medium text-[var(--muted-foreground)] mb-1">കസ്റ്റമറുടെ പേര് (Customer Name) *</label>
-              <input type="text" id="tOrdCustName" required placeholder="eg. Anjali R" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039]">
+              <input type="text" id="tOrdCustName" required placeholder="eg. Anjali R" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
             </div>
 
             <div>
               <label class="block font-medium text-[var(--muted-foreground)] mb-1">WhatsApp ഫോൺ നമ്പർ *</label>
-              <input type="tel" id="tOrdCustPhone" required placeholder="eg. 9847123456" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039]">
+              <input type="tel" id="tOrdCustPhone" required placeholder="eg. 9847123456" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
             </div>
 
             <div>
               <label class="block font-medium text-[var(--muted-foreground)] mb-1">ഏരിയ / ലൊക്കേഷൻ (Area / Room / Dept) *</label>
-              <input type="text" id="tOrdCustArea" required placeholder="eg. Mechanical Dept Lab 2, Hostel..." class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039]">
+              <input type="text" id="tOrdCustArea" required placeholder="eg. Mechanical Dept Lab 2, Hostel..." class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
             </div>
 
             <!-- Litre Selection -->
@@ -434,18 +434,18 @@
                   <option value="5">5 Litres (₹1250)</option>
                   <option value="custom">മറ്റുള്ളവ (Custom)</option>
                 </select>
-                <input type="number" id="tOrdLitres" step="0.1" min="0.2" value="1" oninput="recalcTeamPrice()" class="px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#006039]">
+                <input type="number" id="tOrdLitres" step="0.1" min="0.2" value="1" oninput="recalcTeamPrice()" class="px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#1e3a8a]">
               </div>
             </div>
 
             <div>
               <label class="block font-medium text-[var(--muted-foreground)] mb-1">പായസം തരം (Flavor)</label>
-              <input type="text" readonly value="അട പ്രഥമൻ (Ada Pradhaman Only)" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#006039]">
+              <input type="text" readonly value="അട പ്രഥമൻ (Ada Pradhaman Only)" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#1e3a8a]">
             </div>
 
             <div>
               <label class="block font-medium text-[var(--muted-foreground)] mb-1">ആകെ അടയ്ക്കേണ്ട തുക</label>
-              <div class="flex items-center gap-2 h-9 px-3 rounded-lg bg-[#006039]/10 border border-[#006039]/30 font-bold text-[#006039] text-sm">
+              <div class="flex items-center gap-2 h-9 px-3 rounded-lg bg-[#1e3a8a]/10 border border-[#1e3a8a]/30 font-bold text-[#1e3a8a] text-sm">
                 <span id="tOrdPriceDisplay">₹250</span>
                 <span class="text-[10px] text-[var(--muted-foreground)] font-normal">(Rate: ₹250/L)</span>
               </div>
@@ -455,29 +455,29 @@
               <label class="block font-medium text-[var(--muted-foreground)] mb-1">പേയ്മെന്റ് രീതി (Payment Mode) *</label>
               <div class="flex flex-wrap items-center gap-4 pt-1">
                 <label class="inline-flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="tPayMode" value="cash" checked onchange="toggleTeamUtr(false)" class="accent-[#006039]">
+                  <input type="radio" name="tPayMode" value="cash" checked onchange="toggleTeamUtr(false)" class="accent-[#1e3a8a]">
                   <span>💵 Cash (കയ്യിൽ വാങ്ങി)</span>
                 </label>
                 <label class="inline-flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="tPayMode" value="upi" onchange="toggleTeamUtr(true)" class="accent-[#006039]">
+                  <input type="radio" name="tPayMode" value="upi" onchange="toggleTeamUtr(true)" class="accent-[#1e3a8a]">
                   <span>📱 UPI / GPay</span>
                 </label>
                 <label class="inline-flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="tPayMode" value="unpaid" onchange="toggleTeamUtr(false)" class="accent-[#006039]">
+                  <input type="radio" name="tPayMode" value="unpaid" onchange="toggleTeamUtr(false)" class="accent-[#1e3a8a]">
                   <span>⏳ Pay on Delivery</span>
                 </label>
               </div>
               <div id="tUtrBox" class="mt-2 hidden space-y-2">
                 <div class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
-                  <span class="text-[11px] text-[var(--muted-foreground)]">Admin UPI ID: <b id="teamUpiDisplay" class="text-[#006039] font-mono">festpayasam@upi</b></span>
-                  <button type="button" onclick="copyAdminUpi()" class="px-2 py-0.5 rounded text-[10px] bg-[#006039]/10 text-[#006039] border border-[#006039]/20 font-bold">Copy UPI</button>
+                  <span class="text-[11px] text-[var(--muted-foreground)]">Admin UPI ID: <b id="teamUpiDisplay" class="text-[#1e3a8a] font-mono">festpayasam@upi</b></span>
+                  <button type="button" onclick="copyAdminUpi()" class="px-2 py-0.5 rounded text-[10px] bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/20 font-bold">Copy UPI</button>
                 </div>
                 <input type="text" id="tUtrInput" placeholder="Enter UPI Reference / UTR Number" class="w-full px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
               </div>
             </div>
 
             <div class="flex items-end">
-              <button type="submit" class="w-full py-2.5 rounded-xl bg-[#006039] hover:bg-[#004a2c] text-white font-bold transition shadow flex items-center justify-center gap-1.5">
+              <button type="submit" class="w-full py-2.5 rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold transition shadow flex items-center justify-center gap-1.5">
                 <span>➕</span> <span>ഓർഡർ സേവ് ചെയ്ത് അടുത്തത് എടുക്കുക</span>
               </button>
             </div>
@@ -485,10 +485,10 @@
         </div>
 
         <!-- My Team's Orders List -->
-        <div class="bg-[#ffffff] border border-[#006039]/20 rounded-2xl p-5 shadow-sm space-y-3">
+        <div class="bg-[#ffffff] border border-[#1e3a8a]/20 rounded-2xl p-5 shadow-sm space-y-3">
           <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
-            <h4 class="font-bold text-xs text-[#006039]">ഞങ്ങളുടെ ടീമിന്റെ ഓർഡറുകൾ (My Team Orders)</h4>
-            <span id="myTeamOrderStats" class="text-xs font-bold text-[#006039]">0 Litres</span>
+            <h4 class="font-bold text-xs text-[#1e3a8a]">ഞങ്ങളുടെ ടീമിന്റെ ഓർഡറുകൾ (My Team Orders)</h4>
+            <span id="myTeamOrderStats" class="text-xs font-bold text-[#1e3a8a]">0 Litres</span>
           </div>
           <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
             <table class="w-full text-left text-xs">
@@ -524,19 +524,19 @@
         <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
           <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
         </button>
-        <span class="text-xs font-semibold text-[#006039]">🛍️ 2. Individual Order Portal</span>
+        <span class="text-xs font-semibold text-[#1e3a8a]">🛍️ 2. Individual Order Portal</span>
       </div>
 
-      <div class="max-w-xl mx-auto bg-[#ffffff] border border-[#006039]/20 rounded-2xl p-6 shadow-sm space-y-4 text-xs">
+      <div class="max-w-xl mx-auto bg-[#ffffff] border border-[#1e3a8a]/20 rounded-2xl p-6 shadow-sm space-y-4 text-xs">
         <div class="text-center space-y-1">
           <div class="text-3xl">🍯</div>
-          <h3 class="text-base font-bold text-[#006039]">ഇൻഡിവിജ്വൽ ഓർഡർ (Individual Booking Desk)</h3>
+          <h3 class="text-base font-bold text-[#1e3a8a]">ഇൻഡിവിജ്വൽ ഓർഡർ (Individual Booking Desk)</h3>
           <p class="text-[var(--muted-foreground)]">ഓർഡർ എടുത്ത ആളുടെ പേരും ടീമും നൽകിയാൽ ആ ടീമിന്റെയും ആളുടെയും റാങ്ക് തത്സമയം കയറും!</p>
         </div>
 
         <!-- Mode Toggle -->
         <div class="grid grid-cols-2 gap-2 p-1 bg-[var(--background)] rounded-xl border border-[var(--border)]">
-          <button type="button" id="btnIndModeAgent" onclick="setIndividualMode('agent')" class="py-1.5 rounded-lg font-bold text-xs bg-[#006039] text-white transition shadow-sm">
+          <button type="button" id="btnIndModeAgent" onclick="setIndividualMode('agent')" class="py-1.5 rounded-lg font-bold text-xs bg-[#1e3a8a] text-white transition shadow-sm">
             👤 വോളന്റിയർ / ഏജന്റ് ബുക്കിംഗ്
           </button>
           <button type="button" id="btnIndModeCustomer" onclick="setIndividualMode('customer')" class="py-1.5 rounded-lg font-medium text-xs text-[var(--muted-foreground)] transition">
@@ -545,25 +545,25 @@
         </div>
 
         <!-- Consecutive Banner -->
-        <div id="dirConsecutiveNotice" class="hidden p-3 rounded-xl bg-[#006039]/10 border border-[#006039]/30 text-[#006039] text-xs font-semibold">
+        <div id="dirConsecutiveNotice" class="hidden p-3 rounded-xl bg-[#1e3a8a]/10 border border-[#1e3a8a]/30 text-[#1e3a8a] text-xs font-semibold">
           ✅ മുൻ ഓർഡർ സേവ് ചെയ്തു! അടുത്ത ഓർഡർ നൽകാം.
         </div>
 
         <form id="directOrderForm" onsubmit="handleDirectOrderSubmit(event)" class="space-y-3 pt-2">
           
           <!-- Agent Attribution -->
-          <div id="agentAttributionBox" class="p-3 rounded-xl bg-[#006039]/5 border border-[#006039]/20 space-y-2.5">
-            <div class="font-bold text-[#006039] flex items-center gap-1 text-[11px]">
+          <div id="agentAttributionBox" class="p-3 rounded-xl bg-[#1e3a8a]/5 border border-[#1e3a8a]/20 space-y-2.5">
+            <div class="font-bold text-[#1e3a8a] flex items-center gap-1 text-[11px]">
               <span>⭐</span> <span>റാങ്ക് ക്രെഡിറ്റ് ചെയ്യുന്നതിനുള്ള വിവരങ്ങൾ:</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
                 <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ഓർഡർ എടുത്ത ആളുടെ പേര് (Agent Name) *</label>
-                <input type="text" id="dirAgentName" placeholder="eg. Rahul S" class="w-full px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039]">
+                <input type="text" id="dirAgentName" placeholder="eg. Rahul S" class="w-full px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
               </div>
               <div>
                 <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ഏത് ടീം ആണ്? (Credit Team Rank) *</label>
-                <select id="dirCreditedTeam" class="w-full px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] font-semibold text-[#006039]">
+                <select id="dirCreditedTeam" class="w-full px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] font-semibold text-[#1e3a8a]">
                   <!-- populated dynamically -->
                 </select>
               </div>
@@ -573,34 +573,34 @@
           <!-- Customer Details -->
           <div>
             <label class="block font-medium mb-1 text-[var(--muted-foreground)]">കസ്റ്റമറുടെ പേര് (Customer Name) *</label>
-            <input type="text" id="dirCustName" required placeholder="eg. Karthik V" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039]">
+            <input type="text" id="dirCustName" required placeholder="eg. Karthik V" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
           </div>
 
           <div>
             <label class="block font-medium mb-1 text-[var(--muted-foreground)]">WhatsApp ഫോൺ നമ്പർ *</label>
-            <input type="tel" id="dirCustPhone" required placeholder="eg. 9847123456" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039]">
+            <input type="tel" id="dirCustPhone" required placeholder="eg. 9847123456" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
           </div>
 
           <div>
             <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ഡെലിവറി ഏരിയ / സ്ഥലം (Area / Room / Dept) *</label>
-            <input type="text" id="dirCustArea" required placeholder="eg. CS Dept Lab 2 or Staff Quarters" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#006039]">
+            <input type="text" id="dirCustArea" required placeholder="eg. CS Dept Lab 2 or Staff Quarters" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block font-medium mb-1 text-[var(--muted-foreground)]">പായസം തരം</label>
-              <input type="text" readonly value="അട പ്രഥമൻ (Ada Pradhaman)" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#006039]">
+              <input type="text" readonly value="അട പ്രഥമൻ (Ada Pradhaman)" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#1e3a8a]">
             </div>
             <div>
               <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ലിറ്റർ (Litres) *</label>
-              <input type="number" id="dirLitres" step="0.5" min="0.5" value="1" oninput="recalcDirectPrice()" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#006039]">
+              <input type="number" id="dirLitres" step="0.5" min="0.5" value="1" oninput="recalcDirectPrice()" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#1e3a8a]">
             </div>
           </div>
 
           <!-- Price Display -->
-          <div class="flex items-center justify-between p-3 rounded-xl bg-[#006039]/10 border border-[#006039]/30 text-xs">
+          <div class="flex items-center justify-between p-3 rounded-xl bg-[#1e3a8a]/10 border border-[#1e3a8a]/30 text-xs">
             <span class="font-medium text-[var(--foreground)]">ആകെ തുക (Total Amount):</span>
-            <span id="dirPriceDisplay" class="text-base font-bold text-[#006039]">₹250</span>
+            <span id="dirPriceDisplay" class="text-base font-bold text-[#1e3a8a]">₹250</span>
           </div>
 
           <!-- Payment Options with UPI QR -->
@@ -608,11 +608,11 @@
             <label class="block font-medium mb-1 text-[var(--muted-foreground)]">പേയ്മെന്റ് രീതി *</label>
             <div class="flex gap-4 pt-1">
               <label class="inline-flex items-center gap-1.5 cursor-pointer">
-                <input type="radio" name="dirPayMode" value="cash" checked onchange="toggleDirUpiBox(false)" class="accent-[#006039]">
+                <input type="radio" name="dirPayMode" value="cash" checked onchange="toggleDirUpiBox(false)" class="accent-[#1e3a8a]">
                 <span>💵 Pay on Delivery</span>
               </label>
               <label class="inline-flex items-center gap-1.5 cursor-pointer">
-                <input type="radio" name="dirPayMode" value="upi" onchange="toggleDirUpiBox(true)" class="accent-[#006039]">
+                <input type="radio" name="dirPayMode" value="upi" onchange="toggleDirUpiBox(true)" class="accent-[#1e3a8a]">
                 <span>📱 UPI / GPay (Online)</span>
               </label>
             </div>
@@ -622,11 +622,11 @@
               <div class="flex flex-col sm:flex-row items-center gap-4">
                 <img id="dirUpiQrImg" src="" alt="UPI QR" class="w-28 h-28 border border-[var(--border)] rounded-lg bg-white p-1">
                 <div class="space-y-1 text-center sm:text-left">
-                  <div class="font-bold text-xs text-[#006039]">Scan & Pay via any UPI App</div>
-                  <div class="text-[11px] text-[var(--muted-foreground)]">UPI ID: <b id="dirUpiIdText" class="font-mono text-[#006039]">festpayasam@upi</b></div>
+                  <div class="font-bold text-xs text-[#1e3a8a]">Scan & Pay via any UPI App</div>
+                  <div class="text-[11px] text-[var(--muted-foreground)]">UPI ID: <b id="dirUpiIdText" class="font-mono text-[#1e3a8a]">festpayasam@upi</b></div>
                   <div class="pt-1 flex gap-2 justify-center sm:justify-start">
-                    <button type="button" onclick="copyAdminUpi()" class="px-2.5 py-1 rounded bg-[#006039]/10 text-[#006039] font-bold text-[10px]">Copy UPI</button>
-                    <a id="dirUpiIntentLink" href="#" class="px-2.5 py-1 rounded bg-[#006039] hover:bg-[#004a2c] text-white font-medium text-[10px]">Open GPay/UPI App</a>
+                    <button type="button" onclick="copyAdminUpi()" class="px-2.5 py-1 rounded bg-[#1e3a8a]/10 text-[#1e3a8a] font-bold text-[10px]">Copy UPI</button>
+                    <a id="dirUpiIntentLink" href="#" class="px-2.5 py-1 rounded bg-[#1e3a8a] hover:bg-[#172554] text-white font-medium text-[10px]">Open GPay/UPI App</a>
                   </div>
                 </div>
               </div>
@@ -634,7 +634,7 @@
             </div>
           </div>
 
-          <button type="submit" class="w-full py-2.5 rounded-xl bg-[#006039] hover:bg-[#004a2c] text-white font-bold transition shadow mt-3 flex items-center justify-center gap-1.5">
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold transition shadow mt-3 flex items-center justify-center gap-1.5">
             <span>➕</span> <span>ഓർഡർ സ്ഥിരീകരിച്ച് അടുത്തത് എടുക്കുക</span>
           </button>
         </form>
@@ -654,7 +654,7 @@
           <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
         </button>
         <div class="flex items-center gap-2">
-          <button id="btnRankTeam" onclick="toggleRankingTab('team')" class="px-3 py-1 rounded-lg text-xs font-bold bg-[#006039] text-white transition">
+          <button id="btnRankTeam" onclick="toggleRankingTab('team')" class="px-3 py-1 rounded-lg text-xs font-bold bg-[#1e3a8a] text-white transition">
             👥 Team Rankings
           </button>
           <button id="btnRankIndividual" onclick="toggleRankingTab('individual')" class="px-3 py-1 rounded-lg text-xs font-medium bg-[var(--background)] border border-[var(--border)] text-[var(--muted-foreground)] transition">
@@ -740,7 +740,7 @@
         <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
           <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
         </button>
-        <span class="text-xs font-semibold text-[#006039]">📋 All Orders Master Feed</span>
+        <span class="text-xs font-semibold text-[#1e3a8a]">📋 All Orders Master Feed</span>
       </div>
 
       <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
@@ -796,8 +796,8 @@
         <div class="flex flex-wrap justify-between items-center text-xs text-[var(--muted-foreground)] pt-2 border-t border-[var(--border)] gap-2">
           <div>കാണിക്കുന്ന ഓർഡറുകൾ: <b id="allFilteredCount" class="text-[var(--foreground)]">0</b></div>
           <div class="flex items-center gap-4">
-            <div>ആകെ ലിറ്റർ: <b id="allFilteredLitres" class="text-[#006039]">0 L</b></div>
-            <div>ആകെ തുക: <b id="allFilteredAmount" class="text-[#006039]">₹0</b></div>
+            <div>ആകെ ലിറ്റർ: <b id="allFilteredLitres" class="text-amber-600 font-bold">0 L</b></div>
+            <div>ആകെ തുക: <b id="allFilteredAmount" class="text-[#1e3a8a] font-bold">₹0</b></div>
           </div>
         </div>
 
@@ -816,7 +816,7 @@
           <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
         </button>
         <div class="flex items-center gap-2">
-          <span class="text-xs font-semibold text-[#006039]">🔐 5. Admin Control Panel</span>
+          <span class="text-xs font-semibold text-[#1e3a8a]">🔐 5. Admin Control Panel</span>
           <button onclick="lockAdmin()" class="text-xs text-red-500 hover:underline">Lock</button>
         </div>
       </div>
@@ -827,8 +827,8 @@
         <h3 class="text-base font-bold">അഡ്മിൻ പാസ്‌വേഡ് നൽകുക</h3>
         <form onsubmit="handleAdminUnlock(event)" class="space-y-3 pt-2">
           <input type="password" id="adminPinInput" required placeholder="Enter Admin PIN" class="w-full px-3 py-2 text-center rounded-lg bg-[var(--background)] border border-[var(--border)] text-sm tracking-widest font-mono focus:outline-none">
-          <div class="text-[10px] text-[var(--muted-foreground)]">Default PIN: <code class="text-[#006039] font-bold">admin123</code> (അഡ്മിൻ പാനലിൽ നിന്ന് മാറ്റാം)</div>
-          <button type="submit" class="w-full py-2 rounded-xl bg-[#006039] hover:bg-[#004a2c] text-white font-semibold shadow transition">Unlock Admin Desk</button>
+          <div class="text-[10px] text-[var(--muted-foreground)]">Default PIN: <code class="text-[#1e3a8a] font-bold">admin123</code> (അഡ്മിൻ പാനലിൽ നിന്ന് മാറ്റാം)</div>
+          <button type="submit" class="w-full py-2 rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white font-semibold shadow transition">Unlock Admin Desk</button>
         </form>
       </div>
 
@@ -839,36 +839,36 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 text-xs">
           <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm">
             <span class="text-[var(--muted-foreground)]">ആകെ വിൽപന</span>
-            <div id="admGrossSales" class="text-xl font-bold text-[#006039] mt-1">₹0</div>
+            <div id="admGrossSales" class="text-xl font-bold text-[#1e3a8a] mt-1">₹0</div>
             <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5"><span id="admLitresTotal">0</span> L Ada Pradhaman</div>
           </div>
           <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm">
             <span class="text-[var(--muted-foreground)]">അഡ്മിന് ലഭിച്ച പണം</span>
-            <div id="admRealized" class="text-xl font-bold text-[#006039] mt-1">₹0</div>
+            <div id="admRealized" class="text-xl font-bold text-emerald-700 mt-1">₹0</div>
             <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5">Admin Cash + Verified UPI</div>
           </div>
           <div class="bg-[var(--card)] border border-red-500/20 bg-red-500/5 rounded-xl p-4 shadow-sm">
-            <span class="text-red-500">ടീമുകൾ തരാനുള്ളത് (Due)</span>
+            <span class="text-red-500 font-medium">ടീമുകൾ തരാനുള്ളത് (Due)</span>
             <div id="admUnsettledCash" class="text-xl font-bold text-red-600 mt-1">₹0</div>
             <div class="text-[11px] text-red-500 mt-0.5">ടീം കയ്യിൽ ബാക്കിയുള്ള പണം</div>
           </div>
-          <div class="bg-[var(--card)] border border-[#006039]/20 bg-[#006039]/5 rounded-xl p-4 shadow-sm">
-            <span class="text-[#006039] font-semibold">യഥാർത്ഥ ലാഭം (Net Profit)</span>
-            <div id="admNetProfit" class="text-xl font-bold text-[#006039] mt-1">₹0</div>
-            <div class="text-[11px] text-[#006039] mt-0.5">Total Sales - Total Expenses</div>
+          <div class="bg-[var(--card)] border border-emerald-500/30 bg-emerald-500/5 rounded-xl p-4 shadow-sm">
+            <span class="text-emerald-700 font-semibold">യഥാർത്ഥ ലാഭം (Net Profit)</span>
+            <div id="admNetProfit" class="text-xl font-bold text-emerald-700 mt-1">₹0</div>
+            <div class="text-[11px] text-emerald-600 mt-0.5">Total Sales - Total Expenses</div>
           </div>
         </div>
 
         <!-- ☁️ GOOGLE SHEETS CLOUD SYNC CONFIGURATION -->
-        <div class="bg-[var(--card)] border border-[#006039]/20 bg-[#006039]/5 rounded-2xl p-5 shadow-sm space-y-3 text-xs">
-          <div class="flex justify-between items-center pb-2 border-b border-[#006039]/20">
+        <div class="bg-[var(--card)] border border-[#1e3a8a]/20 bg-[#1e3a8a]/5 rounded-2xl p-5 shadow-sm space-y-3 text-xs">
+          <div class="flex justify-between items-center pb-2 border-b border-[#1e3a8a]/20">
             <div>
-              <h4 class="font-bold text-sm text-[#006039] flex items-center gap-1.5">
+              <h4 class="font-bold text-sm text-[#1e3a8a] flex items-center gap-1.5">
                 <span>☁️</span> <span>Google Sheets ലൈവ് ക്ലൗഡ് സിങ്ക് (Live Multi-Phone Sync)</span>
               </h4>
               <p class="text-[var(--muted-foreground)]">ടീമുകൾ വെവ്വേറെ ഫോണുകളിൽ ഓർഡർ എടുക്കുമ്പോൾ അഡ്മിൻ ഫോണിൽ തത്സമയം സിങ്ക് ആവാൻ</p>
             </div>
-            <span id="sheetSyncStatus" class="font-bold text-[11px] px-2 py-0.5 rounded bg-[#006039]/10 text-[#006039]">Disconnected</span>
+            <span id="sheetSyncStatus" class="font-bold text-[11px] px-2 py-0.5 rounded bg-[#1e3a8a]/10 text-[#1e3a8a]">Disconnected</span>
           </div>
 
           <form onsubmit="handleSaveCloudSync(event)" class="space-y-3">
@@ -882,7 +882,7 @@
                 <button type="button" onclick="testSyncGoogleSheets()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">
                   🔄 Fetch & Sync Now
                 </button>
-                <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white font-bold transition shadow">
+                <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold transition shadow">
                   Save Cloud URL
                 </button>
               </div>
@@ -914,7 +914,7 @@
                 <input type="text" id="admUpiNameInput" placeholder="eg. Fest Payasam Committee" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
               </div>
               <div class="flex justify-end">
-                <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white font-bold transition shadow">
+                <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold transition shadow">
                   Save UPI ID
                 </button>
               </div>
@@ -935,10 +935,10 @@
             <form onsubmit="handleSaveWaTemplate(event)" class="space-y-2 text-xs">
               <textarea id="admWaTemplateInput" rows="3" class="w-full p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none text-xs"></textarea>
               <div class="text-[10px] text-[var(--muted-foreground)]">
-                ലഭ്യമായ ടാഗുകൾ: <code class="text-[#006039] font-bold">{name}</code>, <code class="text-[#006039] font-bold">{id}</code>, <code class="text-[#006039] font-bold">{litres}</code>, <code class="text-[#006039] font-bold">{amount}</code>, <code class="text-[#006039] font-bold">{status}</code>, <code class="text-[#006039] font-bold">{area}</code>
+                ലഭ്യമായ ടാഗുകൾ: <code class="text-[#1e3a8a] font-bold">{name}</code>, <code class="text-[#1e3a8a] font-bold">{id}</code>, <code class="text-[#1e3a8a] font-bold">{litres}</code>, <code class="text-[#1e3a8a] font-bold">{amount}</code>, <code class="text-[#1e3a8a] font-bold">{status}</code>, <code class="text-[#1e3a8a] font-bold">{area}</code>
               </div>
               <div class="flex justify-end pt-1">
-                <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white font-bold transition shadow">
+                <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold transition shadow">
                   Save Message Template
                 </button>
               </div>
@@ -946,10 +946,10 @@
           </div>
 
           <!-- ADMIN PIN / PASSWORD CHANGE CONFIGURATION -->
-          <div class="bg-[var(--card)] border border-[#006039]/20 bg-[#006039]/5 rounded-2xl p-5 shadow-sm space-y-3 lg:col-span-2">
-            <div class="flex justify-between items-center pb-2 border-b border-[#006039]/20">
+          <div class="bg-[var(--card)] border border-[#1e3a8a]/20 bg-[#1e3a8a]/5 rounded-2xl p-5 shadow-sm space-y-3 lg:col-span-2">
+            <div class="flex justify-between items-center pb-2 border-b border-[#1e3a8a]/20">
               <div>
-                <h4 class="font-bold text-sm text-[#006039] flex items-center gap-1.5">
+                <h4 class="font-bold text-sm text-[#1e3a8a] flex items-center gap-1.5">
                   <span>🔐</span> <span>അഡ്മിൻ പാസ്‌വേഡ് മാറ്റുക (Change Admin Password / PIN)</span>
                 </h4>
                 <p class="text-xs text-[var(--muted-foreground)]">അഡ്മിൻ ഡെസ്ക് അൺലോക്ക് ചെയ്യാനുള്ള PIN മാറ്റാനുള്ള സൗകര്യം</p>
@@ -969,7 +969,7 @@
                 <label class="block font-medium mb-1 text-[var(--muted-foreground)]">PIN സ്ഥിരീകരിക്കുക (Confirm PIN) *</label>
                 <div class="flex gap-2">
                   <input type="password" id="admConfirmPinInput" required placeholder="Re-enter PIN" class="w-full px-3 py-2 rounded-lg bg-[var(--card)] border border-[var(--border)] font-mono focus:outline-none">
-                  <button type="submit" class="px-4 py-2 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white font-bold whitespace-nowrap shadow transition">
+                  <button type="submit" class="px-4 py-2 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold whitespace-nowrap shadow transition">
                     Save PIN
                   </button>
                 </div>
@@ -1020,7 +1020,7 @@
                 </h4>
                 <p class="text-xs text-[var(--muted-foreground)]">പാൽ, അട, ശർക്കര, ഗ്യാസ്, പാക്കിംഗ് കവറുകൾ...</p>
               </div>
-              <button onclick="openAddExpenseModal()" class="px-2.5 py-1 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white text-xs font-semibold shadow transition">
+              <button onclick="openAddExpenseModal()" class="px-2.5 py-1 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white text-xs font-semibold shadow transition">
                 ➕ Add Expense
               </button>
             </div>
@@ -1101,7 +1101,7 @@
 
       <div class="flex justify-end gap-2 pt-2 border-t border-[var(--border)]">
         <button type="button" onclick="closePdfModal()" class="px-3.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">Cancel</button>
-        <button type="button" onclick="generateAndPrintPdf()" class="px-4 py-1.5 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white font-bold flex items-center gap-1.5 shadow transition">
+        <button type="button" onclick="generateAndPrintPdf()" class="px-4 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold flex items-center gap-1.5 shadow transition">
           <span>🖨️</span> <span>Generate & Print PDF</span>
         </button>
       </div>
@@ -1130,7 +1130,7 @@
         </div>
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" onclick="closeAddExpenseModal()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">Cancel</button>
-          <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white font-medium shadow transition">Save Expense</button>
+          <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-medium shadow transition">Save Expense</button>
         </div>
       </form>
     </div>
@@ -1174,7 +1174,7 @@
 
         <div class="flex justify-end gap-2 pt-2 border-t border-[var(--border)]">
           <button type="button" onclick="closeTeamPasswordModal()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">Cancel</button>
-          <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white font-bold transition shadow">
+          <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold transition shadow">
             പാസ്‌വേഡ് മാറ്റുക (Update)
           </button>
         </div>
@@ -1221,7 +1221,7 @@
           </div>
           <div>
             <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ആകെ തുക (Amount in ₹) *</label>
-            <input type="number" id="editAmount" min="0" required class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#006039] focus:outline-none">
+            <input type="number" id="editAmount" min="0" required class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold text-[#1e3a8a] focus:outline-none">
           </div>
         </div>
 
@@ -1263,7 +1263,7 @@
 
         <div class="flex justify-end gap-2 pt-2 border-t border-[var(--border)]">
           <button type="button" onclick="closeEditOrderModal()" class="px-3.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">Cancel</button>
-          <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#006039] hover:bg-[#004a2c] text-white font-bold transition shadow">
+          <button type="submit" class="px-4 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold transition shadow">
             സേവ് ചെയ്യുക (Save Changes)
           </button>
         </div>
@@ -1372,10 +1372,10 @@
       const statusText = document.getElementById('sheetSyncStatus');
       if (sheetApiUrl) {
         badge.innerText = '🟢 Google Sheet Connected';
-        badge.className = 'text-[10px] px-2 py-0.2 rounded-full font-bold bg-[#006039]/10 text-[#006039] border border-[#006039]/30';
+        badge.className = 'text-[10px] px-2 py-0.2 rounded-full font-bold bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/30';
         if (statusText) {
           statusText.innerText = 'Connected & Live Syncing';
-          statusText.className = 'font-bold text-[11px] px-2 py-0.5 rounded bg-[#006039]/10 text-[#006039]';
+          statusText.className = 'font-bold text-[11px] px-2 py-0.5 rounded bg-[#1e3a8a]/10 text-[#1e3a8a]';
         }
       } else {
         badge.innerText = '⚪ Local Mode';
@@ -1740,12 +1740,12 @@
             <div class="font-medium">${o.name}</div>
             <div class="text-[10px] text-[var(--muted-foreground)]">${o.phone}</div>
           </td>
-          <td class="p-2.5 font-medium text-[#006039]">${o.member || 'Member'}</td>
+          <td class="p-2.5 font-medium text-[#1e3a8a]">${o.member || 'Member'}</td>
           <td class="p-2.5 font-bold font-mono">${o.litres} L</td>
-          <td class="p-2.5 font-bold text-[#006039]">₹${o.amount}</td>
+          <td class="p-2.5 font-bold text-[#1e3a8a]">₹${o.amount}</td>
           <td class="p-2.5">
             ${o.payStatus === 'PAID'
-              ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#006039]/10 text-[#006039] border border-[#006039]/20">PAID</span>'
+              ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">PAID</span>'
               : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-600 border border-red-500/20">UNPAID</span>'
             }
           </td>
@@ -1761,11 +1761,11 @@
       const box = document.getElementById('agentAttributionBox');
 
       if (mode === 'agent') {
-        btnAgent.className = 'py-1.5 rounded-lg font-bold text-xs bg-[#006039] text-white transition shadow-sm';
+        btnAgent.className = 'py-1.5 rounded-lg font-bold text-xs bg-[#1e3a8a] text-white transition shadow-sm';
         btnCust.className = 'py-1.5 rounded-lg font-medium text-xs text-[var(--muted-foreground)] transition';
         box.classList.remove('hidden');
       } else {
-        btnCust.className = 'py-1.5 rounded-lg font-bold text-xs bg-[#006039] text-white transition shadow-sm';
+        btnCust.className = 'py-1.5 rounded-lg font-bold text-xs bg-[#1e3a8a] text-white transition shadow-sm';
         btnAgent.className = 'py-1.5 rounded-lg font-medium text-xs text-[var(--muted-foreground)] transition';
         box.classList.add('hidden');
       }
@@ -1863,12 +1863,12 @@
       if (tab === 'team') {
         teamTab.classList.remove('hidden');
         indTab.classList.add('hidden');
-        btnTeam.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-[#006039] text-white transition';
+        btnTeam.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-[#1e3a8a] text-white transition';
         btnInd.className = 'px-3 py-1 rounded-lg text-xs font-medium bg-[var(--background)] border border-[var(--border)] text-[var(--muted-foreground)] transition';
       } else {
         teamTab.classList.add('hidden');
         indTab.classList.remove('hidden');
-        btnInd.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-[#006039] text-white transition';
+        btnInd.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-[#1e3a8a] text-white transition';
         btnTeam.className = 'px-3 py-1 rounded-lg text-xs font-medium bg-[var(--background)] border border-[var(--border)] text-[var(--muted-foreground)] transition';
       }
     }
@@ -1895,21 +1895,27 @@
 
       const top3 = teamStats.slice(0, 3);
       const medals = ['🥇 1st Place', '🥈 2nd Place', '🥉 3rd Place'];
-      const styles = ['border-[#006039] bg-[#006039]/10', 'border-[#006039]/40 bg-[#006039]/5', 'border-[#006039]/20 bg-[var(--background)]'];
+      const styles = [
+        'border-amber-400 bg-gradient-to-b from-amber-50 to-amber-100/40 text-amber-950 shadow-md ring-1 ring-amber-400/40',
+        'border-slate-300 bg-gradient-to-b from-slate-50 to-slate-100/60 text-slate-800 shadow-sm',
+        'border-amber-700/30 bg-gradient-to-b from-amber-50/50 to-amber-100/20 text-amber-950 shadow-sm'
+      ];
+      const medalColors = ['text-amber-600', 'text-slate-600', 'text-amber-800'];
+      const litreColors = ['text-amber-600 font-extrabold', 'text-slate-700 font-bold', 'text-amber-800 font-bold'];
 
       podium.innerHTML = top3.map((t, idx) => `
-        <div class="border rounded-2xl p-4 text-center ${styles[idx] || ''} shadow-sm">
-          <div class="text-xs font-bold uppercase tracking-wider mb-1 text-[#006039]">${medals[idx]}</div>
+        <div class="border rounded-2xl p-4 text-center ${styles[idx] || ''} transition transform hover:-translate-y-0.5">
+          <div class="text-xs font-bold uppercase tracking-wider mb-1 ${medalColors[idx] || 'text-[#1e3a8a]'}">${medals[idx]}</div>
           <h4 class="font-bold text-sm text-[var(--foreground)] truncate">${t.name}</h4>
-          <div class="text-xl font-extrabold text-[#006039] mt-2">${t.litresSold.toFixed(1)} L</div>
+          <div class="text-xl mt-2 ${litreColors[idx] || 'text-[#1e3a8a]'}">${t.litresSold.toFixed(1)} L</div>
           <div class="text-xs text-[var(--muted-foreground)] mt-0.5">₹${t.revenue} (${t.orderCount} Orders)</div>
         </div>
       `).join('');
 
       tbody.innerHTML = teamStats.map((t, idx) => {
         let badge = '<span class="text-slate-400">-</span>';
-        if (t.litresSold >= 10) badge = '<span class="px-2 py-0.5 rounded-full text-[10px] bg-[#006039]/15 text-[#006039] font-bold">🔥 10L Milestone</span>';
-        if (t.litresSold >= 25) badge = '<span class="px-2 py-0.5 rounded-full text-[10px] bg-[#006039] text-white font-bold">🚀 25L Superteam</span>';
+        if (t.litresSold >= 10) badge = '<span class="px-2 py-0.5 rounded-full text-[10px] bg-amber-500/15 text-amber-700 border border-amber-500/30 font-bold">🔥 10L Milestone</span>';
+        if (t.litresSold >= 25) badge = '<span class="px-2 py-0.5 rounded-full text-[10px] bg-gradient-to-r from-[#1e3a8a] to-[#2563eb] text-white font-bold shadow-sm">🚀 25L Superteam</span>';
 
         return `
           <tr class="hover:bg-[var(--background)] transition">
@@ -1917,7 +1923,7 @@
             <td class="p-3 font-semibold">${t.name}</td>
             <td class="p-3 text-center">${t.orderCount}</td>
             <td class="p-3 text-center font-mono font-bold">${t.litresSold.toFixed(1)} L</td>
-            <td class="p-3 text-center font-bold text-[#006039]">₹${t.revenue}</td>
+            <td class="p-3 text-center font-bold text-[#1e3a8a]">₹${t.revenue}</td>
             <td class="p-3 text-right">${badge}</td>
           </tr>
         `;
@@ -1957,8 +1963,8 @@
           <td class="p-3 font-semibold text-[var(--foreground)]">${m.name}</td>
           <td class="p-3 text-[var(--muted-foreground)]">${m.teamName}</td>
           <td class="p-3 text-center font-mono">${m.ordersCount}</td>
-          <td class="p-3 text-center font-mono font-bold text-[#006039]">${m.litresSold.toFixed(1)} L</td>
-          <td class="p-3 text-right font-bold text-[#006039]">₹${m.totalValue}</td>
+          <td class="p-3 text-center font-mono font-bold text-amber-600">${m.litresSold.toFixed(1)} L</td>
+          <td class="p-3 text-right font-bold text-[#1e3a8a]">₹${m.totalValue}</td>
         </tr>
       `).join('');
     }
@@ -2013,7 +2019,7 @@
         const isPaid = o.payStatus === 'PAID';
         
         const payStatusBadge = isPaid
-          ? `<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-[#006039]/15 text-[#006039] border border-[#006039]/30">PAID ✓</span>`
+          ? `<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500/15 text-emerald-700 border border-emerald-500/30">PAID ✓</span>`
           : `<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-red-500/15 text-red-600 border border-red-500/30">UNPAID ⚠️</span>`;
 
         const waMsg = getGeneratedWaMessage(o);
@@ -2028,30 +2034,30 @@
             </td>
             <td class="p-3">
               <div class="font-semibold text-[var(--foreground)]">${o.name}</div>
-              <a href="${waLink}" target="_blank" title="Click to open WhatsApp directly" class="text-[#006039] hover:underline font-mono flex items-center gap-1 font-bold">
+              <a href="${waLink}" target="_blank" title="Click to open WhatsApp directly" class="text-emerald-700 hover:underline font-mono flex items-center gap-1 font-bold">
                 <span>💬</span> <span>${o.phone}</span>
               </a>
             </td>
             <td class="p-3">
-              <div class="font-medium text-[#006039]">📍 ${o.area}</div>
+              <div class="font-medium text-amber-700">📍 ${o.area}</div>
               <div class="text-[10px] text-[var(--muted-foreground)]">അട പ്രഥമൻ</div>
             </td>
             <td class="p-3">
               <div class="font-medium">${teamObj.name}</div>
-              <div class="text-[10px] text-[#006039] font-medium">${o.member || 'Member'}</div>
+              <div class="text-[10px] text-[#1e3a8a] font-medium">${o.member || 'Member'}</div>
             </td>
             <td class="p-3 text-center font-mono font-bold text-xs">${o.litres} L</td>
-            <td class="p-3 text-center font-bold text-[#006039]">₹${o.amount}</td>
+            <td class="p-3 text-center font-bold text-[#1e3a8a]">₹${o.amount}</td>
             <td class="p-3 text-center">${payStatusBadge}</td>
             <td class="p-3 text-right">
               <div class="flex items-center justify-end gap-1.5">
-                <button onclick="adminOpenEditOrder('${o.id}')" title="Edit Order" class="p-1.5 rounded-lg bg-[#006039]/10 text-[#006039] hover:bg-[#006039]/20 text-xs font-semibold flex items-center gap-0.5">
+                <button onclick="adminOpenEditOrder('${o.id}')" title="Edit Order" class="p-1.5 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] hover:bg-[#1e3a8a]/20 text-xs font-semibold flex items-center gap-0.5">
                   ✏️ Edit
                 </button>
-                <a href="${waLink}" target="_blank" title="Direct WhatsApp" class="p-1.5 rounded-lg bg-[#006039]/10 text-[#006039] hover:bg-[#006039]/20 text-xs font-bold">
+                <a href="${waLink}" target="_blank" title="Direct WhatsApp" class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 text-xs font-bold">
                   💬 WA
                 </a>
-                <button onclick="quickTogglePaid('${o.id}')" title="Toggle Paid Status" class="p-1.5 rounded-lg bg-[#006039]/10 text-[#006039] hover:bg-[#006039]/20 text-xs font-semibold">
+                <button onclick="quickTogglePaid('${o.id}')" title="Toggle Paid Status" class="p-1.5 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] hover:bg-[#1e3a8a]/20 text-xs font-semibold">
                   ${isPaid ? 'Unpay' : 'Pay ✓'}
                 </button>
                 <button onclick="adminDeleteOrder('${o.id}')" title="Delete" class="p-1.5 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 text-xs">
@@ -2340,10 +2346,10 @@
           const settled = t.settledCash || 0;
           const due = Math.max(0, cashTotal - settled);
 
-          let actionBtn = `<span class="text-xs text-[#006039] font-bold">✓ Settled</span>`;
+          let actionBtn = `<span class="text-xs text-emerald-600 font-bold">✓ Settled</span>`;
           if (due > 0) {
             actionBtn = `
-              <button onclick="adminReceiveTeamCash('${t.id}', ${due})" class="px-2.5 py-1 rounded bg-[#006039] hover:bg-[#004a2c] text-white font-medium text-[11px] shadow transition">
+              <button onclick="adminReceiveTeamCash('${t.id}', ${due})" class="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[11px] shadow transition">
                 കൈപ്പറ്റി (Receive ₹${due})
               </button>
             `;
@@ -2353,12 +2359,12 @@
             <tr class="hover:bg-[var(--background)] transition">
               <td class="p-2.5 font-medium">${t.name}</td>
               <td class="p-2.5 text-center font-semibold">₹${cashTotal}</td>
-              <td class="p-2.5 text-center text-[#006039] font-semibold">₹${settled}</td>
+              <td class="p-2.5 text-center text-emerald-700 font-semibold">₹${settled}</td>
               <td class="p-2.5 text-center font-bold ${due > 0 ? 'text-red-600' : 'text-slate-400'}">₹${due}</td>
               <td class="p-2.5 text-right">
                 <div class="flex items-center justify-end gap-1.5">
                   ${actionBtn}
-                  <button onclick="adminResetTeamPassword('${t.id}')" title="Reset Team Password" class="px-2 py-1 rounded bg-[#006039]/10 hover:bg-[#006039]/20 text-[#006039] text-[11px] font-bold border border-[#006039]/20">
+                  <button onclick="adminResetTeamPassword('${t.id}')" title="Reset Team Password" class="px-2 py-1 rounded bg-[#1e3a8a]/10 hover:bg-[#1e3a8a]/20 text-[#1e3a8a] text-[11px] font-bold border border-[#1e3a8a]/20">
                     🔑 Pwd
                   </button>
                 </div>
@@ -2571,24 +2577,4 @@
             </tbody>
           </table>
 
-          <div style="margin-top: 20px; display: flex; justify-content: space-between; font-size: 10px; color: #777; border-top: 1px dashed #ccc; padding-top: 8px;">
-            <span>Verified by Fest Committee</span>
-            <span>Signature: ______________________</span>
-          </div>
-        </div>
-      `;
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.innerText = msg;
-      toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-      setTimeout(() => {
-        toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-      }, 3000);
-    }
-
-    window.addEventListener('DOMContentLoaded', initApp);
-  </script>
-</body>
-</html>
+          <div style="margin-top: 20px; display: flex; justify-content: space-between; font-size: 10px; col
