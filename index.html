@@ -1600,6 +1600,7 @@
     let teams = [];
     let orders = [];
     let expenses = [];
+    let deletedOrderIds = new Set();
     let adminPin = localStorage.getItem('payasam_v3_admin_pin') || ADMIN_DEFAULT_PIN;
     let adminUpiId = "festpayasam@upi";
     let adminUpiName = "Fest Payasam Committee";
@@ -1677,12 +1678,17 @@
 
         if (storedAdminPin) adminPin = storedAdminPin;
 
-        // Filter out legacy dummy mock teams/orders if present
+        const storedDeleted = localStorage.getItem('payasam_v3_deleted_orders');
+        deletedOrderIds = new Set(safeParseArray(storedDeleted));
+        deletedOrderIds.add('ORD-TEST-1'); // automatically tombstone ORD-TEST-1 test dummy!
+        localStorage.setItem('payasam_v3_deleted_orders', JSON.stringify(Array.from(deletedOrderIds)));
+
+        // Filter out legacy dummy mock teams/orders if present, and exclude deleted orders
         teams = safeParseArray(storedTeams).filter(t => t && t.id && !['t1', 't2', 't3', 't4', 't5'].includes(t.id));
         if (teams.length === 0) {
           teams = JSON.parse(JSON.stringify(DEFAULT_TEAMS));
         }
-        orders = safeParseArray(storedOrders).filter(o => o && o.id && !['ORD-101', 'ORD-102', 'ORD-103', 'ORD-104', 'ORD-105', 'ORD-106'].includes(o.id));
+        orders = safeParseArray(storedOrders).filter(o => o && o.id && !['ORD-101', 'ORD-102', 'ORD-103', 'ORD-104', 'ORD-105', 'ORD-106', 'ORD-TEST-1'].includes(o.id) && !deletedOrderIds.has(o.id));
         expenses = safeParseArray(storedExpenses).filter(e => e && e.id && !['EXP-1', 'EXP-2', 'EXP-3', 'EXP-4'].includes(e.id));
 
         if (storedUpi) adminUpiId = storedUpi;
@@ -1810,6 +1816,9 @@
             let newTeamsFound = false;
 
             cloudOrders.forEach(co => {
+              if (!co || !co.id || deletedOrderIds.has(co.id) || co.id === 'ORD-TEST-1') {
+                return; // SKIP deleted / test order permanently!
+              }
               if (!existingIds.has(co.id)) {
                 orders.push({
                   id: co.id,
@@ -1868,7 +1877,7 @@
             // 📤 If this phone has local orders not yet in Google Sheets, automatically push them!
             const cloudIds = new Set(cloudOrders.map(co => co.id));
             orders.forEach(lo => {
-              if (lo && lo.id && !cloudIds.has(lo.id) && !lo.id.startsWith('SYS-')) {
+              if (lo && lo.id && !cloudIds.has(lo.id) && !lo.id.startsWith('SYS-') && !deletedOrderIds.has(lo.id) && lo.id !== 'ORD-TEST-1') {
                 pushOrderToCloud(lo, true);
               }
             });
@@ -3024,15 +3033,32 @@
       }
     }
 
-    function adminDeleteOrder(orderId) {
-      if (confirm(`ഓർഡർ #${orderId} നീക്കം ചെയ്യണോ?`)) {
+    async function adminDeleteOrder(orderId) {
+      if (confirm(`ഓർഡർ #${orderId} പൂർണ്ണമായി നീക്കം ചെയ്യണോ?`)) {
+        deletedOrderIds.add(orderId);
+        localStorage.setItem('payasam_v3_deleted_orders', JSON.stringify(Array.from(deletedOrderIds)));
         orders = orders.filter(o => o.id !== orderId);
         saveState();
         renderAllOrdersTable();
         renderAdminOrdersTable();
         refreshMetrics();
         if (isAdminUnlocked) renderAdminDesk();
-        showToast('ഓർഡർ നീക്കം ചെയ്തു');
+        await deleteOrderFromCloud(orderId);
+        showToast(`🗑️ ഓർഡർ #${orderId} നീക്കം ചെയ്തു!`);
+      }
+    }
+
+    async function deleteOrderFromCloud(orderId) {
+      if (!sheetApiUrl) return;
+      try {
+        await fetch(sheetApiUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'delete_order', id: orderId, order: { id: orderId } })
+        });
+      } catch (err) {
+        console.error('Cloud delete error', err);
       }
     }
 
@@ -3319,16 +3345,32 @@
       }
     }
 
-    function resetAllDataConfirm() {
+    async function resetAllDataConfirm() {
       if (confirm('ശ്രദ്ധിക്കുക: എല്ലാ ഓർഡറുകളും റീസെറ്റ് ചെയ്യപ്പെടും. തുടരണോ?')) {
-        localStorage.clear();
+        orders.forEach(o => { if (o && o.id) deletedOrderIds.add(o.id); });
+        deletedOrderIds.add('ORD-TEST-1');
+        localStorage.setItem('payasam_v3_deleted_orders', JSON.stringify(Array.from(deletedOrderIds)));
+
         teams = JSON.parse(JSON.stringify(DEFAULT_TEAMS));
         orders = [];
         expenses = [];
         saveState();
         populateSelectOptions();
+        renderAllOrdersTable();
+        renderAdminOrdersTable();
         renderAdminDesk();
         refreshMetrics();
+
+        if (sheetApiUrl) {
+          try {
+            await fetch(sheetApiUrl, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'clear_all' })
+            });
+          } catch(e) {}
+        }
         showToast('✅ എല്ലാ ഡാറ്റയും ക്ലിയർ ചെയ്തു! ഫ്രഷ് ഫെസ്റ്റ് ആരംഭിക്കാം.');
       }
     }
