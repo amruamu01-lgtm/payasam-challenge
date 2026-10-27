@@ -1810,10 +1810,61 @@
       try {
         const response = await fetch(sheetApiUrl);
         if (response.ok) {
-          const cloudOrders = await response.json();
+          const resData = await response.json();
+          let cloudOrders = [];
+          let cloudTeams = [];
+
+          if (Array.isArray(resData)) {
+            cloudOrders = resData;
+          } else if (resData && typeof resData === 'object') {
+            cloudOrders = Array.isArray(resData.orders) ? resData.orders : [];
+            cloudTeams = Array.isArray(resData.teams) ? resData.teams : [];
+          }
+
+          let newTeamsFound = false;
+
+          // 1. Process cloud teams from dedicated Teams sheet (Multi-phone Team Sync)
+          if (cloudTeams.length > 0) {
+            cloudTeams.forEach(ct => {
+              if (!ct || !ct.name) return;
+              const cleanName = ct.name.trim();
+              let existingTeam = teams.find(t => (ct.id && t.id === ct.id) || t.name.toLowerCase() === cleanName.toLowerCase());
+              if (!existingTeam) {
+                existingTeam = {
+                  id: ct.id || `t_${Date.now()}_${Math.floor(Math.random()*1000)}`,
+                  name: cleanName,
+                  password: ct.password || 'team123',
+                  settledCash: parseFloat(ct.settledCash) || 0,
+                  members: Array.isArray(ct.members) ? ct.members : []
+                };
+                teams.push(existingTeam);
+                newTeamsFound = true;
+              } else {
+                if (ct.password) existingTeam.password = ct.password;
+                if (ct.settledCash !== undefined) existingTeam.settledCash = parseFloat(ct.settledCash) || existingTeam.settledCash;
+                if (Array.isArray(ct.members)) {
+                  ct.members.forEach(m => {
+                    if (m && !existingTeam.members.includes(m)) {
+                      existingTeam.members.push(m);
+                      newTeamsFound = true;
+                    }
+                  });
+                }
+              }
+            });
+          }
+
+          // Automatically push local teams to cloud if missing in Google Sheets (Runs even if cloudTeams is initially empty)
+          const cloudTeamNames = new Set((cloudTeams || []).map(t => (t.name || '').toLowerCase()));
+          teams.forEach(lt => {
+            if (lt && lt.name && !cloudTeamNames.has(lt.name.toLowerCase())) {
+              pushTeamToCloud(lt);
+            }
+          });
+
+          // 2. Process cloud orders
           if (Array.isArray(cloudOrders) && cloudOrders.length > 0) {
             const existingIds = new Set(orders.map(o => o.id));
-            let newTeamsFound = false;
 
             cloudOrders.forEach(co => {
               if (!co || !co.id || deletedOrderIds.has(co.id) || co.id === 'ORD-TEST-1') {
@@ -1825,7 +1876,7 @@
                   name: co.name,
                   phone: `${co.phone}`,
                   area: co.area,
-                  teamId: co.teamId,
+                  teamId: co.teamName || co.teamId || 'Direct',
                   member: co.member,
                   item: co.item || FLAVOR_NAME,
                   litres: parseFloat(co.litres) || 1.0,
@@ -1852,20 +1903,21 @@
                 }
               }
 
-              // 🌐 Auto-discover and register teams across all phones from cloud orders!
-              if (co.teamId && co.teamId !== 'DIRECT') {
-                const teamName = co.teamName || co.teamId;
-                let existingTeam = teams.find(t => t.id === co.teamId || t.name.toLowerCase() === teamName.toLowerCase());
+              // 🌐 Auto-discover and register teams across all phones from cloud orders (fallback)!
+              const rawTeam = co.teamName || co.teamId;
+              if (rawTeam && rawTeam !== 'DIRECT' && rawTeam !== 'Direct' && !rawTeam.startsWith('t_1')) {
+                let existingTeam = teams.find(t => t.id === rawTeam || t.name.toLowerCase() === rawTeam.toLowerCase());
                 if (!existingTeam) {
                   existingTeam = {
-                    id: co.teamId,
-                    name: teamName,
+                    id: rawTeam,
+                    name: rawTeam,
                     password: 'team123',
                     settledCash: 0,
                     members: []
                   };
                   teams.push(existingTeam);
                   newTeamsFound = true;
+                  pushTeamToCloud(existingTeam);
                 }
                 if (co.member && !existingTeam.members.includes(co.member)) {
                   existingTeam.members.push(co.member);
@@ -1881,24 +1933,25 @@
                 pushOrderToCloud(lo, true);
               }
             });
-
-            saveState();
-            if (newTeamsFound) populateSelectOptions();
-            refreshMetrics();
-            updateAreaDropdowns();
-            renderAllOrdersTable();
-            renderTeamRankings();
-            renderIndividualRankings();
-            renderMyTeamOrders();
-            if (isAdminUnlocked) renderAdminDesk();
-
-            const syncTimeEl = document.getElementById('lastSyncTimeText');
-            if (syncTimeEl) {
-              syncTimeEl.innerText = 'Sync: ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            }
-
-            if (!silent) showToast(`✅ Google Sheets ലൈവ് അപ്ഡേറ്റ് ആയി (${cloudOrders.length} ആകെ ഓർഡറുകൾ)`);
           }
+
+          saveState();
+          if (newTeamsFound) populateSelectOptions();
+          refreshMetrics();
+          updateAreaDropdowns();
+          renderAllOrdersTable();
+          renderAdminOrdersTable();
+          renderTeamRankings();
+          renderIndividualRankings();
+          renderMyTeamOrders();
+          if (isAdminUnlocked) renderAdminDesk();
+
+          const syncTimeEl = document.getElementById('lastSyncTimeText');
+          if (syncTimeEl) {
+            syncTimeEl.innerText = 'Sync: ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          }
+
+          if (!silent) showToast(`✅ ക്ലൗഡ് ലൈവ് സിങ്ക് ആയി (${orders.length} ഓർഡറുകൾ, ${teams.length} ടീമുകൾ)`);
         }
       } catch (err) {
         if (!silent) alert('Google Sheets-ലേക്ക് കണക്ട് ചെയ്യാൻ സാധിച്ചില്ല. ഇന്റർനെറ്റ് കണക്ഷൻ പരിശോധിക്കുക.');
@@ -1908,17 +1961,33 @@
     async function pushOrderToCloud(newOrder, backgroundSync = false) {
       if (!sheetApiUrl) return;
       try {
+        const payload = Object.assign({}, newOrder);
+        payload.teamName = newOrder.teamName || newOrder.teamId;
         await fetch(sheetApiUrl, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'add_order', order: newOrder })
+          body: JSON.stringify({ action: 'add_order', order: payload })
         });
         if (!backgroundSync) {
           setTimeout(() => testSyncGoogleSheets(true), 1500);
         }
       } catch (err) {
         console.error('Cloud push error', err);
+      }
+    }
+
+    async function pushTeamToCloud(team) {
+      if (!sheetApiUrl || !team || !team.name) return;
+      try {
+        await fetch(sheetApiUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'add_team', team: team })
+        });
+      } catch (err) {
+        console.error('Cloud push team error', err);
       }
     }
 
@@ -2018,6 +2087,16 @@
           teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
       }
 
+      // ⚡ Dynamically render quick-tap login chips for all available teams
+      const chipsContainer = document.getElementById('quickTeamChipsContainer');
+      if (chipsContainer && teams.length > 0) {
+        chipsContainer.innerHTML = teams.slice(0, 10).map(t => {
+          const safeName = (t.name || '').replace(/'/g, "\\'");
+          const shortName = (t.name || '').replace(/^Team\s+/i, '');
+          return `<button type="button" onclick="quickTeamLogin('${safeName}')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ ${shortName}</button>`;
+        }).join('') + `<button type="button" onclick="quickTeamLogin('General Volunteer')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ General</button>`;
+      }
+
       updateAreaDropdowns();
       const countEl = document.getElementById('homeTeamsCount');
       if (countEl) countEl.innerText = teams.length;
@@ -2097,6 +2176,7 @@
       saveState();
       populateSelectOptions();
       toggleNewTeamForm(false);
+      pushTeamToCloud(newTeam);
 
       // Auto login as the newly registered team immediately
       loggedInTeam = newTeam;
@@ -2202,6 +2282,7 @@
         teams.push(t);
         saveState();
         populateSelectOptions();
+        pushTeamToCloud(t);
       }
       loggedInTeam = t;
       loggedInMember = memberName;
@@ -2258,9 +2339,11 @@
             teams.push(team);
             saveState();
             populateSelectOptions();
+            pushTeamToCloud(team);
           } else if (!team.members.includes(member)) {
             team.members.push(member);
             saveState();
+            pushTeamToCloud(team);
           }
         }
       } else {
@@ -2286,6 +2369,7 @@
               teams.push(team);
               saveState();
               populateSelectOptions();
+              pushTeamToCloud(team);
             }
           } else {
             // Default to first team so user is never blocked!
@@ -2455,7 +2539,8 @@
         name,
         phone,
         area,
-        teamId: loggedInTeam.id,
+        teamId: loggedInTeam.name,
+        teamName: loggedInTeam.name,
         member: loggedInMember,
         item: FLAVOR_NAME,
         litres,
@@ -2514,7 +2599,7 @@
     function renderMyTeamOrders() {
       if (!loggedInTeam) return;
       const tbody = document.getElementById('myTeamOrdersTable');
-      const teamOrders = orders.filter(o => o.teamId === loggedInTeam.id);
+      const teamOrders = orders.filter(o => o.teamId === loggedInTeam.id || o.teamId === loggedInTeam.name);
       const totalLitres = teamOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
 
       document.getElementById('myTeamOrderStats').innerText = `${teamOrders.length} Orders (${totalLitres.toFixed(1)} Litres)`;
@@ -2686,7 +2771,7 @@
       }
 
       const teamStats = teams.map(t => {
-        const tOrders = orders.filter(o => o.teamId === t.id);
+        const tOrders = orders.filter(o => o.teamId === t.id || o.teamId === t.name);
         const orderCount = tOrders.length;
         const litresSold = tOrders.reduce((sum, o) => sum + o.litres, 0);
         const revenue = tOrders.reduce((sum, o) => sum + o.amount, 0);
