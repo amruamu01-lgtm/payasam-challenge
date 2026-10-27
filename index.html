@@ -1,0 +1,2060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payasam Challenge 2026 - Fest Hub & Admin System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 4px; }
+
+    :root {
+      --background: #f8fafc;
+      --foreground: #0f172a;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --muted-foreground: #64748b;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background: #090d16;
+        --foreground: #f8fafc;
+        --card: #111827;
+        --border: #1f2937;
+        --muted-foreground: #9ca3af;
+      }
+    }
+    
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printArea, #printArea * {
+        visibility: visible;
+      }
+      #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 15px;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .page-break {
+        page-break-after: always;
+        break-after: page;
+        margin-bottom: 2rem;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] min-h-screen antialiased font-sans p-3 md:p-6">
+
+  <!-- Printable Area (Hidden on screen, populated dynamically for PDF/Print) -->
+  <div id="printArea" class="hidden"></div>
+
+  <!-- APPLICATION WRAPPER -->
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- Top App Header -->
+    <header class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 md:p-5 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
+        <div class="w-12 h-12 rounded-xl bg-amber-500/15 flex items-center justify-center text-2xl border border-amber-500/30">
+          🍯
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl md:text-2xl font-bold tracking-tight">Payasam Challenge 2026</h1>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-600 border border-amber-500/30">അട പ്രഥമൻ (₹250 / L)</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">സ്വാദൂറും അട പ്രഥമൻ ഫെസ്റ്റ് ഓർഡർ മാനേജ്‌മെന്റ് പോർട്ടൽ</p>
+        </div>
+      </div>
+
+      <!-- Quick Nav Buttons -->
+      <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+        <button onclick="navigate('home')" class="px-3.5 py-2 text-xs font-medium rounded-xl bg-[var(--background)] border border-[var(--border)] hover:bg-[var(--border)] transition flex items-center gap-1.5 shadow-sm">
+          <span>🏠</span> <span>Home</span>
+        </button>
+        <button onclick="openPdfModal()" class="px-3.5 py-2 text-xs font-medium rounded-xl bg-amber-500 hover:bg-amber-600 text-white transition flex items-center gap-1.5 shadow-sm">
+          <span>📄</span> <span>PDF Export</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 0: HOME SCREEN (5 OPTIONS - INDIVIDUAL ORDER AS #2) -->
+    <!-- ========================================================= -->
+    <section id="view-home" class="space-y-6">
+      
+      <!-- Festive Hero Banner -->
+      <div class="bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/5 border border-amber-500/20 rounded-2xl p-6 text-center space-y-2">
+        <span class="text-4xl">🍮</span>
+        <h2 class="text-xl md:text-2xl font-extrabold text-[var(--foreground)]">Payasam Challenge - പ്രധാന മെനു</h2>
+        <p class="text-xs md:text-sm text-[var(--muted-foreground)] max-w-xl mx-auto">
+          പായസം: <b>അട പ്രഥമൻ മാത്രം</b> (റൈറ്റ്: 1 ലിറ്റർ = ₹250). താഴെയുള്ള 5 ഓപ്ഷനുകളിൽ നിന്ന് തിരഞ്ഞെടുക്കുക:
+        </p>
+      </div>
+
+      <!-- THE 5 MAIN TILES -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+        
+        <!-- OPTION 1: TEAM LOGIN -->
+        <div onclick="navigate('team-login')" class="group cursor-pointer bg-[var(--card)] hover:bg-amber-500/5 border border-[var(--border)] hover:border-amber-500/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center text-2xl font-bold border border-blue-500/20 group-hover:scale-105 transition">
+              👥
+            </div>
+            <div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-amber-600 transition">1. Team Login</h3>
+                <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 font-medium">Volunteers</span>
+              </div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1.5">
+                ടീം അംഗങ്ങൾക്ക് ലോഗിൻ ചെയ്യാം. പുതിയ ടീം രജിസ്റ്റർ ചെയ്യാനുള്ള ഓപ്ഷനും (New Team), അടുത്തടുത്ത ഓർഡറുകൾ വേഗത്തിൽ എടുക്കാനുള്ള സൗകര്യവും.
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-blue-600">
+            <span>ലോഗിൻ / New Team ➔</span>
+            <span class="text-[11px] text-[var(--muted-foreground)] font-normal"><span id="homeTeamsCount">0</span> Teams</span>
+          </div>
+        </div>
+
+        <!-- OPTION 2: INDIVIDUAL ORDER (NOW OPTION 2!) -->
+        <div onclick="navigate('direct-order')" class="group cursor-pointer bg-[var(--card)] hover:bg-amber-500/5 border border-[var(--border)] hover:border-amber-500/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-2xl font-bold border border-emerald-500/20 group-hover:scale-105 transition">
+              🛍️
+            </div>
+            <div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-amber-600 transition">2. Individual Order</h3>
+                <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-medium">Dual Mode</span>
+              </div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1.5">
+                ഓർഡർ എടുത്ത ആളുടെ പേരും ടീമും വെച്ച് ബുക്ക് ചെയ്യാം (ആ ടീമിന് റാങ്ക് കയറും!), അല്ലെങ്കിൽ കസ്റ്റമർക്ക് നേരിട്ടും ബുക്ക് ചെയ്യാം.
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-emerald-600">
+            <span>ഓർഡർ നൽകുക ➔</span>
+            <span class="text-[11px] text-[var(--muted-foreground)] font-normal">₹250/Litre</span>
+          </div>
+        </div>
+
+        <!-- OPTION 3: RANKINGS (TEAM & INDIVIDUAL) -->
+        <div onclick="navigate('rankings')" class="group cursor-pointer bg-[var(--card)] hover:bg-amber-500/5 border border-[var(--border)] hover:border-amber-500/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-2xl font-bold border border-amber-500/20 group-hover:scale-105 transition">
+              🏆
+            </div>
+            <div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-amber-600 transition">3. Rankings</h3>
+                <span class="text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 font-medium">Leaderboard</span>
+              </div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1.5">
+                ടീം റാങ്കിംഗും, ഒപ്പം കൂടുതൽ ലിറ്റർ വിറ്റ വ്യക്തിഗത വോളന്റിയർമാരുടെ തത്സമയ റാങ്കിംഗും (Individual Standings).
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-amber-600">
+            <span>ലീഡർബോർഡ് കാണുക ➔</span>
+            <span class="text-[11px] text-[var(--muted-foreground)]">Live Standings</span>
+          </div>
+        </div>
+
+        <!-- OPTION 4: ALL ORDERS (PAID / UNPAID STATUS) -->
+        <div onclick="navigate('all-orders')" class="group cursor-pointer bg-[var(--card)] hover:bg-amber-500/5 border border-[var(--border)] hover:border-amber-500/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between sm:col-span-2 lg:col-span-2">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center text-2xl font-bold border border-rose-500/20 group-hover:scale-105 transition">
+              📋
+            </div>
+            <div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-amber-600 transition">4. ആകെ ഓർഡറുകൾ (All Orders)</h3>
+                <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 font-bold border border-emerald-500/30">Paid & Unpaid Status</span>
+              </div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1.5">
+                രജിസ്റ്റർ ചെയ്ത എല്ലാ ഓർഡറുകളും. പണം കിട്ടിയവർക്ക് <b class="text-emerald-600">PAID</b> എന്നും, കിട്ടാനുള്ളവർക്ക് <b class="text-red-500">UNPAID</b> എന്നും കാണാം. ഫോൺ നമ്പറിൽ ക്ലിക്ക് ചെയ്താൽ നേരിട്ട് WhatsApp തുറക്കും!
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-rose-600">
+            <span>ലിസ്റ്റ് തുറക്കുക ➔</span>
+            <span class="text-[11px] text-[var(--muted-foreground)] font-normal"><span id="homePaidCount">0</span> Paid | <span id="homeUnpaidCount">0</span> Unpaid</span>
+          </div>
+        </div>
+
+        <!-- OPTION 5: ADMIN DESK -->
+        <div onclick="navigate('admin')" class="group cursor-pointer bg-[var(--card)] hover:bg-amber-500/5 border border-[var(--border)] hover:border-amber-500/50 rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center text-2xl font-bold border border-purple-500/20 group-hover:scale-105 transition">
+              🔐
+            </div>
+            <div>
+              <div class="flex items-center justify-between">
+                <h3 class="text-base font-bold text-[var(--foreground)] group-hover:text-amber-600 transition">5. Admin Desk</h3>
+                <span class="text-xs px-2 py-0.5 rounded bg-purple-500/10 text-purple-600 font-medium">Full Control</span>
+              </div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1.5">
+                സമ്പൂർണ്ണ അഡ്മിൻ കൺട്രോൾ. UPI ID & QR സെറ്റ് ചെയ്യാം, WhatsApp മെസ്സേജ് ടെംപ്ലേറ്റ് മാറ്റാം, ക്യാഷ് സെറ്റിൽമെന്റും ലാഭവും കൈകാര്യം ചെയ്യാം.
+              </p>
+            </div>
+          </div>
+          <div class="pt-4 mt-2 border-t border-[var(--border)] flex items-center justify-between text-xs font-semibold text-purple-600">
+            <span>അഡ്മിൻ പാനൽ ➔</span>
+            <span class="text-[11px] text-emerald-600 font-mono font-bold" id="homeProfitPreview">₹0 Profit</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Metrics Strip -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
+        <div>
+          <span class="text-[var(--muted-foreground)]">ആകെ അട പ്രഥമൻ</span>
+          <div id="metricTotalLitres" class="text-lg font-bold text-amber-500">0 L</div>
+        </div>
+        <div>
+          <span class="text-[var(--muted-foreground)]">ആകെ വിൽപന തുക</span>
+          <div id="metricTotalRevenue" class="text-lg font-bold text-emerald-600">₹0</div>
+        </div>
+        <div>
+          <span class="text-[var(--muted-foreground)]">അടച്ച തുക (Paid)</span>
+          <div id="metricPaidAmount" class="text-lg font-bold text-blue-600">₹0</div>
+        </div>
+        <div>
+          <span class="text-[var(--muted-foreground)]">പിരിഞ്ഞു കിട്ടാനുള്ളത് (Due)</span>
+          <div id="metricDueAmount" class="text-lg font-bold text-red-500">₹0</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 1: TEAM LOGIN & CONSECUTIVE ORDER DESK + NEW TEAM -->
+    <!-- ========================================================= -->
+    <section id="view-team-login" class="space-y-6 hidden">
+      
+      <!-- Back Navigation Header -->
+      <div class="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+        <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
+          <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="toggleNewTeamForm(true)" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 border border-emerald-500/30">
+            ➕ New Team ഉണ്ടാക്കുക
+          </button>
+          <span class="text-xs font-semibold text-blue-600">👥 Team Portal</span>
+        </div>
+      </div>
+
+      <!-- NEW TEAM REGISTRATION CARD (COLLAPSED / TOGGLED) -->
+      <div id="newTeamCard" class="max-w-md mx-auto bg-emerald-500/5 border border-emerald-500/30 rounded-2xl p-5 shadow-sm space-y-3 text-xs hidden">
+        <div class="flex justify-between items-center pb-2 border-b border-emerald-500/20">
+          <h4 class="font-bold text-sm text-emerald-700 flex items-center gap-1.5">
+            <span>✨</span> <span>പുതിയ ടീം രജിസ്റ്റർ ചെയ്യുക (Register New Team)</span>
+          </h4>
+          <button onclick="toggleNewTeamForm(false)" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+
+        <form onsubmit="handleCreateNewTeam(event)" class="space-y-3">
+          <div>
+            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീമിന്റെ പേര് (Team Name) *</label>
+            <input type="text" id="newTeamName" required placeholder="eg. Team Red Dragons" class="w-full px-3 py-2 rounded-lg bg-[var(--card)] border border-[var(--border)] focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം പാസ്‌വേഡ് (Team Password) *</label>
+            <input type="text" id="newTeamPassword" required value="team123" placeholder="Password" class="w-full px-3 py-2 rounded-lg bg-[var(--card)] border border-[var(--border)] focus:outline-none font-mono">
+          </div>
+          <div>
+            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം അംഗങ്ങളുടെ പേരുകൾ (Members - കോമ ഇട്ട് നൽകാം) *</label>
+            <input type="text" id="newTeamMembers" required placeholder="eg. Arun, Sankar, Sneha" class="w-full px-3 py-2 rounded-lg bg-[var(--card)] border border-[var(--border)] focus:outline-none">
+          </div>
+          <div class="flex justify-end gap-2 pt-1">
+            <button type="button" onclick="toggleNewTeamForm(false)" class="px-3 py-1.5 rounded-lg border border-[var(--border)]">Cancel</button>
+            <button type="submit" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow">
+              സേവ് ചെയ്യുക (Save Team)
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Login Screen (When Logged Out) -->
+      <div id="teamLoginCard" class="max-w-md mx-auto bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 shadow-sm space-y-4 text-xs">
+        <div class="text-center space-y-1">
+          <div class="text-3xl">🛡️</div>
+          <h3 class="text-base font-bold">ടീം ലോഗിൻ (Team Authentication)</h3>
+          <p class="text-[var(--muted-foreground)]">നിങ്ങളുടെ ടീമും അംഗത്തിന്റെ പേരും തിരഞ്ഞെടുത്ത് ലോഗിൻ ചെയ്യുക</p>
+        </div>
+
+        <form onsubmit="handleTeamLogin(event)" class="space-y-3 pt-2">
+          <div>
+            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം തിരഞ്ഞെടുക്കുക (Select Team) *</label>
+            <select id="loginTeamSelect" onchange="updateMemberDropdownForLogin()" required class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+              <!-- populated dynamically -->
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം അംഗത്തിന്റെ പേര് (Member Name) *</label>
+            <select id="loginMemberSelect" required class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+              <!-- populated dynamically -->
+            </select>
+            <div class="text-[10px] text-[var(--muted-foreground)] mt-1">അല്ലെങ്കിൽ പുതിയ അംഗമാണെങ്കിൽ ടൈപ്പ് ചെയ്യുക:</div>
+            <input type="text" id="loginCustomMember" placeholder="Type new member name (optional)" class="w-full mt-1 px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+          </div>
+
+          <div>
+            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം പാസ്‌വേഡ് (Team Password) *</label>
+            <input type="password" id="loginPassword" required placeholder="Default: team123" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+            <span class="text-[10px] text-[var(--muted-foreground)]">Default Demo Password: <code class="text-amber-500 font-bold">team123</code></span>
+          </div>
+
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition shadow mt-3">
+            ലോഗിൻ ചെയ്യുക (Login to Dashboard) ➔
+          </button>
+        </form>
+      </div>
+
+      <!-- Logged-in Dashboard & CONSECUTIVE ORDER DESK -->
+      <div id="teamDashboardCard" class="space-y-6 hidden">
+        
+        <!-- Team Banner / Active Session Info -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-600 flex items-center justify-center font-bold text-lg">
+              ✓
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-[var(--muted-foreground)]">ലോഗിൻ ചെയ്തിരിക്കുന്നു:</span>
+                <span id="activeTeamName" class="font-bold text-sm text-[var(--foreground)]">Team Name</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-600 font-semibold" id="activeMemberName">Member Name</span>
+              </div>
+              <p class="text-[11px] text-[var(--muted-foreground)]">പായസം: <b>അട പ്രഥമൻ (Ada Pradhaman)</b> | 1 ലിറ്റർ = ₹250</p>
+            </div>
+          </div>
+          <button onclick="logoutTeam()" class="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 text-xs font-medium border border-red-500/20">
+            ലോഗൗട്ട് (Logout)
+          </button>
+        </div>
+
+        <!-- NEW ORDER ENTRY FORM (CONSECUTIVE / SEQUENTIAL READY) -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+            <div>
+              <h3 class="text-sm font-bold flex items-center gap-1.5">
+                <span>🛒</span> <span>പുതിയ ഓർഡർ എടുക്കുക (Take Order)</span>
+              </h3>
+              <p class="text-[11px] text-[var(--muted-foreground)]">ഒരു ഓർഡർ സേവ് ചെയ്താൽ ഉടൻ തന്നെ അടുത്ത ഓർഡർ എന്റർ ചെയ്യാം!</p>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-600 border border-amber-500/30">അട പ്രഥമൻ ₹250/L</span>
+          </div>
+
+          <!-- Consecutive Next Order Notification Banner -->
+          <div id="consecutiveOrderNotice" class="hidden p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 text-xs flex justify-between items-center">
+            <span id="consecutiveOrderMsg">✅ ഓർഡർ സേവ് ചെയ്തു! അടുത്ത ഓർഡർ നൽകാം.</span>
+            <span class="text-[10px] text-emerald-600 font-bold">Ready for Next ➔</span>
+          </div>
+
+          <form id="teamOrderForm" onsubmit="handleTeamOrderSubmit(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div>
+              <label class="block font-medium text-[var(--muted-foreground)] mb-1">കസ്റ്റമറുടെ പേര് (Customer Name) *</label>
+              <input type="text" id="tOrdCustName" required placeholder="eg. Anjali R" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-amber-500">
+            </div>
+
+            <div>
+              <label class="block font-medium text-[var(--muted-foreground)] mb-1">WhatsApp ഫോൺ നമ്പർ *</label>
+              <input type="tel" id="tOrdCustPhone" required placeholder="eg. 9847123456" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-amber-500">
+            </div>
+
+            <div>
+              <label class="block font-medium text-[var(--muted-foreground)] mb-1">ഏരിയ / ലൊക്കേഷൻ (Area / Room / Dept) *</label>
+              <input type="text" id="tOrdCustArea" required placeholder="eg. Mechanical Dept Lab 2, Hostel..." class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+            </div>
+
+            <!-- Litre Selection -->
+            <div>
+              <label class="block font-medium text-[var(--muted-foreground)] mb-1">ലിറ്റർ (Litres of Ada Pradhaman) *</label>
+              <div class="grid grid-cols-2 gap-2">
+                <select id="tOrdPresetLitres" onchange="handleLitrePresetChange()" class="px-2 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+                  <option value="1">1 Litre (₹250)</option>
+                  <option value="0.5">0.5 Litre (₹125)</option>
+                  <option value="1.5">1.5 Litres (₹375)</option>
+                  <option value="2">2 Litres (₹500)</option>
+                  <option value="3">3 Litres (₹750)</option>
+                  <option value="5">5 Litres (₹1250)</option>
+                  <option value="custom">മറ്റുള്ളവ (Custom)</option>
+                </select>
+                <input type="number" id="tOrdLitres" step="0.1" min="0.2" value="1" oninput="recalcTeamPrice()" class="px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold">
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-medium text-[var(--muted-foreground)] mb-1">പായസം തരം (Flavor)</label>
+              <input type="text" readonly value="അട പ്രഥമൻ (Ada Pradhaman Only)" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-semibold text-amber-600">
+            </div>
+
+            <div>
+              <label class="block font-medium text-[var(--muted-foreground)] mb-1">ആകെ അടയ്ക്കേണ്ട തുക</label>
+              <div class="flex items-center gap-2 h-9 px-3 rounded-lg bg-amber-500/10 border border-amber-500/30 font-bold text-amber-600 text-sm">
+                <span id="tOrdPriceDisplay">₹250</span>
+                <span class="text-[10px] text-[var(--muted-foreground)] font-normal">(Rate: ₹250/L)</span>
+              </div>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block font-medium text-[var(--muted-foreground)] mb-1">പേയ്മെന്റ് രീതി (Payment Mode) *</label>
+              <div class="flex flex-wrap items-center gap-4 pt-1">
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="radio" name="tPayMode" value="cash" checked onchange="toggleTeamUtr(false)" class="text-amber-500">
+                  <span>💵 Cash (കയ്യിൽ വാങ്ങി)</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="radio" name="tPayMode" value="upi" onchange="toggleTeamUtr(true)" class="text-amber-500">
+                  <span>📱 UPI / GPay</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="radio" name="tPayMode" value="unpaid" onchange="toggleTeamUtr(false)" class="text-amber-500">
+                  <span>⏳ Pay on Delivery</span>
+                </label>
+              </div>
+              <div id="tUtrBox" class="mt-2 hidden space-y-2">
+                <div class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
+                  <span class="text-[11px] text-[var(--muted-foreground)]">Admin UPI ID: <b id="teamUpiDisplay" class="text-blue-600 font-mono">festpayasam@upi</b></span>
+                  <button type="button" onclick="copyAdminUpi()" class="px-2 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-600 border border-blue-500/20">Copy UPI</button>
+                </div>
+                <input type="text" id="tUtrInput" placeholder="Enter UPI Reference / UTR Number" class="w-full px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+              </div>
+            </div>
+
+            <div class="flex items-end">
+              <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold transition shadow flex items-center justify-center gap-1.5">
+                <span>➕</span> <span>ഓർഡർ സേവ് ചെയ്ത് അടുത്തത് എടുക്കുക</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- My Team's Orders List -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-3">
+          <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+            <h4 class="font-bold text-xs">ഞങ്ങളുടെ ടീമിന്റെ ഓർഡറുകൾ (My Team Orders)</h4>
+            <span id="myTeamOrderStats" class="text-xs text-[var(--muted-foreground)]">0 Litres</span>
+          </div>
+          <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-[var(--background)] border-b border-[var(--border)] text-[var(--muted-foreground)]">
+                <tr>
+                  <th class="p-2.5">ID</th>
+                  <th class="p-2.5">Customer & Phone</th>
+                  <th class="p-2.5">Member</th>
+                  <th class="p-2.5">Litres</th>
+                  <th class="p-2.5">Amount</th>
+                  <th class="p-2.5">Status</th>
+                  <th class="p-2.5">Area</th>
+                </tr>
+              </thead>
+              <tbody id="myTeamOrdersTable" class="divide-y divide-[var(--border)]">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 2: INDIVIDUAL ORDER (OPTION 2 - DUAL MODE WITH TEAM CREDIT) -->
+    <!-- ========================================================= -->
+    <section id="view-direct-order" class="space-y-6 hidden">
+      
+      <!-- Back Navigation Header -->
+      <div class="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+        <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
+          <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
+        </button>
+        <span class="text-xs font-semibold text-emerald-600">🛍️ 2. Individual Order Portal</span>
+      </div>
+
+      <div class="max-w-xl mx-auto bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 shadow-sm space-y-4 text-xs">
+        <div class="text-center space-y-1">
+          <div class="text-3xl">🍯</div>
+          <h3 class="text-base font-bold">ഇൻഡിവിജ്വൽ ഓർഡർ (Individual Booking Desk)</h3>
+          <p class="text-[var(--muted-foreground)]">ഓർഡർ എടുത്ത ആളുടെ പേരും ടീമും നൽകിയാൽ ആ ടീമിന്റെയും ആളുടെയും റാങ്ക് തത്സമയം കയറും!</p>
+        </div>
+
+        <!-- Mode Toggle: Volunteer Agent vs Direct Customer -->
+        <div class="grid grid-cols-2 gap-2 p-1 bg-[var(--background)] rounded-xl border border-[var(--border)]">
+          <button type="button" id="btnIndModeAgent" onclick="setIndividualMode('agent')" class="py-1.5 rounded-lg font-bold text-xs bg-amber-500 text-white transition shadow-sm">
+            👤 വോളന്റിയർ / ഏജന്റ് ബുക്കിംഗ്
+          </button>
+          <button type="button" id="btnIndModeCustomer" onclick="setIndividualMode('customer')" class="py-1.5 rounded-lg font-medium text-xs text-[var(--muted-foreground)] transition">
+            🏠 കസ്റ്റമർ നേരിട്ട് ബുക്ക് ചെയ്യുന്നത്
+          </button>
+        </div>
+
+        <!-- Consecutive Banner for Individual Order -->
+        <div id="dirConsecutiveNotice" class="hidden p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 text-xs">
+          ✅ മുൻ ഓർഡർ സേവ് ചെയ്തു! അടുത്ത ഓർഡർ നൽകാം.
+        </div>
+
+        <form id="directOrderForm" onsubmit="handleDirectOrderSubmit(event)" class="space-y-3 pt-2">
+          
+          <!-- AGENT & TEAM ATTRIBUTION SECTION (Gives team ranking points!) -->
+          <div id="agentAttributionBox" class="p-3 rounded-xl bg-blue-500/5 border border-blue-500/20 space-y-2.5">
+            <div class="font-bold text-blue-600 flex items-center gap-1 text-[11px]">
+              <span>⭐</span> <span>റാങ്ക് ക്രെഡിറ്റ് ചെയ്യുന്നതിനുള്ള വിവരങ്ങൾ:</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ഓർഡർ എടുത്ത ആളുടെ പേര് (Agent Name) *</label>
+                <input type="text" id="dirAgentName" placeholder="eg. Rahul S" class="w-full px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] focus:outline-none">
+              </div>
+              <div>
+                <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ഏത് ടീം ആണ്? (Credit Team Rank) *</label>
+                <select id="dirCreditedTeam" class="w-full px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] font-semibold">
+                  <!-- populated dynamically -->
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer Details -->
+          <div>
+            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">കസ്റ്റമറുടെ പേര് (Customer Name) *</label>
+            <input type="text" id="dirCustName" required placeholder="eg. Karthik V" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-amber-500">
+          </div>
+
+          <div>
+            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">WhatsApp ഫോൺ നമ്പർ *</label>
+            <input type="tel" id="dirCustPhone" required placeholder="eg. 9847123456" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-amber-500">
+          </div>
+
+          <div>
+            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ഡെലിവറി ഏരിയ / സ്ഥലം (Area / Room / Dept) *</label>
+            <input type="text" id="dirCustArea" required placeholder="eg. CS Dept Lab 2 or Staff Quarters" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-medium mb-1 text-[var(--muted-foreground)]">പായസം തരം</label>
+              <input type="text" readonly value="അട പ്രഥമൻ (Ada Pradhaman)" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-semibold text-amber-600">
+            </div>
+            <div>
+              <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ലിറ്റർ (Litres) *</label>
+              <input type="number" id="dirLitres" step="0.5" min="0.5" value="1" oninput="recalcDirectPrice()" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-bold">
+            </div>
+          </div>
+
+          <!-- Price Display -->
+          <div class="flex items-center justify-between p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs">
+            <span class="font-medium text-[var(--foreground)]">ആകെ തുക (Total Amount):</span>
+            <span id="dirPriceDisplay" class="text-base font-bold text-amber-600">₹250</span>
+          </div>
+
+          <!-- Payment Options with UPI QR -->
+          <div>
+            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">പേയ്മെന്റ് രീതി *</label>
+            <div class="flex gap-4 pt-1">
+              <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                <input type="radio" name="dirPayMode" value="cash" checked onchange="toggleDirUpiBox(false)" class="text-amber-500">
+                <span>💵 Pay on Delivery</span>
+              </label>
+              <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                <input type="radio" name="dirPayMode" value="upi" onchange="toggleDirUpiBox(true)" class="text-amber-500">
+                <span>📱 UPI / GPay (Online)</span>
+              </label>
+            </div>
+
+            <!-- Dynamic UPI QR & ID Box -->
+            <div id="dirUpiBox" class="mt-3 p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] space-y-3 hidden">
+              <div class="flex flex-col sm:flex-row items-center gap-4">
+                <img id="dirUpiQrImg" src="" alt="UPI QR" class="w-28 h-28 border border-[var(--border)] rounded-lg bg-white p-1">
+                <div class="space-y-1 text-center sm:text-left">
+                  <div class="font-bold text-xs text-blue-600">Scan & Pay via any UPI App</div>
+                  <div class="text-[11px] text-[var(--muted-foreground)]">UPI ID: <b id="dirUpiIdText" class="font-mono text-[var(--foreground)]">festpayasam@upi</b></div>
+                  <div class="pt-1 flex gap-2 justify-center sm:justify-start">
+                    <button type="button" onclick="copyAdminUpi()" class="px-2.5 py-1 rounded bg-blue-500/10 text-blue-600 font-medium text-[10px]">Copy UPI</button>
+                    <a id="dirUpiIntentLink" href="#" class="px-2.5 py-1 rounded bg-amber-500 text-white font-medium text-[10px]">Open GPay/UPI App</a>
+                  </div>
+                </div>
+              </div>
+              <input type="text" id="dirUtrInput" placeholder="Enter UPI Reference / UTR Number" class="w-full px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs">
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow mt-3 flex items-center justify-center gap-1.5">
+            <span>➕</span> <span>ഓർഡർ സ്ഥിരീകരിച്ച് അടുത്തത് എടുക്കുക</span>
+          </button>
+        </form>
+      </div>
+
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 3: RANKINGS (TEAM & INDIVIDUAL LEADERBOARD) -->
+    <!-- ========================================================= -->
+    <section id="view-rankings" class="space-y-6 hidden">
+      
+      <!-- Back Navigation Header -->
+      <div class="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+        <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
+          <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <button id="btnRankTeam" onclick="toggleRankingTab('team')" class="px-3 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white transition">
+            👥 Team Rankings
+          </button>
+          <button id="btnRankIndividual" onclick="toggleRankingTab('individual')" class="px-3 py-1 rounded-lg text-xs font-medium bg-[var(--background)] border border-[var(--border)] text-[var(--muted-foreground)] transition">
+            🌟 Individual Rankings
+          </button>
+        </div>
+      </div>
+
+      <!-- 3A: TEAM RANKINGS TAB -->
+      <div id="rankTeamContent" class="space-y-6">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="text-center max-w-md mx-auto">
+            <span class="text-3xl">🏆</span>
+            <h3 class="text-lg font-bold">ടീം ലീഡർബോർഡ് (Team Standings)</h3>
+            <p class="text-xs text-[var(--muted-foreground)]">വിറ്റ അട പ്രഥമൻ ലിറ്ററും വരുമാനവും അടിസ്ഥാനമാക്കി</p>
+          </div>
+
+          <!-- Podium Top 3 -->
+          <div id="teamPodium" class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Full Team Table -->
+          <div class="overflow-x-auto border border-[var(--border)] rounded-xl mt-4">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-[var(--background)] border-b border-[var(--border)] text-[var(--muted-foreground)] font-semibold">
+                <tr>
+                  <th class="p-3 text-center">Rank</th>
+                  <th class="p-3">Team Name</th>
+                  <th class="p-3 text-center">Orders</th>
+                  <th class="p-3 text-center">Litres Sold</th>
+                  <th class="p-3 text-center">Total Revenue</th>
+                  <th class="p-3 text-right">Badge</th>
+                </tr>
+              </thead>
+              <tbody id="teamRankTableBody" class="divide-y divide-[var(--border)]">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3B: INDIVIDUAL MEMBER RANKINGS TAB -->
+      <div id="rankIndividualContent" class="space-y-6 hidden">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="text-center max-w-md mx-auto">
+            <span class="text-3xl">🌟</span>
+            <h3 class="text-lg font-bold">വ്യക്തിഗത റാങ്കിംഗ് (Individual Superstars)</h3>
+            <p class="text-xs text-[var(--muted-foreground)]">ഏറ്റവും കൂടുതൽ ലിറ്റർ വിറ്റ വ്യക്തിഗത വോളന്റിയർമാർ</p>
+          </div>
+
+          <!-- Individual Table -->
+          <div class="overflow-x-auto border border-[var(--border)] rounded-xl mt-2">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-[var(--background)] border-b border-[var(--border)] text-[var(--muted-foreground)] font-semibold">
+                <tr>
+                  <th class="p-3 text-center">Rank</th>
+                  <th class="p-3">Member Name</th>
+                  <th class="p-3">Team</th>
+                  <th class="p-3 text-center">Orders Taken</th>
+                  <th class="p-3 text-center">Litres Sold</th>
+                  <th class="p-3 text-right">Total Value</th>
+                </tr>
+              </thead>
+              <tbody id="individualRankTableBody" class="divide-y divide-[var(--border)]">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 4: ALL ORDERS (PAID / UNPAID & DIRECT WHATSAPP) -->
+    <!-- ========================================================= -->
+    <section id="view-all-orders" class="space-y-6 hidden">
+      
+      <!-- Back Navigation Header -->
+      <div class="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+        <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
+          <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
+        </button>
+        <span class="text-xs font-semibold text-rose-600">📋 All Orders Master Feed</span>
+      </div>
+
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
+        
+        <!-- Filter and Search Header -->
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3">
+          <div>
+            <h3 class="font-bold text-base">ആകെ ഓർഡറുകൾ (All Orders Directory)</h3>
+            <p class="text-xs text-[var(--muted-foreground)]">ഫോൺ നമ്പറിൽ ക്ലിക്ക് ചെയ്താൽ നേരിട്ട് WhatsApp തുറക്കാം. പണം ലഭിച്ചവർക്ക് <span class="text-emerald-600 font-bold">PAID</span> എന്നും ബാക്കിയുള്ളവർക്ക് <span class="text-red-500 font-bold">UNPAID</span> എന്നും കാണാം.</p>
+          </div>
+
+          <!-- Filter Controls -->
+          <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+            <input type="text" id="allSearch" oninput="renderAllOrdersTable()" placeholder="പേര് / ഫോൺ / ഏരിയ തിരയുക..." class="px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs flex-1 lg:w-48 focus:outline-none">
+            
+            <select id="allFilterPaid" onchange="renderAllOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+              <option value="ALL">All Payment Statuses</option>
+              <option value="PAID">✅ Paid Only</option>
+              <option value="UNPAID">⚠️ Unpaid Only</option>
+            </select>
+
+            <select id="allFilterTeam" onchange="renderAllOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+              <option value="ALL">All Teams</option>
+            </select>
+
+            <select id="allFilterArea" onchange="renderAllOrdersTable()" class="px-2 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+              <option value="ALL">All Areas</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Master Orders Table -->
+        <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[var(--background)] border-b border-[var(--border)] text-[var(--muted-foreground)] font-semibold">
+              <tr>
+                <th class="p-3">Order ID</th>
+                <th class="p-3">Customer & Direct WhatsApp</th>
+                <th class="p-3">Area / Delivery Location</th>
+                <th class="p-3">Team & Volunteer</th>
+                <th class="p-3 text-center">Litres</th>
+                <th class="p-3 text-center">Amount</th>
+                <th class="p-3 text-center">Payment Status</th>
+                <th class="p-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="allOrdersTableBody" class="divide-y divide-[var(--border)]">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Summary Footer under Table -->
+        <div class="flex flex-wrap justify-between items-center text-xs text-[var(--muted-foreground)] pt-2 border-t border-[var(--border)] gap-2">
+          <div>കാണിക്കുന്ന ഓർഡറുകൾ: <b id="allFilteredCount" class="text-[var(--foreground)]">0</b></div>
+          <div class="flex items-center gap-4">
+            <div>ആകെ ലിറ്റർ: <b id="allFilteredLitres" class="text-amber-500">0 L</b></div>
+            <div>ആകെ തുക: <b id="allFilteredAmount" class="text-emerald-600">₹0</b></div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- VIEW 5: ADMIN DESK (UPI CONFIG & WHATSAPP TEMPLATE SETTINGS) -->
+    <!-- ========================================================= -->
+    <section id="view-admin" class="space-y-6 hidden">
+      
+      <!-- Back Navigation Header -->
+      <div class="flex items-center justify-between pb-2 border-b border-[var(--border)]">
+        <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
+          <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold text-purple-600">🔐 5. Admin Control Panel</span>
+          <button onclick="lockAdmin()" class="text-xs text-red-500 hover:underline">Lock</button>
+        </div>
+      </div>
+
+      <!-- Admin PIN Lock Screen -->
+      <div id="adminPinCard" class="max-w-sm mx-auto bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 shadow-sm space-y-4 text-xs text-center">
+        <div class="text-3xl">🔑</div>
+        <h3 class="text-base font-bold">അഡ്മിൻ പാസ്‌വേഡ് നൽകുക</h3>
+        <p class="text-[var(--muted-foreground)]">അഡ്മിൻ പാനലിലേക്ക് പ്രവേശിക്കാൻ PIN ടൈപ്പ് ചെയ്യുക</p>
+        <form onsubmit="handleAdminUnlock(event)" class="space-y-3 pt-2">
+          <input type="password" id="adminPinInput" required placeholder="Default PIN: admin123" class="w-full px-3 py-2 text-center rounded-lg bg-[var(--background)] border border-[var(--border)] text-sm tracking-widest font-mono focus:outline-none">
+          <div class="text-[10px] text-[var(--muted-foreground)]">Default Password: <code class="text-amber-500 font-bold">admin123</code></div>
+          <button type="submit" class="w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold">Unlock Admin Desk</button>
+        </form>
+      </div>
+
+      <!-- Admin Full Dashboard (When Unlocked) -->
+      <div id="adminMainDashboard" class="space-y-6 hidden">
+        
+        <!-- Financial Overview 4 Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 text-xs">
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm">
+            <span class="text-[var(--muted-foreground)]">ആകെ വിൽപന</span>
+            <div id="admGrossSales" class="text-xl font-bold text-amber-500 mt-1">₹0</div>
+            <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5"><span id="admLitresTotal">0</span> L Ada Pradhaman</div>
+          </div>
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm">
+            <span class="text-[var(--muted-foreground)]">അഡ്മിന് ലഭിച്ച പണം</span>
+            <div id="admRealized" class="text-xl font-bold text-emerald-600 mt-1">₹0</div>
+            <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5">Admin Cash + Verified UPI</div>
+          </div>
+          <div class="bg-[var(--card)] border border-red-500/20 bg-red-500/5 rounded-xl p-4 shadow-sm">
+            <span class="text-red-500">ടീമുകൾ തരാനുള്ളത് (Due)</span>
+            <div id="admUnsettledCash" class="text-xl font-bold text-red-600 mt-1">₹0</div>
+            <div class="text-[11px] text-red-500 mt-0.5">ടീം കയ്യിൽ ബാക്കിയുള്ള പണം</div>
+          </div>
+          <div class="bg-[var(--card)] border border-emerald-500/20 bg-emerald-500/5 rounded-xl p-4 shadow-sm">
+            <span class="text-emerald-600 font-semibold">യഥാർത്ഥ ലാഭം (Net Profit)</span>
+            <div id="admNetProfit" class="text-xl font-bold text-emerald-600 mt-1">₹0</div>
+            <div class="text-[11px] text-emerald-600 mt-0.5">Total Sales - Total Expenses</div>
+          </div>
+        </div>
+
+        <!-- NEW ADMIN SETTINGS: 1. UPI CONFIG, 2. WHATSAPP TEMPLATE -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <!-- 1. UPI CONFIGURATION -->
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+              <div>
+                <h4 class="font-bold text-sm flex items-center gap-1.5">
+                  <span>📱</span> <span>UPI പേയ്‌മെന്റ് വിവരങ്ങൾ സജ്ജീകരിക്കുക</span>
+                </h4>
+                <p class="text-xs text-[var(--muted-foreground)]">ഇവിടെ നൽകുന്ന UPI ID ആണ് കസ്റ്റമർക്കും ടീമുകൾക്കും QR കോഡായി കാണിക്കുക</p>
+              </div>
+            </div>
+
+            <form onsubmit="handleSaveUpiSettings(event)" class="space-y-3 text-xs">
+              <div>
+                <label class="block font-medium mb-1 text-[var(--muted-foreground)]">Admin UPI ID *</label>
+                <input type="text" id="admUpiIdInput" required placeholder="eg. festpayasam@okaxis or 9847123456@paytm" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono font-bold focus:outline-none">
+              </div>
+              <div>
+                <label class="block font-medium mb-1 text-[var(--muted-foreground)]">Payee / Account Name</label>
+                <input type="text" id="admUpiNameInput" placeholder="eg. Fest Payasam Committee" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+              </div>
+              <div class="flex justify-end">
+                <button type="submit" class="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold transition shadow">
+                  Save UPI ID
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- 2. WHATSAPP MESSAGE TEMPLATE SETTINGS -->
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+              <div>
+                <h4 class="font-bold text-sm flex items-center gap-1.5">
+                  <span>💬</span> <span>WhatsApp മെസ്സേജ് ടെംപ്ലേറ്റ് (Message Customizer)</span>
+                </h4>
+                <p class="text-xs text-[var(--muted-foreground)]">ഫോൺ നമ്പറിൽ ക്ലിക്ക് ചെയ്യുമ്പോൾ പോകുന്ന മെസ്സേജ് മാറ്റിയെഴുതാം</p>
+              </div>
+            </div>
+
+            <form onsubmit="handleSaveWaTemplate(event)" class="space-y-2 text-xs">
+              <textarea id="admWaTemplateInput" rows="3" class="w-full p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none text-xs"></textarea>
+              <div class="text-[10px] text-[var(--muted-foreground)]">
+                ലഭ്യമായ ടാഗുകൾ: <code class="text-amber-600 font-bold">{name}</code>, <code class="text-amber-600 font-bold">{id}</code>, <code class="text-amber-600 font-bold">{litres}</code>, <code class="text-amber-600 font-bold">{amount}</code>, <code class="text-amber-600 font-bold">{status}</code>, <code class="text-amber-600 font-bold">{area}</code>
+              </div>
+              <div class="flex justify-end pt-1">
+                <button type="submit" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow">
+                  Save Message Template
+                </button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+
+        <!-- 2 Columns: Cash Settlements & Expenses -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <!-- 1. Cash Handover Desk -->
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+              <div>
+                <h4 class="font-bold text-sm flex items-center gap-1.5">
+                  <span>🤝</span> <span>ടീം ക്യാഷ് സെറ്റിൽമെന്റ് (Team Cash Handover)</span>
+                </h4>
+                <p class="text-xs text-[var(--muted-foreground)]">ടീമുകൾ കസ്റ്റമേഴ്സിൽ നിന്ന് പിരിച്ച ക്യാഷ് അഡ്മിന് കൈമാറിയോ എന്ന് നോക്കുക</p>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-[var(--background)] border-b border-[var(--border)] text-[var(--muted-foreground)]">
+                  <tr>
+                    <th class="p-2.5">Team</th>
+                    <th class="p-2.5 text-center">Cash Collected</th>
+                    <th class="p-2.5 text-center">Handed to Admin</th>
+                    <th class="p-2.5 text-center">Due (ബാക്കി)</th>
+                    <th class="p-2.5 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admSettlementTable" class="divide-y divide-[var(--border)]">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 2. Expenses -->
+          <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+              <div>
+                <h4 class="font-bold text-sm flex items-center gap-1.5">
+                  <span>🧾</span> <span>ചിലവുകൾ (Fest Expenses)</span>
+                </h4>
+                <p class="text-xs text-[var(--muted-foreground)]">പാൽ, അട, ശർക്കര, ഗ്യാസ്, പാക്കിംഗ് കവറുകൾ...</p>
+              </div>
+              <button onclick="openAddExpenseModal()" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium">
+                ➕ Add Expense
+              </button>
+            </div>
+
+            <div class="flex justify-between items-center p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+              <span>ആകെ ചിലവ്:</span>
+              <span id="admTotalExpenseDisplay" class="font-bold text-red-500 text-sm">₹0</span>
+            </div>
+
+            <div class="overflow-x-auto border border-[var(--border)] rounded-xl max-h-56">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-[var(--background)] border-b border-[var(--border)] text-[var(--muted-foreground)]">
+                  <tr>
+                    <th class="p-2">Item</th>
+                    <th class="p-2">Notes</th>
+                    <th class="p-2 text-right">Amount (₹)</th>
+                    <th class="p-2 text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admExpenseTable" class="divide-y divide-[var(--border)]">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Danger Zone: Reset Data -->
+        <div class="bg-red-500/5 border border-red-500/20 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs">
+          <div>
+            <h5 class="font-bold text-red-600">ഫെസ്റ്റ് ഡാറ്റ റീസെറ്റ് (Reset Fest Data)</h5>
+            <p class="text-[var(--muted-foreground)]">യഥാർത്ഥ ഫെസ്റ്റ് തുടങ്ങുമ്പോൾ എല്ലാ ഡെമോ ഓർഡറുകളും ക്ലിയർ ചെയ്യാം.</p>
+          </div>
+          <button onclick="resetAllDataConfirm()" class="px-3.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium transition shadow">
+            🗑️ Clear & Reset Data
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL: PDF EXPORT & PRINT STUDIO -->
+  <!-- ========================================================= -->
+  <div id="pdfModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 max-w-lg w-full shadow-2xl space-y-4 text-xs">
+      <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+        <div>
+          <h4 class="font-bold text-sm flex items-center gap-1.5">
+            <span>📄</span> <span>PDF Export & Print Studio</span>
+          </h4>
+          <p class="text-[var(--muted-foreground)]">Page-by-page ആയി വൃത്തിയായി പ്രിന്റ് / PDF സേവ് ചെയ്യാം</p>
+        </div>
+        <button onclick="closePdfModal()" class="text-base text-[var(--muted-foreground)] hover:text-[var(--foreground)]">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block font-medium mb-1">ഏത് രീതിയിലാണ് PDF വേണ്ടത്? (Export Mode) *</label>
+          <select id="pdfExportMode" onchange="handlePdfModeChange()" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] font-medium">
+            <option value="TEAM_WISE">1. ടീം അടിസ്ഥാനത്തിൽ (Team-wise - Page per Team)</option>
+            <option value="AREA_WISE">2. ഏരിയ അടിസ്ഥാനത്തിൽ (Area-wise - Page per Location)</option>
+            <option value="PAID_ONLY">3. പണം അടച്ചവർ മാത്രം (Paid Orders Only)</option>
+            <option value="UNPAID_ONLY">4. പണം പിരിക്കാനുള്ളവർ (Unpaid / Cash Collection List)</option>
+            <option value="MASTER_ALL">5. സമ്പൂർണ്ണ മാസ്റ്റർ റിപ്പോർട്ട് (Master All Orders)</option>
+          </select>
+        </div>
+
+        <div id="pdfSubFilterBox" class="hidden">
+          <label id="pdfSubFilterLabel" class="block font-medium mb-1">Select Specific Team/Area</label>
+          <select id="pdfSubFilterSelect" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+            <!-- populated dynamically -->
+          </select>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2 border-t border-[var(--border)]">
+        <button type="button" onclick="closePdfModal()" class="px-3.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">Cancel</button>
+        <button type="button" onclick="generateAndPrintPdf()" class="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold flex items-center gap-1.5 shadow">
+          <span>🖨️</span> <span>Generate & Print PDF</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD EXPENSE -->
+  <div id="expenseModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 max-w-sm w-full shadow-2xl space-y-4 text-xs">
+      <div class="flex justify-between items-center pb-2 border-b border-[var(--border)]">
+        <h4 class="font-bold text-sm">പുതിയ ചിലവ് ചേർക്കുക (Add Expense)</h4>
+        <button onclick="closeAddExpenseModal()" class="text-base text-[var(--muted-foreground)] hover:text-[var(--foreground)]">✕</button>
+      </div>
+      <form onsubmit="handleSaveExpense(event)" class="space-y-3">
+        <div>
+          <label class="block font-medium mb-1">സാധനം / ചിലവ് (Item Name) *</label>
+          <input type="text" id="expItem" required placeholder="eg. പാൽ (Milma Milk) or അട & ശർക്കര" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-medium mb-1">തുക (Amount in ₹) *</label>
+          <input type="number" id="expAmount" required min="1" placeholder="eg. 1500" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+        </div>
+        <div>
+          <label class="block font-medium mb-1">വിശദാംശങ്ങൾ (Notes)</label>
+          <input type="text" id="expNotes" placeholder="eg. 25 Litres Milma" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeAddExpenseModal()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--background)]">Cancel</button>
+          <button type="submit" class="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-medium">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST FEEDBACK -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs shadow-lg transition-all transform translate-y-10 opacity-0 pointer-events-none">
+    Notification
+  </div>
+
+  <!-- APPLICATION LOGIC IN JAVASCRIPT -->
+  <script>
+    const PRICE_PER_LITRE = 250;
+    const ADMIN_DEFAULT_PIN = "admin123";
+    const FLAVOR_NAME = "അട പ്രഥമൻ (Ada Pradhaman)";
+
+    const DEFAULT_TEAMS = [
+      { id: 't1', name: 'Team Royal Warriors', password: 'team123', settledCash: 0, members: ['Arun Kumar', 'Sanjay Mohan', 'Anjali R'] },
+      { id: 't2', name: 'Team Mech Strikers', password: 'team123', settledCash: 0, members: ['Faizal Rahman', 'Jithin Raj', 'Sneha V'] },
+      { id: 't3', name: 'Team Byte Busters', password: 'team123', settledCash: 0, members: ['Neha Varghese', 'Vishnu P', 'Rahul CS'] },
+      { id: 't4', name: 'Team Commerce Kings', password: 'team123', settledCash: 0, members: ['Ashwin Nair', 'Anoop K', 'Pooja S'] },
+      { id: 't5', name: 'Team Civil Titans', password: 'team123', settledCash: 0, members: ['Midhun B', 'Kavya S', 'Gokul Krishna'] }
+    ];
+
+    const SEED_ORDERS = [
+      { id: 'ORD-101', name: 'Dr. Suresh Kumar', phone: '9847123456', area: 'Mechanical Dept Staff Room', teamId: 't1', member: 'Arun Kumar', item: FLAVOR_NAME, litres: 2.0, amount: 500, payMode: 'cash', payStatus: 'PAID', utr: '', time: '10:30 AM' },
+      { id: 'ORD-102', name: 'Prof. Ananya V', phone: '9447881122', area: 'ECE Lab 2', teamId: 't2', member: 'Sneha V', item: FLAVOR_NAME, litres: 1.0, amount: 250, payMode: 'upi', payStatus: 'PAID', utr: 'UPI/409827110', time: '11:00 AM' },
+      { id: 'ORD-103', name: 'Vishal Nair', phone: '9745009988', area: 'Hostel Block A, R-105', teamId: 't1', member: 'Sanjay Mohan', item: FLAVOR_NAME, litres: 1.5, amount: 375, payMode: 'cash', payStatus: 'PAID', utr: '', time: '11:20 AM' },
+      { id: 'ORD-104', name: 'Reshma Philip', phone: '9562334411', area: 'Library 1st Floor', teamId: 't3', member: 'Neha Varghese', item: FLAVOR_NAME, litres: 1.0, amount: 250, payMode: 'upi', payStatus: 'UNPAID', utr: 'GPay Ref 776192', time: '11:45 AM' },
+      { id: 'ORD-105', name: 'Akhil Das', phone: '9895112233', area: 'Main Canteen Desk 3', teamId: 't4', member: 'Ashwin Nair', item: FLAVOR_NAME, litres: 3.0, amount: 750, payMode: 'cash', payStatus: 'PAID', utr: '', time: '12:15 PM' },
+      { id: 'ORD-106', name: 'Deepa Krishnan', phone: '9496773322', area: 'Admin Office Counter', teamId: 't2', member: 'Faizal Rahman', item: FLAVOR_NAME, litres: 0.5, amount: 125, payMode: 'unpaid', payStatus: 'UNPAID', utr: '', time: '12:40 PM' }
+    ];
+
+    const SEED_EXPENSES = [
+      { id: 'EXP-1', item: 'Milma Milk (പാൽ)', amount: 2000, notes: '40 Litres @ ₹50' },
+      { id: 'EXP-2', item: 'Ada & Jaggery (അട & ശർക്കര)', amount: 750, notes: 'Wholesale batch' },
+      { id: 'EXP-3', item: 'Ghee & Cashews (നെയ്യ് & അണ്ടിപ്പരിപ്പ്)', amount: 800, notes: '500g Ghee + 500g Cashews' },
+      { id: 'EXP-4', item: 'Food Containers & Covers', amount: 550, notes: '100 Litre jars' }
+    ];
+
+    const DEFAULT_WA_TEMPLATE = `ഹലോ {name}, നിങ്ങളുടെ അട പ്രഥമൻ ഓർഡർ (#{id}) വിവരങ്ങൾ:
+അളവ്: {litres} Litres
+തുക: ₹{amount} [{status}]
+ഡെലിവറി സ്ഥലം: {area}
+പായസം ഫെസ്റ്റിലേക്ക് സ്വാഗതം! ❤️`;
+
+    let teams = [];
+    let orders = [];
+    let expenses = [];
+    let adminUpiId = "festpayasam@upi";
+    let adminUpiName = "Fest Payasam Committee";
+    let waTemplate = DEFAULT_WA_TEMPLATE;
+    let loggedInTeam = null;
+    let loggedInMember = null;
+    let isAdminUnlocked = false;
+    let individualMode = 'agent';
+
+    function initApp() {
+      const storedTeams = localStorage.getItem('payasam_v3_teams');
+      const storedOrders = localStorage.getItem('payasam_v3_orders');
+      const storedExpenses = localStorage.getItem('payasam_v3_expenses');
+      const storedUpi = localStorage.getItem('payasam_v3_upi_id');
+      const storedPayee = localStorage.getItem('payasam_v3_upi_name');
+      const storedWa = localStorage.getItem('payasam_v3_wa_template');
+
+      teams = storedTeams ? JSON.parse(storedTeams) : JSON.parse(JSON.stringify(DEFAULT_TEAMS));
+      orders = storedOrders ? JSON.parse(storedOrders) : JSON.parse(JSON.stringify(SEED_ORDERS));
+      expenses = storedExpenses ? JSON.parse(storedExpenses) : JSON.parse(JSON.stringify(SEED_EXPENSES));
+      if (storedUpi) adminUpiId = storedUpi;
+      if (storedPayee) adminUpiName = storedPayee;
+      if (storedWa) waTemplate = storedWa;
+
+      saveState();
+      populateSelectOptions();
+      refreshMetrics();
+      updateUpiDisplay();
+      navigate('home');
+    }
+
+    function saveState() {
+      localStorage.setItem('payasam_v3_teams', JSON.stringify(teams));
+      localStorage.setItem('payasam_v3_orders', JSON.stringify(orders));
+      localStorage.setItem('payasam_v3_expenses', JSON.stringify(expenses));
+      localStorage.setItem('payasam_v3_upi_id', adminUpiId);
+      localStorage.setItem('payasam_v3_upi_name', adminUpiName);
+      localStorage.setItem('payasam_v3_wa_template', waTemplate);
+    }
+
+    function navigate(viewName) {
+      const views = ['home', 'team-login', 'direct-order', 'rankings', 'all-orders', 'admin'];
+      views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) {
+          if (v === viewName) el.classList.remove('hidden');
+          else el.classList.add('hidden');
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (viewName === 'home') {
+        refreshMetrics();
+      } else if (viewName === 'team-login') {
+        if (loggedInTeam) {
+          document.getElementById('teamLoginCard').classList.add('hidden');
+          document.getElementById('teamDashboardCard').classList.remove('hidden');
+          renderMyTeamOrders();
+        } else {
+          document.getElementById('teamLoginCard').classList.remove('hidden');
+          document.getElementById('teamDashboardCard').classList.add('hidden');
+        }
+      } else if (viewName === 'direct-order') {
+        recalcDirectPrice();
+      } else if (viewName === 'rankings') {
+        renderTeamRankings();
+        renderIndividualRankings();
+      } else if (viewName === 'all-orders') {
+        renderAllOrdersTable();
+      } else if (viewName === 'admin') {
+        if (isAdminUnlocked) {
+          document.getElementById('adminPinCard').classList.add('hidden');
+          document.getElementById('adminMainDashboard').classList.remove('hidden');
+          renderAdminDesk();
+        } else {
+          document.getElementById('adminPinCard').classList.remove('hidden');
+          document.getElementById('adminMainDashboard').classList.add('hidden');
+        }
+      }
+    }
+
+    function populateSelectOptions() {
+      const loginTeamSelect = document.getElementById('loginTeamSelect');
+      loginTeamSelect.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+      updateMemberDropdownForLogin();
+
+      const dirCreditedTeam = document.getElementById('dirCreditedTeam');
+      dirCreditedTeam.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('') +
+        `<option value="DIRECT">Fest General (No Team)</option>`;
+
+      const allFilterTeam = document.getElementById('allFilterTeam');
+      allFilterTeam.innerHTML = `<option value="ALL">All Teams</option>` +
+        teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+
+      updateAreaDropdowns();
+      document.getElementById('homeTeamsCount').innerText = teams.length;
+    }
+
+    function updateAreaDropdowns() {
+      const areas = Array.from(new Set(orders.map(o => o.area).filter(Boolean)));
+      const allFilterArea = document.getElementById('allFilterArea');
+      allFilterArea.innerHTML = `<option value="ALL">All Areas</option>` +
+        areas.map(a => `<option value="${a}">${a}</option>`).join('');
+    }
+
+    function updateMemberDropdownForLogin() {
+      const teamId = document.getElementById('loginTeamSelect').value;
+      const team = teams.find(t => t.id === teamId);
+      const memberSelect = document.getElementById('loginMemberSelect');
+      if (team && team.members) {
+        memberSelect.innerHTML = team.members.map(m => `<option value="${m}">${m}</option>`).join('');
+      } else {
+        memberSelect.innerHTML = `<option value="Volunteer">Volunteer</option>`;
+      }
+    }
+
+    function refreshMetrics() {
+      const totalLitres = orders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
+      const grossRevenue = orders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const paidOrders = orders.filter(o => o.payStatus === 'PAID');
+      const paidAmount = paidOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const unpaidOrders = orders.filter(o => o.payStatus !== 'PAID');
+      const dueAmount = unpaidOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const totalExpense = expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+      const netProfit = grossRevenue - totalExpense;
+
+      document.getElementById('metricTotalLitres').innerText = `${totalLitres.toFixed(1)} L`;
+      document.getElementById('metricTotalRevenue').innerText = `₹${grossRevenue}`;
+      document.getElementById('metricPaidAmount').innerText = `₹${paidAmount}`;
+      document.getElementById('metricDueAmount').innerText = `₹${dueAmount}`;
+      document.getElementById('homePaidCount').innerText = paidOrders.length;
+      document.getElementById('homeUnpaidCount').innerText = unpaidOrders.length;
+      document.getElementById('homeProfitPreview').innerText = `₹${netProfit} Profit`;
+    }
+
+    function toggleNewTeamForm(show) {
+      const card = document.getElementById('newTeamCard');
+      if (show) card.classList.remove('hidden');
+      else card.classList.add('hidden');
+    }
+
+    function handleCreateNewTeam(e) {
+      e.preventDefault();
+      const name = document.getElementById('newTeamName').value.trim();
+      const password = document.getElementById('newTeamPassword').value.trim() || 'team123';
+      const membersRaw = document.getElementById('newTeamMembers').value.trim();
+      const members = membersRaw.split(',').map(m => m.trim()).filter(Boolean);
+
+      if (!name) return;
+
+      const newTeam = {
+        id: `t_${Date.now()}`,
+        name,
+        password,
+        settledCash: 0,
+        members: members.length > 0 ? members : ['Captain']
+      };
+
+      teams.push(newTeam);
+      saveState();
+      populateSelectOptions();
+      toggleNewTeamForm(false);
+
+      document.getElementById('loginTeamSelect').value = newTeam.id;
+      updateMemberDropdownForLogin();
+
+      showToast(`🎉 പുതിയ ടീം "${name}" രജിസ്റ്റർ ചെയ്തു!`);
+    }
+
+    function handleTeamLogin(e) {
+      e.preventDefault();
+      const teamId = document.getElementById('loginTeamSelect').value;
+      const team = teams.find(t => t.id === teamId);
+      const customMember = document.getElementById('loginCustomMember').value.trim();
+      const selectedMember = document.getElementById('loginMemberSelect').value;
+      const member = customMember || selectedMember || 'Volunteer';
+      const password = document.getElementById('loginPassword').value.trim();
+
+      if (!team) return;
+
+      if (password !== (team.password || 'team123')) {
+        alert('തെറ്റായ പാസ്‌വേഡ്! (Incorrect Password). Default: team123');
+        return;
+      }
+
+      if (customMember && !team.members.includes(customMember)) {
+        team.members.push(customMember);
+        saveState();
+      }
+
+      loggedInTeam = team;
+      loggedInMember = member;
+
+      document.getElementById('activeTeamName').innerText = team.name;
+      document.getElementById('activeMemberName').innerText = member;
+
+      document.getElementById('teamLoginCard').classList.add('hidden');
+      document.getElementById('teamDashboardCard').classList.remove('hidden');
+
+      showToast(`🎉 സ്വാഗതം ${member} (${team.name})`);
+      renderMyTeamOrders();
+    }
+
+    function logoutTeam() {
+      loggedInTeam = null;
+      loggedInMember = null;
+      document.getElementById('teamLoginCard').classList.remove('hidden');
+      document.getElementById('teamDashboardCard').classList.add('hidden');
+      document.getElementById('loginPassword').value = '';
+      showToast('ടീം ലോഗൗട്ട് ചെയ്തു');
+    }
+
+    function handleLitrePresetChange() {
+      const preset = document.getElementById('tOrdPresetLitres').value;
+      const customInput = document.getElementById('tOrdLitres');
+      if (preset !== 'custom') customInput.value = preset;
+      recalcTeamPrice();
+    }
+
+    function recalcTeamPrice() {
+      const litres = parseFloat(document.getElementById('tOrdLitres').value) || 0;
+      const total = Math.round(litres * PRICE_PER_LITRE);
+      document.getElementById('tOrdPriceDisplay').innerText = `₹${total}`;
+      return total;
+    }
+
+    function toggleTeamUtr(show) {
+      const el = document.getElementById('tUtrBox');
+      if (show) el.classList.remove('hidden');
+      else el.classList.add('hidden');
+    }
+
+    function handleTeamOrderSubmit(e) {
+      e.preventDefault();
+      if (!loggedInTeam) {
+        alert('ദയവായി ലോഗിൻ ചെയ്യുക');
+        return;
+      }
+
+      const name = document.getElementById('tOrdCustName').value.trim();
+      const phone = document.getElementById('tOrdCustPhone').value.trim();
+      const area = document.getElementById('tOrdCustArea').value.trim();
+      const litres = parseFloat(document.getElementById('tOrdLitres').value) || 1.0;
+      const amount = Math.round(litres * PRICE_PER_LITRE);
+      const payMode = document.querySelector('input[name="tPayMode"]:checked').value;
+      const utr = document.getElementById('tUtrInput').value.trim();
+
+      const newOrder = {
+        id: `ORD-${Math.floor(100 + Math.random() * 900)}`,
+        name,
+        phone,
+        area,
+        teamId: loggedInTeam.id,
+        member: loggedInMember,
+        item: FLAVOR_NAME,
+        litres,
+        amount,
+        payMode,
+        payStatus: payMode === 'unpaid' ? 'UNPAID' : 'PAID',
+        utr,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      orders.unshift(newOrder);
+      saveState();
+
+      document.getElementById('tOrdCustName').value = '';
+      document.getElementById('tOrdCustPhone').value = '';
+      document.getElementById('tOrdCustArea').value = '';
+      document.getElementById('tUtrInput').value = '';
+      document.getElementById('tOrdLitres').value = '1';
+      document.getElementById('tOrdPresetLitres').value = '1';
+      recalcTeamPrice();
+      toggleTeamUtr(false);
+      updateAreaDropdowns();
+
+      const banner = document.getElementById('consecutiveOrderNotice');
+      document.getElementById('consecutiveOrderMsg').innerText = `✅ ഓർഡർ #${newOrder.id} (${newOrder.name}) സേവ് ചെയ്തു! അടുത്ത ഓർഡർ എന്റർ ചെയ്യാം.`;
+      banner.classList.remove('hidden');
+      document.getElementById('tOrdCustName').focus();
+
+      renderMyTeamOrders();
+      refreshMetrics();
+      showToast(`🎉 ഓർഡർ #${newOrder.id} രജിസ്റ്റർ ചെയ്തു!`);
+    }
+
+    function renderMyTeamOrders() {
+      if (!loggedInTeam) return;
+      const tbody = document.getElementById('myTeamOrdersTable');
+      const teamOrders = orders.filter(o => o.teamId === loggedInTeam.id);
+      const totalLitres = teamOrders.reduce((sum, o) => sum + o.litres, 0);
+
+      document.getElementById('myTeamOrderStats').innerText = `${teamOrders.length} Orders (${totalLitres.toFixed(1)} Litres)`;
+
+      if (teamOrders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-[var(--muted-foreground)]">ഇതുവരെ ഓർഡറുകൾ എടുത്തിട്ടില്ല</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = teamOrders.map(o => `
+        <tr class="hover:bg-[var(--background)] transition">
+          <td class="p-2.5 font-mono font-bold">${o.id}</td>
+          <td class="p-2.5">
+            <div class="font-medium">${o.name}</div>
+            <div class="text-[10px] text-[var(--muted-foreground)]">${o.phone}</div>
+          </td>
+          <td class="p-2.5 font-medium text-blue-600">${o.member || 'Member'}</td>
+          <td class="p-2.5 font-bold font-mono">${o.litres} L</td>
+          <td class="p-2.5 font-bold text-amber-600">₹${o.amount}</td>
+          <td class="p-2.5">
+            ${o.payStatus === 'PAID'
+              ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">PAID</span>'
+              : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-600 border border-red-500/20">UNPAID</span>'
+            }
+          </td>
+          <td class="p-2.5 text-[var(--muted-foreground)]">${o.area}</td>
+        </tr>
+      `).join('');
+    }
+
+    function setIndividualMode(mode) {
+      individualMode = mode;
+      const btnAgent = document.getElementById('btnIndModeAgent');
+      const btnCust = document.getElementById('btnIndModeCustomer');
+      const box = document.getElementById('agentAttributionBox');
+
+      if (mode === 'agent') {
+        btnAgent.className = 'py-1.5 rounded-lg font-bold text-xs bg-amber-500 text-white transition shadow-sm';
+        btnCust.className = 'py-1.5 rounded-lg font-medium text-xs text-[var(--muted-foreground)] transition';
+        box.classList.remove('hidden');
+      } else {
+        btnCust.className = 'py-1.5 rounded-lg font-bold text-xs bg-amber-500 text-white transition shadow-sm';
+        btnAgent.className = 'py-1.5 rounded-lg font-medium text-xs text-[var(--muted-foreground)] transition';
+        box.classList.add('hidden');
+      }
+    }
+
+    function recalcDirectPrice() {
+      const litres = parseFloat(document.getElementById('dirLitres').value) || 0;
+      const total = Math.round(litres * PRICE_PER_LITRE);
+      document.getElementById('dirPriceDisplay').innerText = `₹${total}`;
+      updateDirectUpiQr(total);
+      return total;
+    }
+
+    function updateDirectUpiQr(amount) {
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(adminUpiId)}&pn=${encodeURIComponent(adminUpiName)}&am=${amount}&cu=INR&tn=PayasamChallenge`;
+      document.getElementById('dirUpiIdText').innerText = adminUpiId;
+      document.getElementById('dirUpiIntentLink').href = upiUrl;
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiUrl)}`;
+      document.getElementById('dirUpiQrImg').src = qrApiUrl;
+    }
+
+    function toggleDirUpiBox(show) {
+      const box = document.getElementById('dirUpiBox');
+      if (show) {
+        box.classList.remove('hidden');
+        recalcDirectPrice();
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
+    function handleDirectOrderSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('dirCustName').value.trim();
+      const phone = document.getElementById('dirCustPhone').value.trim();
+      const area = document.getElementById('dirCustArea').value.trim();
+      const litres = parseFloat(document.getElementById('dirLitres').value) || 1.0;
+      const payMode = document.querySelector('input[name="dirPayMode"]:checked').value;
+      const utr = document.getElementById('dirUtrInput').value.trim();
+      const amount = Math.round(litres * PRICE_PER_LITRE);
+
+      let teamId = 'DIRECT';
+      let member = 'Direct Customer';
+
+      if (individualMode === 'agent') {
+        const agentName = document.getElementById('dirAgentName').value.trim();
+        const selectedTeam = document.getElementById('dirCreditedTeam').value;
+        teamId = selectedTeam;
+        member = agentName || 'Volunteer';
+      }
+
+      const newOrder = {
+        id: `ORD-${Math.floor(100 + Math.random() * 900)}`,
+        name,
+        phone,
+        area,
+        teamId,
+        member,
+        item: FLAVOR_NAME,
+        litres,
+        amount,
+        payMode,
+        payStatus: payMode === 'cash' ? 'UNPAID' : 'PAID',
+        utr,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      orders.unshift(newOrder);
+      saveState();
+
+      document.getElementById('dirCustName').value = '';
+      document.getElementById('dirCustPhone').value = '';
+      document.getElementById('dirCustArea').value = '';
+      document.getElementById('dirUtrInput').value = '';
+      document.getElementById('dirLitres').value = '1';
+      recalcDirectPrice();
+      updateAreaDropdowns();
+      refreshMetrics();
+
+      const banner = document.getElementById('dirConsecutiveNotice');
+      banner.innerText = `✅ ഓർഡർ #${newOrder.id} (${newOrder.name}) വിജയകരമായി ചേർത്തു. ആ ടീമിന് റാങ്ക് ക്രെഡിറ്റ് ആയി! അടുത്ത ഓർഡർ നൽകാം.`;
+      banner.classList.remove('hidden');
+      document.getElementById('dirCustName').focus();
+
+      showToast(`🎉 ഓർഡർ #${newOrder.id} സേവ് ചെയ്തു! ടീം റാങ്ക് ഉയർന്നു.`);
+    }
+
+    function toggleRankingTab(tab) {
+      const teamTab = document.getElementById('rankTeamContent');
+      const indTab = document.getElementById('rankIndividualContent');
+      const btnTeam = document.getElementById('btnRankTeam');
+      const btnInd = document.getElementById('btnRankIndividual');
+
+      if (tab === 'team') {
+        teamTab.classList.remove('hidden');
+        indTab.classList.add('hidden');
+        btnTeam.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white transition';
+        btnInd.className = 'px-3 py-1 rounded-lg text-xs font-medium bg-[var(--background)] border border-[var(--border)] text-[var(--muted-foreground)] transition';
+      } else {
+        teamTab.classList.add('hidden');
+        indTab.classList.remove('hidden');
+        btnInd.className = 'px-3 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white transition';
+        btnTeam.className = 'px-3 py-1 rounded-lg text-xs font-medium bg-[var(--background)] border border-[var(--border)] text-[var(--muted-foreground)] transition';
+      }
+    }
+
+    function renderTeamRankings() {
+      const teamStats = teams.map(t => {
+        const tOrders = orders.filter(o => o.teamId === t.id);
+        const orderCount = tOrders.length;
+        const litresSold = tOrders.reduce((sum, o) => sum + o.litres, 0);
+        const revenue = tOrders.reduce((sum, o) => sum + o.amount, 0);
+        return { ...t, orderCount, litresSold, revenue };
+      });
+
+      teamStats.sort((a, b) => b.litresSold - a.litresSold || b.revenue - a.revenue);
+
+      const podium = document.getElementById('teamPodium');
+      const top3 = teamStats.slice(0, 3);
+      const medals = ['🥇 1st Place', '🥈 2nd Place', '🥉 3rd Place'];
+      const styles = ['border-amber-500 bg-amber-500/5', 'border-slate-400 bg-slate-400/5', 'border-amber-700 bg-amber-700/5'];
+
+      podium.innerHTML = top3.map((t, idx) => `
+        <div class="border rounded-2xl p-4 text-center ${styles[idx] || ''} shadow-sm">
+          <div class="text-xs font-bold uppercase tracking-wider mb-1">${medals[idx]}</div>
+          <h4 class="font-bold text-sm text-[var(--foreground)] truncate">${t.name}</h4>
+          <div class="text-xl font-extrabold text-amber-500 mt-2">${t.litresSold.toFixed(1)} L</div>
+          <div class="text-xs text-[var(--muted-foreground)] mt-0.5">₹${t.revenue} (${t.orderCount} Orders)</div>
+        </div>
+      `).join('');
+
+      const tbody = document.getElementById('teamRankTableBody');
+      tbody.innerHTML = teamStats.map((t, idx) => {
+        let badge = '<span class="text-slate-400">-</span>';
+        if (t.litresSold >= 10) badge = '<span class="px-2 py-0.5 rounded-full text-[10px] bg-amber-500/20 text-amber-600 font-bold">🔥 10L Milestone</span>';
+        if (t.litresSold >= 25) badge = '<span class="px-2 py-0.5 rounded-full text-[10px] bg-purple-500/20 text-purple-600 font-bold">🚀 25L Superteam</span>';
+
+        return `
+          <tr class="hover:bg-[var(--background)] transition">
+            <td class="p-3 text-center font-bold">${idx === 0 ? '👑 1' : idx + 1}</td>
+            <td class="p-3 font-semibold">${t.name}</td>
+            <td class="p-3 text-center">${t.orderCount}</td>
+            <td class="p-3 text-center font-mono font-bold">${t.litresSold.toFixed(1)} L</td>
+            <td class="p-3 text-center font-bold text-amber-600">₹${t.revenue}</td>
+            <td class="p-3 text-right">${badge}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderIndividualRankings() {
+      const memberMap = {};
+      orders.forEach(o => {
+        const mem = o.member || 'Direct / Online';
+        if (!memberMap[mem]) {
+          const team = teams.find(t => t.id === o.teamId);
+          memberMap[mem] = {
+            name: mem,
+            teamName: team ? team.name : 'Fest Direct',
+            ordersCount: 0,
+            litresSold: 0,
+            totalValue: 0
+          };
+        }
+        memberMap[mem].ordersCount += 1;
+        memberMap[mem].litresSold += o.litres;
+        memberMap[mem].totalValue += o.amount;
+      });
+
+      const memberList = Object.values(memberMap);
+      memberList.sort((a, b) => b.litresSold - a.litresSold || b.totalValue - a.totalValue);
+
+      const tbody = document.getElementById('individualRankTableBody');
+      tbody.innerHTML = memberList.map((m, idx) => `
+        <tr class="hover:bg-[var(--background)] transition">
+          <td class="p-3 text-center font-bold">${idx === 0 ? '⭐ 1' : idx + 1}</td>
+          <td class="p-3 font-semibold text-[var(--foreground)]">${m.name}</td>
+          <td class="p-3 text-[var(--muted-foreground)]">${m.teamName}</td>
+          <td class="p-3 text-center font-mono">${m.ordersCount}</td>
+          <td class="p-3 text-center font-mono font-bold text-amber-600">${m.litresSold.toFixed(1)} L</td>
+          <td class="p-3 text-right font-bold text-emerald-600">₹${m.totalValue}</td>
+        </tr>
+      `).join('');
+    }
+
+    function getGeneratedWaMessage(order) {
+      let msg = waTemplate;
+      msg = msg.replace(/\{name\}/g, order.name);
+      msg = msg.replace(/\{id\}/g, order.id);
+      msg = msg.replace(/\{litres\}/g, `${order.litres}`);
+      msg = msg.replace(/\{amount\}/g, `${order.amount}`);
+      msg = msg.replace(/\{status\}/g, order.payStatus);
+      msg = msg.replace(/\{area\}/g, order.area);
+      msg = msg.replace(/\{upi\}/g, adminUpiId);
+      return encodeURIComponent(msg);
+    }
+
+    function renderAllOrdersTable() {
+      const tbody = document.getElementById('allOrdersTableBody');
+      const search = (document.getElementById('allSearch')?.value || '').toLowerCase();
+      const paidFilter = document.getElementById('allFilterPaid')?.value || 'ALL';
+      const teamFilter = document.getElementById('allFilterTeam')?.value || 'ALL';
+      const areaFilter = document.getElementById('allFilterArea')?.value || 'ALL';
+
+      const filtered = orders.filter(o => {
+        const teamObj = teams.find(t => t.id === o.teamId) || { name: 'Direct' };
+        const matchesSearch = o.name.toLowerCase().includes(search) ||
+                              o.phone.includes(search) ||
+                              o.area.toLowerCase().includes(search) ||
+                              teamObj.name.toLowerCase().includes(search) ||
+                              o.id.toLowerCase().includes(search);
+        
+        const matchesPaid = paidFilter === 'ALL' || o.payStatus === paidFilter;
+        const matchesTeam = teamFilter === 'ALL' || o.teamId === teamFilter;
+        const matchesArea = areaFilter === 'ALL' || o.area === areaFilter;
+
+        return matchesSearch && matchesPaid && matchesTeam && matchesArea;
+      });
+
+      document.getElementById('allFilteredCount').innerText = filtered.length;
+      const totalLitres = filtered.reduce((sum, o) => sum + o.litres, 0);
+      const totalAmount = filtered.reduce((sum, o) => sum + o.amount, 0);
+      document.getElementById('allFilteredLitres').innerText = `${totalLitres.toFixed(1)} L`;
+      document.getElementById('allFilteredAmount').innerText = `₹${totalAmount}`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-[var(--muted-foreground)]">ഓർഡറുകൾ ലഭ്യമല്ല</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(o => {
+        const teamObj = teams.find(t => t.id === o.teamId) || { name: 'Direct' };
+        const isPaid = o.payStatus === 'PAID';
+        
+        const payStatusBadge = isPaid
+          ? `<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500/15 text-emerald-600 border border-emerald-500/30">PAID ✓</span>`
+          : `<span class="px-3 py-1 rounded-full text-xs font-extrabold bg-red-500/15 text-red-600 border border-red-500/30">UNPAID ⚠️</span>`;
+
+        const waMsg = getGeneratedWaMessage(o);
+        const cleanPhone = o.phone.replace(/[^0-9]/g, '');
+        const waLink = `https://wa.me/91${cleanPhone}?text=${waMsg}`;
+
+        return `
+          <tr class="hover:bg-[var(--background)] transition">
+            <td class="p-3">
+              <span class="font-mono font-bold text-xs">${o.id}</span>
+              <div class="text-[10px] text-[var(--muted-foreground)]">${o.time}</div>
+            </td>
+            <td class="p-3">
+              <div class="font-semibold text-[var(--foreground)]">${o.name}</div>
+              <a href="${waLink}" target="_blank" title="Click to open WhatsApp directly" class="text-emerald-600 hover:text-emerald-700 font-mono flex items-center gap-1 font-bold">
+                <span>💬</span> <span>${o.phone}</span>
+              </a>
+            </td>
+            <td class="p-3">
+              <div class="font-medium text-amber-600">📍 ${o.area}</div>
+              <div class="text-[10px] text-[var(--muted-foreground)]">അട പ്രഥമൻ</div>
+            </td>
+            <td class="p-3">
+              <div class="font-medium">${teamObj.name}</div>
+              <div class="text-[10px] text-blue-600 font-medium">${o.member || 'Member'}</div>
+            </td>
+            <td class="p-3 text-center font-mono font-bold text-xs">${o.litres} L</td>
+            <td class="p-3 text-center font-bold text-amber-600">₹${o.amount}</td>
+            <td class="p-3 text-center">${payStatusBadge}</td>
+            <td class="p-3 text-right">
+              <div class="flex items-center justify-end gap-1.5">
+                <a href="${waLink}" target="_blank" title="Direct WhatsApp" class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 text-xs">
+                  💬 WA
+                </a>
+                <button onclick="quickTogglePaid('${o.id}')" title="Toggle Paid Status" class="p-1.5 rounded-lg bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 text-xs font-semibold">
+                  ${isPaid ? 'Unpay' : 'Pay ✓'}
+                </button>
+                <button onclick="adminDeleteOrder('${o.id}')" title="Delete" class="p-1.5 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 text-xs">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function quickTogglePaid(orderId) {
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        order.payStatus = order.payStatus === 'PAID' ? 'UNPAID' : 'PAID';
+        saveState();
+        renderAllOrdersTable();
+        refreshMetrics();
+        showToast(`ഓർഡർ #${orderId} ${order.payStatus} ആയി അപ്‌ഡേറ്റ് ചെയ്തു`);
+      }
+    }
+
+    function adminDeleteOrder(orderId) {
+      if (confirm(`ഓർഡർ #${orderId} നീക്കം ചെയ്യണോ?`)) {
+        orders = orders.filter(o => o.id !== orderId);
+        saveState();
+        renderAllOrdersTable();
+        refreshMetrics();
+        showToast('ഓർഡർ നീക്കം ചെയ്തു');
+      }
+    }
+
+    function handleAdminUnlock(e) {
+      e.preventDefault();
+      const pin = document.getElementById('adminPinInput').value.trim();
+      if (pin === ADMIN_DEFAULT_PIN) {
+        isAdminUnlocked = true;
+        document.getElementById('adminPinCard').classList.add('hidden');
+        document.getElementById('adminMainDashboard').classList.remove('hidden');
+        renderAdminDesk();
+        showToast('🔓 അഡ്മിൻ പാനൽ അൺലോക്ക് ചെയ്തു');
+      } else {
+        alert('തെറ്റായ PIN! Default PIN: admin123');
+      }
+    }
+
+    function lockAdmin() {
+      isAdminUnlocked = false;
+      document.getElementById('adminPinCard').classList.remove('hidden');
+      document.getElementById('adminMainDashboard').classList.add('hidden');
+      document.getElementById('adminPinInput').value = '';
+      showToast('🔒 അഡ്മിൻ പാനൽ ലോക്ക് ചെയ്തു');
+    }
+
+    function updateUpiDisplay() {
+      const tUpi = document.getElementById('teamUpiDisplay');
+      if (tUpi) tUpi.innerText = adminUpiId;
+      const dUpi = document.getElementById('dirUpiIdText');
+      if (dUpi) dUpi.innerText = adminUpiId;
+    }
+
+    function copyAdminUpi() {
+      navigator.clipboard.writeText(adminUpiId);
+      showToast(`📋 UPI ID കോപ്പി ചെയ്തു: ${adminUpiId}`);
+    }
+
+    function handleSaveUpiSettings(e) {
+      e.preventDefault();
+      const newUpi = document.getElementById('admUpiIdInput').value.trim();
+      const newName = document.getElementById('admUpiNameInput').value.trim() || 'Payasam Committee';
+
+      if (!newUpi) return;
+      adminUpiId = newUpi;
+      adminUpiName = newName;
+      saveState();
+      updateUpiDisplay();
+      showToast(`✅ Admin UPI ID വിജയകരമായി മാറ്റി: ${newUpi}`);
+    }
+
+    function handleSaveWaTemplate(e) {
+      e.preventDefault();
+      const newTpl = document.getElementById('admWaTemplateInput').value.trim();
+      if (!newTpl) return;
+      waTemplate = newTpl;
+      saveState();
+      showToast('✅ WhatsApp മെസ്സേജ് ടെംപ്ലേറ്റ് സേവ് ചെയ്തു!');
+    }
+
+    function renderAdminDesk() {
+      document.getElementById('admUpiIdInput').value = adminUpiId;
+      document.getElementById('admUpiNameInput').value = adminUpiName;
+      document.getElementById('admWaTemplateInput').value = waTemplate;
+
+      const grossSales = orders.reduce((sum, o) => sum + o.amount, 0);
+      const totalLitres = orders.reduce((sum, o) => sum + o.litres, 0);
+
+      const verifiedUpi = orders
+        .filter(o => o.payMode === 'upi' && o.payStatus === 'PAID')
+        .reduce((sum, o) => sum + o.amount, 0);
+
+      let totalCashCollectedByTeams = 0;
+      let totalCashHandedToAdmin = 0;
+
+      teams.forEach(t => {
+        const teamCashOrders = orders.filter(o => o.teamId === t.id && o.payMode === 'cash' && o.payStatus === 'PAID');
+        const teamTotalCash = teamCashOrders.reduce((sum, o) => sum + o.amount, 0);
+        totalCashCollectedByTeams += teamTotalCash;
+        totalCashHandedToAdmin += (t.settledCash || 0);
+      });
+
+      const unsettledCash = Math.max(0, totalCashCollectedByTeams - totalCashHandedToAdmin);
+      const realizedMoney = verifiedUpi + totalCashHandedToAdmin;
+      const totalExpense = expenses.reduce((sum, e) => sum + e.amount, 0);
+      const netProfit = grossSales - totalExpense;
+
+      document.getElementById('admGrossSales').innerText = `₹${grossSales}`;
+      document.getElementById('admLitresTotal').innerText = totalLitres.toFixed(1);
+      document.getElementById('admRealized').innerText = `₹${realizedMoney}`;
+      document.getElementById('admUnsettledCash').innerText = `₹${unsettledCash}`;
+      document.getElementById('admNetProfit').innerText = `₹${netProfit}`;
+      document.getElementById('admTotalExpenseDisplay').innerText = `₹${totalExpense}`;
+
+      const stBody = document.getElementById('admSettlementTable');
+      stBody.innerHTML = teams.map(t => {
+        const teamCashOrders = orders.filter(o => o.teamId === t.id && o.payMode === 'cash' && o.payStatus === 'PAID');
+        const cashTotal = teamCashOrders.reduce((sum, o) => sum + o.amount, 0);
+        const settled = t.settledCash || 0;
+        const due = Math.max(0, cashTotal - settled);
+
+        let actionBtn = `<span class="text-xs text-emerald-600 font-bold">✓ Settled</span>`;
+        if (due > 0) {
+          actionBtn = `
+            <button onclick="adminReceiveTeamCash('${t.id}', ${due})" class="px-2.5 py-1 rounded bg-emerald-500 hover:bg-emerald-600 text-white font-medium text-[11px] shadow transition">
+              കൈപ്പറ്റി (Receive ₹${due})
+            </button>
+          `;
+        }
+
+        return `
+          <tr class="hover:bg-[var(--background)] transition">
+            <td class="p-2.5 font-medium">${t.name}</td>
+            <td class="p-2.5 text-center font-semibold">₹${cashTotal}</td>
+            <td class="p-2.5 text-center text-emerald-600">₹${settled}</td>
+            <td class="p-2.5 text-center font-bold ${due > 0 ? 'text-red-600' : 'text-slate-400'}">₹${due}</td>
+            <td class="p-2.5 text-right">${actionBtn}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const expBody = document.getElementById('admExpenseTable');
+      if (expenses.length === 0) {
+        expBody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-[var(--muted-foreground)]">ചിലവുകൾ ഇല്ല</td></tr>`;
+      } else {
+        expBody.innerHTML = expenses.map(e => `
+          <tr class="hover:bg-[var(--background)] transition">
+            <td class="p-2 font-medium">${e.item}</td>
+            <td class="p-2 text-[var(--muted-foreground)]">${e.notes || '-'}</td>
+            <td class="p-2 text-right font-bold text-red-500">₹${e.amount}</td>
+            <td class="p-2 text-center">
+              <button onclick="deleteExpense('${e.id}')" class="text-red-500 hover:text-red-700 text-xs">🗑️</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function adminReceiveTeamCash(teamId, amount) {
+      const team = teams.find(t => t.id === teamId);
+      if (!team) return;
+      if (confirm(`${team.name}-ൽ നിന്നും ₹${amount} ക്യാഷ് അഡ്മിന് ലഭിച്ചതായി രേഖപ്പെടുത്തണോ?`)) {
+        team.settledCash = (team.settledCash || 0) + amount;
+        saveState();
+        renderAdminDesk();
+        refreshMetrics();
+        showToast(`✅ ${team.name}-ൽ നിന്നും ₹${amount} അഡ്മിൻ സ്വീകരിച്ചു!`);
+      }
+    }
+
+    function openAddExpenseModal() { document.getElementById('expenseModal').classList.remove('hidden'); }
+    function closeAddExpenseModal() { document.getElementById('expenseModal').classList.add('hidden'); }
+    function handleSaveExpense(e) {
+      e.preventDefault();
+      const item = document.getElementById('expItem').value.trim();
+      const amount = parseFloat(document.getElementById('expAmount').value) || 0;
+      const notes = document.getElementById('expNotes').value.trim();
+
+      expenses.unshift({ id: `EXP-${Date.now()}`, item, amount, notes });
+      saveState();
+      closeAddExpenseModal();
+      document.getElementById('expItem').value = '';
+      document.getElementById('expAmount').value = '';
+      document.getElementById('expNotes').value = '';
+      renderAdminDesk();
+      refreshMetrics();
+      showToast(`🧾 ചിലവ് ₹${amount} ആഡ് ചെയ്തു`);
+    }
+
+    function deleteExpense(id) {
+      if (confirm('ഈ ചിലവ് ഒഴിവാക്കണോ?')) {
+        expenses = expenses.filter(e => e.id !== id);
+        saveState();
+        renderAdminDesk();
+        refreshMetrics();
+        showToast('ചിലവ് നീക്കം ചെയ്തു');
+      }
+    }
+
+    function resetAllDataConfirm() {
+      if (confirm('ശ്രദ്ധിക്കുക: എല്ലാ ഓർഡറുകളും റീസെറ്റ് ചെയ്യപ്പെടും. തുടരണോ?')) {
+        localStorage.clear();
+        teams = JSON.parse(JSON.stringify(DEFAULT_TEAMS));
+        orders = [];
+        expenses = [];
+        saveState();
+        populateSelectOptions();
+        renderAdminDesk();
+        refreshMetrics();
+        showToast('✅ എല്ലാ ഡാറ്റയും ക്ലിയർ ചെയ്തു! ഫ്രഷ് ഫെസ്റ്റ് ആരംഭിക്കാം.');
+      }
+    }
+
+    function openPdfModal() {
+      document.getElementById('pdfModal').classList.remove('hidden');
+      handlePdfModeChange();
+    }
+    function closePdfModal() {
+      document.getElementById('pdfModal').classList.add('hidden');
+    }
+
+    function handlePdfModeChange() {
+      const mode = document.getElementById('pdfExportMode').value;
+      const subBox = document.getElementById('pdfSubFilterBox');
+      const subSelect = document.getElementById('pdfSubFilterSelect');
+      const subLabel = document.getElementById('pdfSubFilterLabel');
+
+      if (mode === 'TEAM_WISE') {
+        subBox.classList.remove('hidden');
+        subLabel.innerText = 'ഏത് ടീം ആണ് വേണ്ടത്?';
+        subSelect.innerHTML = `<option value="ALL_PAGE_BY_PAGE">എല്ലാ ടീമുകളും (ഓരോ ടീമിനും ഓരോ പേജ് - Page per Team)</option>` +
+          teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+      } else if (mode === 'AREA_WISE') {
+        subBox.classList.remove('hidden');
+        subLabel.innerText = 'ഏത് ഏരിയ ആണ് വേണ്ടത്?';
+        const areas = Array.from(new Set(orders.map(o => o.area).filter(Boolean)));
+        subSelect.innerHTML = `<option value="ALL_PAGE_BY_PAGE">എല്ലാ ഏരിയകളും (ഓരോ ഏരിയക്കും ഓരോ പേജ് - Page per Area)</option>` +
+          areas.map(a => `<option value="${a}">${a}</option>`).join('');
+      } else {
+        subBox.classList.add('hidden');
+      }
+    }
+
+    function generateAndPrintPdf() {
+      const mode = document.getElementById('pdfExportMode').value;
+      const subChoice = document.getElementById('pdfSubFilterSelect').value;
+      const printContainer = document.getElementById('printArea');
+
+      let html = '';
+
+      if (mode === 'TEAM_WISE') {
+        if (subChoice === 'ALL_PAGE_BY_PAGE') {
+          teams.forEach(t => {
+            const teamOrders = orders.filter(o => o.teamId === t.id);
+            html += generatePdfSectionHtml(`ടീം ഷീറ്റ്: ${t.name}`, `Volunteers: ${t.members.join(', ')}`, teamOrders);
+          });
+        } else {
+          const t = teams.find(team => team.id === subChoice);
+          const teamOrders = orders.filter(o => o.teamId === subChoice);
+          html += generatePdfSectionHtml(`ടീം ഷീറ്റ്: ${t.name}`, `Volunteers: ${t.members.join(', ')}`, teamOrders);
+        }
+      } else if (mode === 'AREA_WISE') {
+        const areas = subChoice === 'ALL_PAGE_BY_PAGE' 
+          ? Array.from(new Set(orders.map(o => o.area).filter(Boolean)))
+          : [subChoice];
+
+        areas.forEach(areaName => {
+          const areaOrders = orders.filter(o => o.area === areaName);
+          html += generatePdfSectionHtml(`ഡെലിവറി ഷീറ്റ്: ഏരിയ - ${areaName}`, `Total Drops: ${areaOrders.length}`, areaOrders);
+        });
+      } else if (mode === 'PAID_ONLY') {
+        const paidOrders = orders.filter(o => o.payStatus === 'PAID');
+        html += generatePdfSectionHtml('പണം അടച്ച ഓർഡറുകൾ (PAID ORDERS LIST)', 'Confirmed Receipts', paidOrders);
+      } else if (mode === 'UNPAID_ONLY') {
+        const unpaidOrders = orders.filter(o => o.payStatus !== 'PAID');
+        html += generatePdfSectionHtml('പണം പിരിക്കാനുള്ള ഓർഡറുകൾ (PENDING CASH COLLECTION)', 'Cash Pending on Delivery', unpaidOrders);
+      } else {
+        html += generatePdfSectionHtml('പായസം ചലഞ്ച് സമ്പൂർണ്ണ മാസ്റ്റർ റിപ്പോർട്ട് (MASTER ORDERS)', `Generated at: ${new Date().toLocaleString()}`, orders);
+      }
+
+      if (!html) {
+        alert('പ്രിന്റ് ചെയ്യാൻ ഓർഡറുകൾ ലഭ്യമല്ല');
+        return;
+      }
+
+      printContainer.innerHTML = html;
+      closePdfModal();
+
+      setTimeout(() => {
+        window.print();
+      }, 300);
+    }
+
+    function generatePdfSectionHtml(title, subtitle, orderList) {
+      const totalLitres = orderList.reduce((sum, o) => sum + o.litres, 0);
+      const totalAmount = orderList.reduce((sum, o) => sum + o.amount, 0);
+
+      const rows = orderList.map((o, idx) => `
+        <tr style="border-bottom: 1px solid #ddd; padding: 6px 0;">
+          <td style="padding: 6px; font-weight: bold;">${idx + 1}</td>
+          <td style="padding: 6px;"><b>${o.id}</b><br><small>${o.name} (${o.phone})</small></td>
+          <td style="padding: 6px;">${o.area}</td>
+          <td style="padding: 6px; text-align: center; font-weight: bold;">${o.litres} L</td>
+          <td style="padding: 6px; text-align: right; font-weight: bold;">₹${o.amount}</td>
+          <td style="padding: 6px; text-align: center;">
+            <span style="display:inline-block; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; ${o.payStatus === 'PAID' ? 'background: #dcfce7; color: #15803d;' : 'background: #fee2e2; color: #b91c1c;'}">
+              ${o.payStatus}
+            </span>
+          </td>
+          <td style="padding: 6px; text-align: center;">[ &nbsp; ]</td>
+        </tr>
+      `).join('');
+
+      return `
+        <div class="page-break" style="font-family: sans-serif; color: #000; margin-bottom: 30px;">
+          <div style="border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+              <h2 style="margin: 0; font-size: 18px; text-transform: uppercase;">Payasam Challenge 2026</h2>
+              <h3 style="margin: 4px 0 0 0; font-size: 14px; color: #333;">${title}</h3>
+              <p style="margin: 2px 0 0 0; font-size: 11px; color: #666;">${subtitle} | ഐറ്റം: അട പ്രഥമൻ</p>
+            </div>
+            <div style="text-align: right; font-size: 12px;">
+              <div>ആകെ ലിറ്റർ: <b>${totalLitres.toFixed(1)} L</b></div>
+              <div>ആകെ തുക: <b>₹${totalAmount}</b></div>
+            </div>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left;">
+            <thead>
+              <tr style="background: #f1f5f9; border-bottom: 2px solid #333;">
+                <th style="padding: 6px;">#</th>
+                <th style="padding: 6px;">Customer</th>
+                <th style="padding: 6px;">Area / Location</th>
+                <th style="padding: 6px; text-align: center;">Litres</th>
+                <th style="padding: 6px; text-align: right;">Amount</th>
+                <th style="padding: 6px; text-align: center;">Status</th>
+                <th style="padding: 6px; text-align: center;">Delivered?</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.length > 0 ? rows : '<tr><td colspan="7" style="padding: 15px; text-align: center;">ഓർഡറുകൾ ലഭ്യമല്ല</td></tr>'}
+            </tbody>
+          </table>
+
+          <div style="margin-top: 20px; display: flex; justify-content: space-between; font-size: 10px; color: #777; border-top: 1px dashed #ccc; padding-top: 8px;">
+            <span>Verified by Fest Committee</span>
+            <span>Signature: ______________________</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+      }, 3000);
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
