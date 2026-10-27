@@ -424,23 +424,6 @@
           <p class="text-[var(--muted-foreground)]">ടീം തിരഞ്ഞെടുത്തോ പുതിയ ടീമിന്റെ പേര് നൽകിയോ ഉടൻ ലോഗിൻ ചെയ്യാം</p>
         </div>
 
-        <!-- Quick 1-Tap Login Chips -->
-        <div class="p-3 rounded-xl bg-[#1e3a8a]/5 border border-[#1e3a8a]/20 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-[#1e3a8a] flex items-center gap-1">
-              <span>⚡</span> <span>1-ടാപ്പ് അതിവേഗ ലോഗിൻ:</span>
-            </span>
-            <span class="text-[10px] text-[var(--muted-foreground)]">നേരിട്ട് കടക്കാം</span>
-          </div>
-          <div class="flex flex-wrap gap-1.5" id="quickTeamChipsContainer">
-            <button type="button" onclick="quickTeamLogin('Team Challengers')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ Challengers</button>
-            <button type="button" onclick="quickTeamLogin('Team Champions')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ Champions</button>
-            <button type="button" onclick="quickTeamLogin('Team Warriors')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ Warriors</button>
-            <button type="button" onclick="quickTeamLogin('Team Strivers')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ Strivers</button>
-            <button type="button" onclick="quickTeamLogin('General Volunteer')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ General</button>
-          </div>
-        </div>
-
         <!-- Mode Toggle: Existing Team vs Direct Type New Team -->
         <div class="grid grid-cols-2 gap-2 p-1 bg-[var(--background)] rounded-xl border border-[var(--border)]">
           <button type="button" id="tabLoginSelect" onclick="setLoginMode('select')" class="py-1.5 rounded-lg font-bold text-xs bg-[#1e3a8a] text-white transition shadow-sm">
@@ -1681,6 +1664,7 @@
         const storedDeleted = localStorage.getItem('payasam_v3_deleted_orders');
         deletedOrderIds = new Set(safeParseArray(storedDeleted));
         deletedOrderIds.add('ORD-TEST-1'); // automatically tombstone ORD-TEST-1 test dummy!
+        deletedOrderIds.add('ORD-TEST-SPOT');
         localStorage.setItem('payasam_v3_deleted_orders', JSON.stringify(Array.from(deletedOrderIds)));
 
         // Filter out legacy dummy mock teams/orders if present, and exclude deleted orders
@@ -1688,7 +1672,7 @@
         if (teams.length === 0) {
           teams = JSON.parse(JSON.stringify(DEFAULT_TEAMS));
         }
-        orders = safeParseArray(storedOrders).filter(o => o && o.id && !['ORD-101', 'ORD-102', 'ORD-103', 'ORD-104', 'ORD-105', 'ORD-106', 'ORD-TEST-1'].includes(o.id) && !deletedOrderIds.has(o.id));
+        orders = safeParseArray(storedOrders).filter(o => o && o.id && !['ORD-101', 'ORD-102', 'ORD-103', 'ORD-104', 'ORD-105', 'ORD-106', 'ORD-TEST-1', 'ORD-TEST-SPOT'].includes(o.id) && !deletedOrderIds.has(o.id) && !o.id.startsWith('TEAM-'));
         expenses = safeParseArray(storedExpenses).filter(e => e && e.id && !['EXP-1', 'EXP-2', 'EXP-3', 'EXP-4'].includes(e.id));
 
         if (storedUpi) adminUpiId = storedUpi;
@@ -1867,9 +1851,38 @@
             const existingIds = new Set(orders.map(o => o.id));
 
             cloudOrders.forEach(co => {
-              if (!co || !co.id || deletedOrderIds.has(co.id) || co.id === 'ORD-TEST-1') {
+              if (!co || !co.id || deletedOrderIds.has(co.id) || co.id === 'ORD-TEST-1' || co.id === 'ORD-TEST-SPOT') {
                 return; // SKIP deleted / test order permanently!
               }
+
+              // 🌐 Check if this is a Team Registration sync record
+              if (co.id.startsWith('TEAM-') || co.id.startsWith('SYS-TEAM')) {
+                const rawTeam = co.teamName || co.teamId;
+                if (rawTeam && rawTeam !== 'DIRECT' && rawTeam !== 'Direct') {
+                  let existingTeam = teams.find(t => t.id === rawTeam || t.name.toLowerCase() === rawTeam.toLowerCase());
+                  const membersList = (co.area ? co.area.split(',') : []).map(m => m.trim()).filter(Boolean);
+                  if (!existingTeam) {
+                    existingTeam = {
+                      id: rawTeam,
+                      name: rawTeam,
+                      password: (co.phone && !co.phone.startsWith('9')) ? co.phone : 'team123',
+                      settledCash: 0,
+                      members: membersList.length > 0 ? membersList : [(co.member || 'Captain')]
+                    };
+                    teams.push(existingTeam);
+                    newTeamsFound = true;
+                  } else {
+                    membersList.forEach(m => {
+                      if (m && !existingTeam.members.includes(m)) {
+                        existingTeam.members.push(m);
+                        newTeamsFound = true;
+                      }
+                    });
+                  }
+                }
+                return; // Do NOT add team registration records to customer orders list!
+              }
+
               if (!existingIds.has(co.id)) {
                 orders.push({
                   id: co.id,
@@ -1917,7 +1930,6 @@
                   };
                   teams.push(existingTeam);
                   newTeamsFound = true;
-                  pushTeamToCloud(existingTeam);
                 }
                 if (co.member && !existingTeam.members.includes(co.member)) {
                   existingTeam.members.push(co.member);
@@ -1929,7 +1941,7 @@
             // 📤 If this phone has local orders not yet in Google Sheets, automatically push them!
             const cloudIds = new Set(cloudOrders.map(co => co.id));
             orders.forEach(lo => {
-              if (lo && lo.id && !cloudIds.has(lo.id) && !lo.id.startsWith('SYS-') && !deletedOrderIds.has(lo.id) && lo.id !== 'ORD-TEST-1') {
+              if (lo && lo.id && !cloudIds.has(lo.id) && !lo.id.startsWith('SYS-') && !lo.id.startsWith('TEAM-') && !deletedOrderIds.has(lo.id) && lo.id !== 'ORD-TEST-1' && lo.id !== 'ORD-TEST-SPOT') {
                 pushOrderToCloud(lo, true);
               }
             });
@@ -1962,15 +1974,25 @@
       if (!sheetApiUrl) return;
       try {
         const payload = Object.assign({}, newOrder);
-        payload.teamName = newOrder.teamName || newOrder.teamId;
+        payload.teamName = newOrder.teamName || newOrder.teamId || 'Direct';
+        payload.teamId = newOrder.teamId || newOrder.teamName || 'Direct';
+
+        // Dual compatibility: root properties (for older Apps Script) + action/order object (for newer Apps Script)
+        const postBody = Object.assign({}, payload, {
+          action: 'add_order',
+          order: payload
+        });
+
         await fetch(sheetApiUrl, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'add_order', order: payload })
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(postBody)
         });
+
         if (!backgroundSync) {
-          setTimeout(() => testSyncGoogleSheets(true), 1500);
+          showToast(`⚡ ഓർഡർ #${newOrder.id} തത്സമയം ക്ലൗഡിലേക്ക് നൽകി!`);
+          setTimeout(() => testSyncGoogleSheets(true), 1200);
         }
       } catch (err) {
         console.error('Cloud push error', err);
@@ -1980,11 +2002,40 @@
     async function pushTeamToCloud(team) {
       if (!sheetApiUrl || !team || !team.name) return;
       try {
+        // 1. Send dedicated add_team action (works with new Apps Script Teams sheet)
         await fetch(sheetApiUrl, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action: 'add_team', team: team })
+        });
+
+        // 2. Also register team in Orders sheet (ensures cross-phone auto-discovery even with older Apps Script!)
+        const teamRegRecord = {
+          id: `TEAM-${(team.name || 'Team').replace(/\s+/g, '_')}`,
+          name: `[TEAM] ${team.name}`,
+          phone: team.password || 'team123',
+          area: (team.members && team.members.length > 0) ? team.members.join(', ') : 'Team Members',
+          teamId: team.name,
+          teamName: team.name,
+          member: (team.members && team.members[0]) || 'Captain',
+          item: 'അട പ്രഥമൻ',
+          litres: 0,
+          amount: 0,
+          payMode: 'cash',
+          payStatus: 'PAID',
+          utr: 'TEAM_REGISTERED',
+          time: new Date().toLocaleTimeString()
+        };
+        const teamRegBody = Object.assign({}, teamRegRecord, {
+          action: 'add_order',
+          order: teamRegRecord
+        });
+        await fetch(sheetApiUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(teamRegBody)
         });
       } catch (err) {
         console.error('Cloud push team error', err);
@@ -2087,16 +2138,6 @@
           teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
       }
 
-      // ⚡ Dynamically render quick-tap login chips for all available teams
-      const chipsContainer = document.getElementById('quickTeamChipsContainer');
-      if (chipsContainer && teams.length > 0) {
-        chipsContainer.innerHTML = teams.slice(0, 10).map(t => {
-          const safeName = (t.name || '').replace(/'/g, "\\'");
-          const shortName = (t.name || '').replace(/^Team\s+/i, '');
-          return `<button type="button" onclick="quickTeamLogin('${safeName}')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ ${shortName}</button>`;
-        }).join('') + `<button type="button" onclick="quickTeamLogin('General Volunteer')" class="px-2.5 py-1 rounded-lg bg-[var(--card)] hover:bg-[#1e3a8a] hover:text-white border border-[#1e3a8a]/30 text-[#1e3a8a] font-bold text-[11px] shadow-sm transition">⚡ General</button>`;
-      }
-
       updateAreaDropdowns();
       const countEl = document.getElementById('homeTeamsCount');
       if (countEl) countEl.innerText = teams.length;
@@ -2131,11 +2172,12 @@
     }
 
     function refreshMetrics() {
-      const totalLitres = orders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
-      const grossRevenue = orders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
-      const paidOrders = orders.filter(o => o.payStatus === 'PAID');
+      const validOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id));
+      const totalLitres = validOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
+      const grossRevenue = validOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+      const paidOrders = validOrders.filter(o => o.payStatus === 'PAID');
       const paidAmount = paidOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
-      const unpaidOrders = orders.filter(o => o.payStatus !== 'PAID');
+      const unpaidOrders = validOrders.filter(o => o.payStatus !== 'PAID');
       const dueAmount = unpaidOrders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
       const totalExpense = expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
       const netProfit = grossRevenue - totalExpense;
@@ -2400,13 +2442,18 @@
         populateSelectOptions();
       }
 
-      // Password Validation (Case-insensitive & resilient: allows default, admin PIN, or auto-accepts)
-      const enteredPwd = (password || '').toLowerCase();
-      const expectedPwd = (team.password || 'team123').toLowerCase();
+      // 🔒 Strict Team Password Validation (Enhanced Security)
+      const enteredPwd = (password || '').trim();
+      const expectedPwd = (team.password || 'team123').trim();
       
-      if (enteredPwd && enteredPwd !== expectedPwd && enteredPwd !== 'admin123' && enteredPwd !== 'team123') {
-        team.password = password; // smoothly update password to avoid lockout
-        saveState();
+      if (enteredPwd !== expectedPwd && enteredPwd !== 'admin123' && enteredPwd !== 'team123') {
+        alert('❌ തെറ്റായ പാസ്‌വേഡ്! നിങ്ങളുടെ ടീമിന്റെ ശരിയായ പാസ്‌വേഡ് നൽകുക.');
+        const pwdInput = document.getElementById('loginPassword');
+        if (pwdInput) {
+          pwdInput.focus();
+          pwdInput.select();
+        }
+        return;
       }
 
       loggedInTeam = team;
@@ -2599,7 +2646,7 @@
     function renderMyTeamOrders() {
       if (!loggedInTeam) return;
       const tbody = document.getElementById('myTeamOrdersTable');
-      const teamOrders = orders.filter(o => o.teamId === loggedInTeam.id || o.teamId === loggedInTeam.name);
+      const teamOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id) && (o.teamId === loggedInTeam.id || o.teamId === loggedInTeam.name));
       const totalLitres = teamOrders.reduce((sum, o) => sum + (parseFloat(o.litres) || 0), 0);
 
       document.getElementById('myTeamOrderStats').innerText = `${teamOrders.length} Orders (${totalLitres.toFixed(1)} Litres)`;
@@ -2771,7 +2818,7 @@
       }
 
       const teamStats = teams.map(t => {
-        const tOrders = orders.filter(o => o.teamId === t.id || o.teamId === t.name);
+        const tOrders = orders.filter(o => o && o.id && !o.id.startsWith('TEAM-') && !o.id.startsWith('SYS-') && o.id !== 'ORD-TEST-1' && o.id !== 'ORD-TEST-SPOT' && !deletedOrderIds.has(o.id) && (o.teamId === t.id || o.teamId === t.name));
         const orderCount = tOrders.length;
         const litresSold = tOrders.reduce((sum, o) => sum + o.litres, 0);
         const revenue = tOrders.reduce((sum, o) => sum + o.amount, 0);
@@ -2821,6 +2868,7 @@
       const tbody = document.getElementById('individualRankTableBody');
       const memberMap = {};
       orders.forEach(o => {
+        if (!o || !o.id || o.id.startsWith('TEAM-') || o.id.startsWith('SYS-') || o.id === 'ORD-TEST-1' || o.id === 'ORD-TEST-SPOT' || deletedOrderIds.has(o.id)) return;
         const mem = o.member || 'Direct / Online';
         if (!memberMap[mem]) {
           const team = teams.find(t => t.id === o.teamId);
@@ -2876,7 +2924,8 @@
       const areaFilter = document.getElementById('allFilterArea')?.value || 'ALL';
 
       const filtered = orders.filter(o => {
-        const teamObj = teams.find(t => t.id === o.teamId) || { name: 'Direct' };
+        if (!o || !o.id || o.id.startsWith('TEAM-') || o.id.startsWith('SYS-') || o.id === 'ORD-TEST-1' || o.id === 'ORD-TEST-SPOT' || deletedOrderIds.has(o.id)) return false;
+        const teamObj = teams.find(t => t.id === o.teamId || t.name === o.teamId) || { name: o.teamId || 'Direct' };
         const matchesSearch = o.name.toLowerCase().includes(search) ||
                               o.phone.includes(search) ||
                               o.area.toLowerCase().includes(search) ||
@@ -2956,6 +3005,7 @@
       const areaFilter = document.getElementById('admOrderFilterArea')?.value || 'ALL';
 
       const filtered = orders.filter(o => {
+        if (!o || !o.id || o.id.startsWith('TEAM-') || o.id.startsWith('SYS-') || o.id === 'ORD-TEST-1' || o.id === 'ORD-TEST-SPOT' || deletedOrderIds.has(o.id)) return false;
         const matchesSearch = !q ||
           (o.name && o.name.toLowerCase().includes(q)) ||
           (o.phone && o.phone.includes(q)) ||
@@ -3139,7 +3189,7 @@
         await fetch(sheetApiUrl, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action: 'delete_order', id: orderId, order: { id: orderId } })
         });
       } catch (err) {
