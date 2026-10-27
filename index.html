@@ -181,20 +181,24 @@
           <div class="flex items-center gap-2 mt-0.5">
             <p class="text-xs text-[var(--muted-foreground)]">ഫെസ്റ്റ് ഓർഡർ മാനേജ്‌മെന്റ് പോർട്ടൽ</p>
             <span id="cloudStatusBadge" class="text-[10px] px-2 py-0.2 rounded-full font-bold bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/30">⚪ Local Mode</span>
+            <span id="lastSyncTimeText" class="text-[10px] text-emerald-700 dark:text-emerald-400 font-mono font-semibold hidden sm:inline"></span>
           </div>
         </div>
       </div>
 
       <!-- Quick Nav Buttons -->
-      <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+      <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+        <button id="btnGlobalSync" onclick="triggerManualSync()" class="px-3 py-2 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1.5 shadow-sm active:scale-95" title="തത്സമയം പുതിയ ഓർഡറുകൾ സിങ്ക് ചെയ്യുക">
+          <span id="syncIconSpin" class="text-sm">🔄</span> <span class="font-bold">Sync</span>
+        </button>
         <button id="themeToggleBtn" onclick="toggleTheme()" class="px-3 py-2 text-xs font-semibold rounded-xl bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--background)] transition flex items-center gap-1.5 shadow-sm" title="Toggle Light / Dark Mode">
           <span id="themeToggleIcon">☀️</span> <span id="themeToggleLabel" class="hidden sm:inline font-bold">Theme</span>
         </button>
-        <button onclick="navigate('home')" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-[var(--card)] border border-[#1e3a8a]/20 text-[#1e3a8a] hover:bg-[#1e3a8a]/5 transition flex items-center gap-1.5 shadow-sm">
-          <span>🏠</span> <span>Home</span>
+        <button onclick="navigate('home')" class="px-3 py-2 text-xs font-semibold rounded-xl bg-[var(--card)] border border-[#1e3a8a]/20 text-[#1e3a8a] hover:bg-[#1e3a8a]/5 transition flex items-center gap-1.5 shadow-sm">
+          <span>🏠</span> <span class="hidden sm:inline">Home</span>
         </button>
-        <button onclick="openPdfModal()" class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white transition flex items-center gap-1.5 shadow-sm">
-          <span>📄</span> <span>PDF Export</span>
+        <button onclick="openPdfModal()" class="px-3 py-2 text-xs font-semibold rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white transition flex items-center gap-1.5 shadow-sm">
+          <span>📄</span> <span class="hidden sm:inline">PDF</span>
         </button>
       </div>
     </header>
@@ -363,6 +367,9 @@
 
         <!-- Logged-in nav strip -->
         <div id="teamNavLoggedIn" class="hidden flex items-center gap-2">
+          <button onclick="triggerManualSync()" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1 shadow-sm">
+            <span>🔄</span> <span>ലൈവ് സിങ്ക്</span>
+          </button>
           <span id="teamNavActiveBadge" class="text-xs font-bold px-2 py-0.5 rounded-md bg-[#1e3a8a]/10 text-[#1e3a8a] border border-[#1e3a8a]/20">
             Team Active
           </span>
@@ -411,42 +418,74 @@
         <div class="text-center space-y-1">
           <div class="text-3xl">🛡️</div>
           <h3 class="text-base font-bold text-[#1e3a8a]">ടീം ലോഗിൻ (Team Authentication)</h3>
-          <p class="text-[var(--muted-foreground)]">നിങ്ങളുടെ ടീമും അംഗത്തിന്റെ പേരും തിരഞ്ഞെടുത്ത് ലോഗിൻ ചെയ്യുക</p>
+          <p class="text-[var(--muted-foreground)]">ടീം തിരഞ്ഞെടുത്തോ പുതിയ ടീമിന്റെ പേര് നൽകിയോ ഉടൻ ലോഗിൻ ചെയ്യാം</p>
         </div>
 
-        <!-- Banner shown when no teams exist -->
+        <!-- Mode Toggle: Existing Team vs Direct Type New Team -->
+        <div class="grid grid-cols-2 gap-2 p-1 bg-[var(--background)] rounded-xl border border-[var(--border)]">
+          <button type="button" id="tabLoginSelect" onclick="setLoginMode('select')" class="py-1.5 rounded-lg font-bold text-xs bg-[#1e3a8a] text-white transition shadow-sm">
+            📋 ലിസ്റ്റിൽ നിന്ന്
+          </button>
+          <button type="button" id="tabLoginDirect" onclick="setLoginMode('direct')" class="py-1.5 rounded-lg font-medium text-xs text-[var(--muted-foreground)] transition">
+            ✍️ നേരിട്ട് ടൈപ്പ് ചെയ്യുക
+          </button>
+        </div>
+
+        <!-- Banner shown when no teams exist on this phone -->
         <div id="noTeamsWarning" class="hidden p-3.5 rounded-xl bg-[#1e3a8a]/10 border border-[#1e3a8a]/30 text-[#1e3a8a] text-xs flex flex-col gap-2">
           <div class="font-bold flex items-center gap-1.5 text-[#1e3a8a]">
-            <span>⚠️</span> <span>ഇതുവരെ ടീമുകൾ ഒന്നും ചേർത്തിട്ടില്ല!</span>
+            <span>💡</span> <span>ഈ ഫോണിൽ ഇതുവരെ ടീമുകൾ ലിസ്റ്റ് ചെയ്തിട്ടില്ല</span>
           </div>
-          <p class="text-[11px] text-[var(--muted-foreground)]">ഓർഡറുകൾ എടുക്കാൻ ആദ്യം നിങ്ങളുടെ ടീം രജിസ്റ്റർ ചെയ്യുക:</p>
+          <p class="text-[11px] text-[var(--muted-foreground)]">മുകളിലെ <b>"✍️ നേരിട്ട് ടൈപ്പ് ചെയ്യുക"</b> ടാബിൽ നിങ്ങളുടെ ടീമിന്റെ പേര് ടൈപ്പ് ചെയ്ത് ഒറ്റ ക്ലിക്കിൽ ലോഗിൻ ചെയ്യാം, അല്ലെങ്കിൽ സാമ്പിൾ ടീമുകൾ ലോഡ് ചെയ്യാം:</p>
           <div class="flex flex-wrap gap-2 pt-1">
-            <button type="button" onclick="toggleNewTeamForm(true)" class="px-3.5 py-1.5 rounded-lg bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold w-fit shadow transition">
-              ➕ പുതിയ ടീം ഉണ്ടാക്കുക (Create New Team)
-            </button>
-            <button type="button" onclick="loadDemoTeams()" class="px-3.5 py-1.5 rounded-lg border border-[#1e3a8a]/40 bg-[var(--card)] text-[#1e3a8a] font-bold w-fit shadow-sm">
+            <button type="button" onclick="loadDemoTeams()" class="px-3 py-1.5 rounded-lg border border-[#1e3a8a]/40 bg-[var(--card)] text-[#1e3a8a] font-bold text-[11px] shadow-sm">
               ⚡ സാമ്പിൾ ടീമുകൾ നൽകുക (Load Demo)
             </button>
           </div>
         </div>
 
-        <form onsubmit="handleTeamLogin(event)" class="space-y-3 pt-2">
-          <div>
-            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം തിരഞ്ഞെടുക്കുക (Select Team) *</label>
-            <select id="loginTeamSelect" onchange="updateMemberDropdownForLogin()" required class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
-              <!-- populated dynamically -->
-            </select>
+        <form onsubmit="handleTeamLogin(event)" novalidate class="space-y-3 pt-1">
+          
+          <!-- OPTION 1: SELECT EXISTING TEAM -->
+          <div id="loginSelectContainer" class="space-y-3">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label class="block font-medium text-[var(--muted-foreground)]">ടീം തിരഞ്ഞെടുക്കുക (Select Team) *</label>
+                <button type="button" onclick="setLoginMode('direct')" class="text-[10px] text-[#1e3a8a] hover:underline font-bold">
+                  + പുതിയ ടീം ടൈപ്പ് ചെയ്യാം
+                </button>
+              </div>
+              <select id="loginTeamSelect" onchange="updateMemberDropdownForLogin()" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+                <!-- populated dynamically -->
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം അംഗത്തിന്റെ പേര് (Member Name) *</label>
+              <select id="loginMemberSelect" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
+                <!-- populated dynamically -->
+              </select>
+              <div class="text-[10px] text-[var(--muted-foreground)] mt-1">അല്ലെങ്കിൽ പുതിയ അംഗമാണെങ്കിൽ ഇവിടെ ടൈപ്പ് ചെയ്യുക:</div>
+              <input type="text" id="loginCustomMember" placeholder="നിങ്ങളുടെ പേര് നൽകുക (eg. Arun)" class="w-full mt-1 px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+            </div>
           </div>
 
-          <div>
-            <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീം അംഗത്തിന്റെ പേര് (Member Name) *</label>
-            <select id="loginMemberSelect" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none">
-              <!-- populated dynamically -->
-            </select>
-            <div class="text-[10px] text-[var(--muted-foreground)] mt-1">അല്ലെങ്കിൽ പുതിയ അംഗമാണെങ്കിൽ ഇവിടെ ടൈപ്പ് ചെയ്യുക:</div>
-            <input type="text" id="loginCustomMember" placeholder="Type member name (eg. Arun)" class="w-full mt-1 px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+          <!-- OPTION 2: DIRECT TYPE NEW/CUSTOM TEAM -->
+          <div id="loginDirectContainer" class="space-y-3 hidden">
+            <div class="p-2.5 rounded-xl bg-[#1e3a8a]/5 border border-[#1e3a8a]/20 text-[11px] text-[var(--muted-foreground)]">
+              ✨ നിങ്ങളുടെ ടീമിന്റെ പേരും വോളന്റിയറുടെ പേരും ഇവിടെ ടൈപ്പ് ചെയ്ത് ഒറ്റ ക്ലിക്കിൽ ലോഗിൻ ചെയ്യാം!
+            </div>
+            <div>
+              <label class="block font-medium mb-1 text-[var(--muted-foreground)]">ടീമിന്റെ പേര് (Team Name) *</label>
+              <input type="text" id="loginDirectTeamName" placeholder="ഉദാ: Team Warriors / Challengers" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+            </div>
+            <div>
+              <label class="block font-medium mb-1 text-[var(--muted-foreground)]">നിങ്ങളുടെ പേര് (Volunteer / Member Name) *</label>
+              <input type="text" id="loginDirectMemberName" placeholder="ഉദാ: Rahul / Sneha" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+            </div>
           </div>
 
+          <!-- PASSWORD SECTION -->
           <div>
             <div class="flex justify-between items-center mb-1">
               <label class="block font-medium text-[var(--muted-foreground)]">ടീം പാസ്‌വേഡ് (Team Password) *</label>
@@ -454,11 +493,20 @@
                 <span>🔑</span> <span>പാസ്‌വേഡ് മാറ്റുക</span>
               </button>
             </div>
-            <input type="password" id="loginPassword" required placeholder="ടീം പാസ്‌വേഡ് നൽകുക" class="w-full px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+            <div class="relative">
+              <input type="password" id="loginPassword" value="team123" placeholder="ടീം പാസ്‌വേഡ് നൽകുക" class="w-full px-3 py-2 pr-10 rounded-lg bg-[var(--background)] border border-[var(--border)] focus:outline-none focus:ring-1 focus:ring-[#1e3a8a]">
+              <button type="button" onclick="togglePasswordVisibility('loginPassword', 'eyeIconLogin')" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-sm">
+                <span id="eyeIconLogin">👁️</span>
+              </button>
+            </div>
+            <div class="flex justify-between items-center text-[10px] text-[var(--muted-foreground)] mt-1">
+              <span>💡 ഡിഫോൾട്ട് പാസ്‌വേഡ്: <button type="button" onclick="fillDefaultPassword()" class="text-[#1e3a8a] font-bold underline font-mono">team123</button></span>
+              <span class="text-slate-400">(ക്ലിക്ക് ചെയ്ത് ഫിൽ ചെയ്യാം)</span>
+            </div>
           </div>
 
-          <button type="submit" class="w-full py-2.5 rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white font-semibold transition shadow mt-3">
-            ലോഗിൻ ചെയ്യുക (Login to Dashboard) ➔
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-[#1e3a8a] hover:bg-[#172554] text-white font-bold transition shadow mt-3 flex items-center justify-center gap-1.5">
+            <span>🚀</span> <span>ലോഗിൻ ചെയ്ത് ഓർഡറുകളിലേക്ക് കടക്കുക ➔</span>
           </button>
         </form>
       </div>
@@ -481,12 +529,15 @@
               <p class="text-[11px] text-[var(--muted-foreground)] mt-0.5">പായസം: <b class="text-[#1e3a8a]">അട പ്രഥമൻ (Ada Pradhaman)</b> | 1 ലിറ്റർ = ₹250</p>
             </div>
           </div>
-          <div class="flex items-center gap-2 self-end sm:self-auto">
-            <button onclick="openTeamPasswordModal()" class="px-3 py-1.5 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] hover:bg-[#1e3a8a]/20 text-xs font-semibold border border-[#1e3a8a]/20 flex items-center gap-1 transition">
-              <span>🔑</span> <span>പാസ്‌വേഡ് മാറ്റുക</span>
+          <div class="flex flex-wrap items-center gap-2 self-end sm:self-auto">
+            <button onclick="shareTeamLinkWhatsApp()" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 text-xs font-semibold border border-emerald-500/20 flex items-center gap-1 transition">
+              <span>📲</span> <span>ടീം ലിങ്ക് ഷെയർ</span>
             </button>
-            <button onclick="logoutTeam()" class="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 text-xs font-medium border border-red-500/20 transition">
-              🚪 ലോഗൗട്ട് (Logout)
+            <button onclick="openTeamPasswordModal()" class="px-2.5 py-1.5 rounded-lg bg-[#1e3a8a]/10 text-[#1e3a8a] hover:bg-[#1e3a8a]/20 text-xs font-semibold border border-[#1e3a8a]/20 flex items-center gap-1 transition">
+              <span>🔑</span> <span>പാസ്‌വേഡ്</span>
+            </button>
+            <button onclick="logoutTeam()" class="px-2.5 py-1.5 rounded-lg bg-red-500/10 text-red-600 hover:bg-red-500/20 text-xs font-medium border border-red-500/20 transition">
+              🚪 ലോഗൗട്ട്
             </button>
           </div>
         </div>
@@ -674,7 +725,12 @@
         <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
           <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
         </button>
-        <span class="text-xs font-semibold text-[#1e3a8a]">🛍️ 2. Individual Order Portal</span>
+        <div class="flex items-center gap-2">
+          <button onclick="triggerManualSync()" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1 shadow-sm">
+            <span>🔄</span> <span>ലൈവ് സിങ്ക്</span>
+          </button>
+          <span class="text-xs font-semibold text-[#1e3a8a]">🛍️ Individual Order Portal</span>
+        </div>
       </div>
 
       <div class="max-w-xl mx-auto bg-[var(--card)] border border-[#1e3a8a]/20 rounded-2xl p-6 shadow-sm space-y-4 text-xs">
@@ -803,7 +859,10 @@
         <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
           <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
         </button>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="triggerManualSync()" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1 shadow-sm">
+            <span>🔄</span> <span>ലൈവ് സിങ്ക്</span>
+          </button>
           <button id="btnRankTeam" onclick="toggleRankingTab('team')" class="px-3 py-1 rounded-lg text-xs font-bold bg-[#1e3a8a] text-white transition">
             👥 Team Rankings
           </button>
@@ -890,7 +949,12 @@
         <button onclick="navigate('home')" class="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] flex items-center gap-1">
           <span>⬅</span> <span>തിരികെ മെനുവിലേക്ക് (Back)</span>
         </button>
-        <span class="text-xs font-semibold text-[#1e3a8a]">📋 All Orders Master Feed</span>
+        <div class="flex items-center gap-2">
+          <button onclick="triggerManualSync()" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1 shadow-sm">
+            <span>🔄</span> <span>ലൈവ് റിഫ്രഷ്</span>
+          </button>
+          <span class="text-xs font-semibold text-[#1e3a8a]">📋 All Orders Feed</span>
+        </div>
       </div>
 
       <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm space-y-4">
@@ -1546,9 +1610,34 @@
         updateUpiDisplay();
         updateCloudBadge();
 
+        // 🌐 Auto-check URL Team parameter (eg. ?team=TeamChallengers)
+        const urlTeamParam = urlParams.get('team');
+        if (urlTeamParam) {
+          const cleanTeam = decodeURIComponent(urlTeamParam).trim();
+          let matchedTeam = teams.find(t => t.name.toLowerCase() === cleanTeam.toLowerCase());
+          if (!matchedTeam) {
+            matchedTeam = {
+              id: `t_${Date.now()}`,
+              name: cleanTeam,
+              password: 'team123',
+              settledCash: 0,
+              members: []
+            };
+            teams.push(matchedTeam);
+            saveState();
+          }
+          populateSelectOptions();
+          const select = document.getElementById('loginTeamSelect');
+          if (select) select.value = matchedTeam.id;
+          updateMemberDropdownForLogin();
+          setLoginMode('select');
+        } else if (teams.length === 0) {
+          setLoginMode('direct');
+        }
+
         if (sheetApiUrl) {
           testSyncGoogleSheets(true);
-          setInterval(() => testSyncGoogleSheets(true), 15000);
+          setInterval(() => testSyncGoogleSheets(true), 5000);
         }
 
         navigate('home');
@@ -1609,6 +1698,16 @@
       }
     }
 
+    async function triggerManualSync() {
+      const icon = document.getElementById('syncIconSpin');
+      if (icon) icon.classList.add('animate-spin');
+      showToast('🔄 തത്സമയ സിങ്കിംഗ് ആരംഭിച്ചു...');
+      await testSyncGoogleSheets(false);
+      setTimeout(() => {
+        if (icon) icon.classList.remove('animate-spin');
+      }, 1000);
+    }
+
     async function testSyncGoogleSheets(silent = false) {
       if (!sheetApiUrl) return;
       try {
@@ -1617,6 +1716,8 @@
           const cloudOrders = await response.json();
           if (Array.isArray(cloudOrders) && cloudOrders.length > 0) {
             const existingIds = new Set(orders.map(o => o.id));
+            let newTeamsFound = false;
+
             cloudOrders.forEach(co => {
               if (!existingIds.has(co.id)) {
                 orders.push({
@@ -1634,23 +1735,77 @@
                   utr: co.utr || '',
                   time: co.time || ''
                 });
+              } else {
+                // 🔄 Update existing local order with latest cloud updates (e.g. Paid status, amount)!
+                const localOrder = orders.find(o => o.id === co.id);
+                if (localOrder) {
+                  if (co.name) localOrder.name = co.name;
+                  if (co.phone) localOrder.phone = `${co.phone}`;
+                  if (co.area) localOrder.area = co.area;
+                  if (co.teamId) localOrder.teamId = co.teamId;
+                  if (co.member) localOrder.member = co.member;
+                  if (co.litres) localOrder.litres = parseFloat(co.litres) || localOrder.litres;
+                  if (co.amount) localOrder.amount = parseFloat(co.amount) || localOrder.amount;
+                  if (co.payMode) localOrder.payMode = co.payMode;
+                  if (co.payStatus) localOrder.payStatus = co.payStatus;
+                  if (co.utr !== undefined) localOrder.utr = co.utr;
+                }
+              }
+
+              // 🌐 Auto-discover and register teams across all phones from cloud orders!
+              if (co.teamId && co.teamId !== 'DIRECT') {
+                const teamName = co.teamName || co.teamId;
+                let existingTeam = teams.find(t => t.id === co.teamId || t.name.toLowerCase() === teamName.toLowerCase());
+                if (!existingTeam) {
+                  existingTeam = {
+                    id: co.teamId,
+                    name: teamName,
+                    password: 'team123',
+                    settledCash: 0,
+                    members: []
+                  };
+                  teams.push(existingTeam);
+                  newTeamsFound = true;
+                }
+                if (co.member && !existingTeam.members.includes(co.member)) {
+                  existingTeam.members.push(co.member);
+                  newTeamsFound = true;
+                }
               }
             });
+
+            // 📤 If this phone has local orders not yet in Google Sheets, automatically push them!
+            const cloudIds = new Set(cloudOrders.map(co => co.id));
+            orders.forEach(lo => {
+              if (lo && lo.id && !cloudIds.has(lo.id) && !lo.id.startsWith('SYS-')) {
+                pushOrderToCloud(lo, true);
+              }
+            });
+
             saveState();
+            if (newTeamsFound) populateSelectOptions();
             refreshMetrics();
             updateAreaDropdowns();
             renderAllOrdersTable();
             renderTeamRankings();
             renderIndividualRankings();
-            if (!silent) showToast(`✅ Google Sheets-ൽ നിന്ന് സിങ്ക് ചെയ്തു (${cloudOrders.length} ആകെ ഓർഡറുകൾ)`);
+            renderMyTeamOrders();
+            if (isAdminUnlocked) renderAdminDesk();
+
+            const syncTimeEl = document.getElementById('lastSyncTimeText');
+            if (syncTimeEl) {
+              syncTimeEl.innerText = 'Sync: ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+
+            if (!silent) showToast(`✅ Google Sheets ലൈവ് അപ്ഡേറ്റ് ആയി (${cloudOrders.length} ആകെ ഓർഡറുകൾ)`);
           }
         }
       } catch (err) {
-        if (!silent) alert('Google Sheets-ലേക്ക് കണക്ട് ചെയ്യാൻ സാധിച്ചില്ല. URL ശരിയാണോ എന്ന് പരിശോധിക്കുക.');
+        if (!silent) alert('Google Sheets-ലേക്ക് കണക്ട് ചെയ്യാൻ സാധിച്ചില്ല. ഇന്റർനെറ്റ് കണക്ഷൻ പരിശോധിക്കുക.');
       }
     }
 
-    async function pushOrderToCloud(newOrder) {
+    async function pushOrderToCloud(newOrder, backgroundSync = false) {
       if (!sheetApiUrl) return;
       try {
         await fetch(sheetApiUrl, {
@@ -1659,6 +1814,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'add_order', order: newOrder })
         });
+        if (!backgroundSync) {
+          setTimeout(() => testSyncGoogleSheets(true), 1500);
+        }
       } catch (err) {
         console.error('Cloud push error', err);
       }
@@ -1703,7 +1861,7 @@
           document.getElementById('teamLoginCard').classList.remove('hidden');
           document.getElementById('teamDashboardCard').classList.add('hidden');
           if (teams.length === 0) {
-            toggleNewTeamForm(true);
+            setLoginMode('direct');
           }
         }
       } else if (viewName === 'direct-order') {
@@ -1730,10 +1888,11 @@
       const noTeamsWarning = document.getElementById('noTeamsWarning');
 
       if (teams.length === 0) {
-        loginTeamSelect.innerHTML = `<option value="">⚠️ ടീമുകൾ ഒന്നും ലഭ്യമല്ല (ആദ്യം New Team ഉണ്ടാക്കുക)</option>`;
+        if (loginTeamSelect) loginTeamSelect.innerHTML = `<option value="">⚠️ ടീമുകൾ ലിസ്റ്റ് ചെയ്തിട്ടില്ല (നേരിട്ട് ടൈപ്പ് ചെയ്യാം)</option>`;
         if (noTeamsWarning) noTeamsWarning.classList.remove('hidden');
+        setLoginMode('direct');
       } else {
-        loginTeamSelect.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+        if (loginTeamSelect) loginTeamSelect.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
         if (noTeamsWarning) noTeamsWarning.classList.add('hidden');
       }
       updateMemberDropdownForLogin();
@@ -1842,6 +2001,58 @@
       showToast(`🎉 പുതിയ ടീം "${name}" രജിസ്റ്റർ ചെയ്ത് ഓർഡർ ഡെസ്ക് തുറന്നു!`);
     }
 
+    let loginMode = 'select';
+
+    function setLoginMode(mode) {
+      loginMode = mode;
+      const tabSel = document.getElementById('tabLoginSelect');
+      const tabDir = document.getElementById('tabLoginDirect');
+      const boxSel = document.getElementById('loginSelectContainer');
+      const boxDir = document.getElementById('loginDirectContainer');
+
+      if (mode === 'direct') {
+        if (tabDir) tabDir.className = 'py-1.5 rounded-lg font-bold text-xs bg-[#1e3a8a] text-white transition shadow-sm';
+        if (tabSel) tabSel.className = 'py-1.5 rounded-lg font-medium text-xs text-[var(--muted-foreground)] transition';
+        if (boxDir) boxDir.classList.remove('hidden');
+        if (boxSel) boxSel.classList.add('hidden');
+        setTimeout(() => document.getElementById('loginDirectTeamName')?.focus(), 150);
+      } else {
+        if (tabSel) tabSel.className = 'py-1.5 rounded-lg font-bold text-xs bg-[#1e3a8a] text-white transition shadow-sm';
+        if (tabDir) tabDir.className = 'py-1.5 rounded-lg font-medium text-xs text-[var(--muted-foreground)] transition';
+        if (boxSel) boxSel.classList.remove('hidden');
+        if (boxDir) boxDir.classList.add('hidden');
+      }
+    }
+
+    function togglePasswordVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input) {
+        if (input.type === 'password') {
+          input.type = 'text';
+          if (icon) icon.innerText = '🙈';
+        } else {
+          input.type = 'password';
+          if (icon) icon.innerText = '👁️';
+        }
+      }
+    }
+
+    function fillDefaultPassword() {
+      const pwd = document.getElementById('loginPassword');
+      if (pwd) pwd.value = 'team123';
+      showToast('🔑 പാസ്‌വേഡ് "team123" നൽകി');
+    }
+
+    function shareTeamLinkWhatsApp() {
+      if (!loggedInTeam) return;
+      const currentUrl = window.location.origin + window.location.pathname;
+      const shareUrl = `${currentUrl}?team=${encodeURIComponent(loggedInTeam.name)}`;
+      const text = `🎉 പായസം ഫെസ്റ്റ് 2026 - ഞങ്ങളുടെ ടീം (${loggedInTeam.name}) ഓർഡറുകൾ എടുക്കാൻ ഈ ലിങ്ക് തുറന്ന് ലോഗിൻ ചെയ്യുക:\n${shareUrl}`;
+      const waLink = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      window.open(waLink, '_blank');
+    }
+
     function loadDemoTeams() {
       teams = [
         { id: `t_${Date.now()}_1`, name: "Team Challengers", password: "team123", settledCash: 0, members: ["Rahul", "Anand", "Divya"] },
@@ -1850,36 +2061,82 @@
       saveState();
       populateSelectOptions();
       toggleNewTeamForm(false);
+      setLoginMode('select');
       showToast('✅ 2 സാമ്പിൾ ടീമുകൾ ചേർത്തു!');
     }
 
     function handleTeamLogin(e) {
       e.preventDefault();
-      if (teams.length === 0) {
-        alert('ഇതുവരെ ടീമുകൾ ഒന്നും ചേർത്തിട്ടില്ല. മുകളിലെ "+ New Team ഉണ്ടാക്കുക" ക്ലിക്ക് ചെയ്ത് പുതിയ ടീം രജിസ്റ്റർ ചെയ്യുക.');
-        toggleNewTeamForm(true);
-        return;
-      }
-      const teamId = document.getElementById('loginTeamSelect').value;
-      const team = teams.find(t => t.id === teamId);
-      const customMember = document.getElementById('loginCustomMember').value.trim();
-      const selectedMember = document.getElementById('loginMemberSelect').value;
-      const member = customMember || selectedMember || 'Volunteer';
-      const password = document.getElementById('loginPassword').value.trim();
+      
+      let teamName = '';
+      let member = '';
+      let team = null;
+      const password = (document.getElementById('loginPassword')?.value || '').trim();
 
-      if (!team) {
-        alert('ദയവായി ഒരു ടീം തിരഞ്ഞെടുക്കുക');
-        return;
+      if (loginMode === 'direct') {
+        teamName = (document.getElementById('loginDirectTeamName')?.value || '').trim();
+        member = (document.getElementById('loginDirectMemberName')?.value || '').trim() || 'Volunteer';
+
+        if (!teamName) {
+          alert('ദയവായി നിങ്ങളുടെ ടീമിന്റെ പേര് നൽകുക (eg. Team Warriors)');
+          document.getElementById('loginDirectTeamName')?.focus();
+          return;
+        }
+
+        // Find or auto-create team
+        team = teams.find(t => t.name.toLowerCase() === teamName.toLowerCase());
+        if (!team) {
+          team = {
+            id: `t_${Date.now()}`,
+            name: teamName,
+            password: password || 'team123',
+            settledCash: 0,
+            members: [member]
+          };
+          teams.push(team);
+          saveState();
+          populateSelectOptions();
+        } else if (!team.members.includes(member)) {
+          team.members.push(member);
+          saveState();
+        }
+      } else {
+        // Mode === 'select'
+        if (teams.length === 0) {
+          setLoginMode('direct');
+          alert('ടീമുകൾ ഒന്നും ലഭ്യമല്ല. ദയവായി ടീമിന്റെ പേര് ഇവിടെ ടൈപ്പ് ചെയ്യുക:');
+          return;
+        }
+        const teamId = document.getElementById('loginTeamSelect')?.value;
+        team = teams.find(t => t.id === teamId);
+        const customMember = (document.getElementById('loginCustomMember')?.value || '').trim();
+        const selectedMember = document.getElementById('loginMemberSelect')?.value;
+        member = customMember || selectedMember || 'Volunteer';
+
+        if (!team) {
+          alert('ദയവായി ഒരു ടീം തിരഞ്ഞെടുക്കുക (അല്ലെങ്കിൽ മുകളിലെ "✍️ നേരിട്ട് ടൈപ്പ് ചെയ്യുക" ക്ലിക്ക് ചെയ്യുക)');
+          return;
+        }
+
+        if (customMember && !team.members.includes(customMember)) {
+          team.members.push(customMember);
+          saveState();
+        }
       }
 
-      if (password !== (team.password || 'team123')) {
-        alert('തെറ്റായ പാസ്‌വേഡ്! (Incorrect Password). മാറ്റാൻ "പാസ്‌വേഡ് മാറ്റുക" ക്ലിക്ക് ചെയ്യുക.');
+      // Password Validation (Case-insensitive & trimmed, also allows admin master PIN)
+      const enteredPwd = (password || '').toLowerCase();
+      const expectedPwd = (team.password || 'team123').toLowerCase();
+      
+      if (enteredPwd !== expectedPwd && enteredPwd !== 'admin123') {
+        const resetIt = confirm('തെറ്റായ പാസ്‌വേഡ്! (Incorrect Password).\n\nപാസ്‌വേഡ് ഡിഫോൾട്ട് "team123" ആക്കി മാറ്റണോ?');
+        if (resetIt) {
+          team.password = 'team123';
+          saveState();
+          document.getElementById('loginPassword').value = 'team123';
+          showToast('🔑 പാസ്‌വേഡ് "team123" ആക്കി മാറ്റി! വീണ്ടും ലോഗിൻ ചെയ്യാം.');
+        }
         return;
-      }
-
-      if (customMember && !team.members.includes(customMember)) {
-        team.members.push(customMember);
-        saveState();
       }
 
       loggedInTeam = team;
@@ -1919,7 +2176,7 @@
 
       document.getElementById('teamLoginCard').classList.remove('hidden');
       document.getElementById('teamDashboardCard').classList.add('hidden');
-      document.getElementById('loginPassword').value = '';
+      document.getElementById('loginPassword').value = 'team123';
       window.scrollTo({ top: 0, behavior: 'smooth' });
       showToast('ടീം ലോഗൗട്ട് ചെയ്തു');
     }
